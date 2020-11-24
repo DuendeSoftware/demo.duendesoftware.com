@@ -16,7 +16,6 @@ on:
 env:
   AZURE_WEBAPP_NAME: DuendeSoftware-Demo       # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './publish'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '3.1.402'           # set this to the dot net version to use
 
 jobs:
   build-and-deploy:
@@ -29,8 +28,6 @@ jobs:
       # Setup .NET Core SDK
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} 
       
       # Run dotnet build and publish
       - name: dotnet build and publish
