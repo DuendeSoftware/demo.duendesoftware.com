@@ -38,10 +38,18 @@ namespace Duende.IdentityServer.Demo
                 .AddTestUsers(TestUsers.Users);
 
             services.AddAuthentication()
-                .AddLocalApi();
+                .AddLocalApi()
+                .AddOpenIdConnect("Google", "Sign-in with Google", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.ForwardSignOut = IdentityServerConstants.DefaultCookieAuthenticationScheme;
 
-            // preserve OIDC state in cache (solves problems with AAD and URL lenghts)
-            services.AddOidcStateDataFormatterCache("aad");
+                    options.Authority = "https://accounts.google.com/";
+                    options.ClientId = "708778530804-rhu8gc4kged3he14tbmonhmhe7a43hlp.apps.googleusercontent.com";
+
+                    options.CallbackPath = "/signin-google";
+                    options.Scope.Add("email");
+                });
 
             // add CORS policy for non-IdentityServer endpoints
             services.AddCors(options =>
