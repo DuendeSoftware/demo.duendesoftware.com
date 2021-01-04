@@ -1,56 +1,97 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Duende.IdentityServer.Models;
 
 namespace Duende.IdentityServer.Demo
 {
     public class Config
     {
-        public static IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new List<IdentityResource>
+        private static List<string> AllIdentityScopes =>
+            IdentityResources.Select(s => s.Name).ToList();
+
+        private static List<string> AllApiScopes =>
+            ApiScopes.Select(s => s.Name).ToList();
+
+        private static List<string> AllScopes =>
+            AllApiScopes.Concat(AllIdentityScopes).ToList();
+        
+        public static IEnumerable<IdentityResource> IdentityResources =>
+            new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
             };
-        }
 
-        public static IEnumerable<ApiScope> GetApiScopes()
-        {
-            return new List<ApiScope>
+        public static IEnumerable<ApiScope> ApiScopes =>
+            new List<ApiScope>
             {
                 // backward compat
                 new ApiScope("api"),
                 
-                // more formal
-                new ApiScope("api.scope1"),
-                new ApiScope("api.scope2"),
-                
-                // scope without a resource
-                new ApiScope("scope2"),
-                
                 // policyserver
                 new ApiScope("policyserver.runtime"),
-                new ApiScope("policyserver.management")
+                new ApiScope("policyserver.management"),
+                
+                // resource specific scopes
+                new ApiScope("resource1.scope1"),
+                new ApiScope("resource1.scope2"),
+                
+                new ApiScope("resource2.scope1"),
+                new ApiScope("resource2.scope2"),
+                
+                new ApiScope("resource3.scope1"),
+                new ApiScope("resource3.scope2"),
+                
+                // a scope without resource association
+                new ApiScope("scope3"),
+                new ApiScope("scope4"),
+                
+                // a scope shared by multiple resources
+                new ApiScope("shared.scope"),
+
+                // a parameterized scope
+                new ApiScope("transaction", "Transaction")
+                {
+                    Description = "Some Transaction"
+                }
             };
-        }
-        
-        public static IEnumerable<ApiResource> GetApis()
-        {
-            return new List<ApiResource>
+
+        public static IEnumerable<ApiResource> ApiResources =>
+            new List<ApiResource>
             {
                 new ApiResource("api", "Demo API")
                 {
                     ApiSecrets = { new Secret("secret".Sha256()) },
                     
-                    Scopes = { "api", "api.scope1", "api.scope2" }
+                    Scopes = { "api" }
+                },
+                
+                new ApiResource("urn:resource1", "Resource 1")
+                {
+                    ApiSecrets = { new Secret("secret".Sha256()) },
+
+                    Scopes = { "resource1.scope1", "resource1.scope2", "shared.scope" }
+                },
+                
+                new ApiResource("urn:resource2", "Resource 2")
+                {
+                    ApiSecrets = { new Secret("secret".Sha256()) },
+
+                    Scopes = { "resource2.scope1", "resource2.scope2", "shared.scope" }
+                },
+                
+                new ApiResource("urn:resource3", "Resource 3 (isolated)")
+                {
+                    ApiSecrets = { new Secret("secret".Sha256()) },
+                    RequireResourceIndicator = true,
+                    
+                    Scopes = { "resource3.scope1", "resource3.scope2", "shared.scope" }
                 }
             };
-        }
 
-        public static IEnumerable<Client> GetClients()
-        {
-            return new List<Client>
+        public static IEnumerable<Client> Clients =>
+            new List<Client>
             {
                 // non-interactive
                 new Client
@@ -60,7 +101,7 @@ namespace Duende.IdentityServer.Demo
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2", "policyserver.runtime", "policyserver.management" },
+                    AllowedScopes = AllApiScopes,
                 },
                 new Client
                 {
@@ -69,7 +110,7 @@ namespace Duende.IdentityServer.Demo
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = AllApiScopes,
                     AccessTokenLifetime = 75
                 },
 
@@ -85,7 +126,7 @@ namespace Duende.IdentityServer.Demo
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
@@ -104,7 +145,7 @@ namespace Duende.IdentityServer.Demo
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequirePkce = true,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
@@ -124,7 +165,7 @@ namespace Duende.IdentityServer.Demo
                     RequireClientSecret = false,
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
@@ -141,7 +182,7 @@ namespace Duende.IdentityServer.Demo
                     RequireClientSecret = false,
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
@@ -162,7 +203,7 @@ namespace Duende.IdentityServer.Demo
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
                     
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
+                    AllowedScopes = AllScopes,
                 },
                 
                 // oidc login only
@@ -174,7 +215,7 @@ namespace Duende.IdentityServer.Demo
                     PostLogoutRedirectUris = { "https://notused" },
                     
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = { "openid", "profile", "email" },
+                    AllowedScopes = AllIdentityScopes,
                 },
                 
                 new Client
@@ -189,9 +230,8 @@ namespace Duende.IdentityServer.Demo
                     PostLogoutRedirectUris = { "https://notused" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
+                    AllowedScopes = AllScopes
                 }
             };
-        }
     }
 }

@@ -31,10 +31,11 @@ namespace Duende.IdentityServer.Demo
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                 })
-                .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryApiResources(Config.GetApis())
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiResources(Config.ApiResources)
+                
+                .AddInMemoryClients(Config.Clients)
                 .AddTestUsers(TestUsers.Users);
 
             services.AddAuthentication()
