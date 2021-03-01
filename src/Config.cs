@@ -191,6 +191,46 @@ namespace Duende.IdentityServer.Demo
                     AccessTokenLifetime = 75
                 },
 
+                // not recommended - only for clients that do not support PKCE
+                new Client
+                {
+                    ClientId = "interactive.confidential.nopkce",
+                    ClientName = "Interactive client (Code without PKCE)",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    RequirePkce = false,
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding
+                },
+
+                // hybrid as alternative to PKCE
+                new Client
+                {
+                    ClientId = "interactive.confidential.hybrid",
+                    ClientName = "Interactive client (Code with Hybrid Flow)",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    RequirePkce = false,
+
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding
+                },
+
                 new Client
                 {
                     ClientId = "device",
