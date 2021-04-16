@@ -60,7 +60,7 @@ namespace Duende.IdentityServer.Demo
         public static IEnumerable<ApiResource> ApiResources =>
             new List<ApiResource>
             {
-                new ApiResource("api", "Demo API")
+                new ApiResource("api", "Demo API", new[] { "name", "email" })
                 {
                     ApiSecrets = { new Secret("secret".Sha256()) },
                     
