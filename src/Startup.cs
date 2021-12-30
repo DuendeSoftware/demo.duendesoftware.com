@@ -1,7 +1,6 @@
-﻿using Duende.IdentityServer.Configuration;
-using Duende.IdentityServer.Services;
+﻿using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
-using IdentityServerHost.Quickstart.UI;
+using IdentityServerHost;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,7 @@ namespace Duende.IdentityServer.Demo
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddRazorPages();
             
             // cookie policy to deal with temporary browser incompatibilities
             services.AddSameSiteCookiePolicy();
@@ -32,13 +31,13 @@ namespace Duende.IdentityServer.Demo
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                     
-                    options.KeyManagement.SigningAlgorithms = new[]
-                    {
-                        new SigningAlgorithmOptions("RS256")
-                        {
-                            UseX509Certificate = true
-                        }
-                    };
+                    // options.KeyManagement.SigningAlgorithms = new[]
+                    // {
+                    //     new SigningAlgorithmOptions("RS256")
+                    //     {
+                    //         UseX509Certificate = true
+                    //     }
+                    // };
                 })
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
