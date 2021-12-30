@@ -1,49 +1,33 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+﻿using Duende.IdentityServer.Demo;
 using Serilog;
-using Serilog.Events;
-using System;
 
-namespace Duende.IdentityServer.Demo
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
+Log.Information("Starting up");
+
+try
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            Console.Title = "IdentityServer";
+    var builder = WebApplication.CreateBuilder(args);
 
-            BuildWebHostBuilder(args).Build().Run();
-        }
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+        .Enrich.FromLogContext()
+        .ReadFrom.Configuration(ctx.Configuration));
 
-        public static IHostBuilder BuildWebHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .UseSerilog((ctx, config) =>
-                {
-                    config.MinimumLevel.Debug()
-                        .MinimumLevel.Debug()
-                        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                        .MinimumLevel.Override("System", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                        .Enrich.FromLogContext();
-
-                    if (ctx.HostingEnvironment.IsDevelopment())
-                    {
-                        config.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}");
-                    }
-                    else if (ctx.HostingEnvironment.IsProduction())
-                    {
-                        config.WriteTo.File(@"/home/LogFiles/Application/identityserver.txt",
-                            fileSizeLimitBytes: 1_000_000,
-                            rollOnFileSizeLimit: true,
-                            shared: true,
-                            flushToDiskInterval: TimeSpan.FromSeconds(1));
-                    }
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        }
-    }
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
+    
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
 }
