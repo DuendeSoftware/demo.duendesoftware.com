@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Services;
+﻿using Duende.IdentityServer.Configuration;
+using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,14 @@ namespace Duende.IdentityServer.Demo
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseSuccessEvents = true;
+                    
+                    options.KeyManagement.SigningAlgorithms = new[]
+                    {
+                        new SigningAlgorithmOptions("RS256")
+                        {
+                            UseX509Certificate = true
+                        }
+                    };
                 })
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
