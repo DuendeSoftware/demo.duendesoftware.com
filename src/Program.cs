@@ -12,10 +12,9 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, lc) =>
+    builder.Host.UseSerilog((ctx, logger) =>
     {
-        lc
-            .MinimumLevel.Debug()
+        logger
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("System", LogEventLevel.Warning)
