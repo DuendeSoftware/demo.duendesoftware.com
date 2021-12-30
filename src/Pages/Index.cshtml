@@ -1,0 +1,89 @@
+@page
+@model IdentityServerHost.Pages.Home.Index
+
+<div class="welcome-page">
+    <h1>
+        <img src="~/duende-logo.svg" class="logo">
+        Welcome to Duende IdentityServer
+        <small class="text-muted">(version @Model.Version)</small>
+    </h1>
+
+    <ul>
+        <li>
+            IdentityServer publishes a
+            <a href="~/.well-known/openid-configuration">discovery document</a>
+            where you can find metadata and links to all the endpoints, key material, etc.
+        </li>
+        <li>
+            Click <a href="~/diagnostics">here</a> to see the claims for your current session.
+        </li>
+        <li>
+            Click <a href="~/grants">here</a> to manage your stored grants.
+        </li>
+        <li>
+            Click <a href="~/ciba/all">here</a> to view your pending CIBA login requests.
+        </li>
+        <li>
+            Here are links to the
+            <a href="https://github.com/duendesoftware/IdentityServer">source code repository</a>,
+            and <a href="https://github.com/duendesoftware/samples">ready to use samples</a>.
+        </li>
+    </ul>
+    
+    <ul>
+            <h3>Demo clients</h3>
+            <li>
+                <b>client id: m2m</b> <br/>
+                grant type: client credentials <br/>
+                client secret: secret <br/>
+                access token lifetime: 60 minutes<br/>
+                allowed scopes: api
+            </li>
+            <li>
+                <b>client id: m2m.short</b> <br/>
+                grant type: client credentials <br/>
+                client secret: secret <br/>
+                access token lifetime: 75 seconds<br/>
+                allowed scopes: api
+            </li>
+            <li>
+                <b>client id: interactive.confidential</b> <br/>
+                grant type: authorization code with PKCE and client credentials<br/>
+                client secret: secret <br/>
+                access token lifetime: 60 minutues<br/>
+                allowed scopes: openid profile email api offline_access
+            </li>
+            <li>
+                <b>client id: interactive.confidential.short</b> <br/>
+                grant type: authorization code with PKCE and client credentials<br/>
+                client secret: secret <br/>
+                access token lifetime: 75 seconds<br/>
+                allowed scopes: openid profile email api offline_access
+            </li>
+            <li>
+                <b>client id: interactive.public</b> <br/>
+                grant type: authorization code with PKCE and client credentials<br/>
+                access token lifetime: 60 minutues<br/>
+                allowed scopes: openid profile email api offline_access
+            </li>
+            <li>
+                <b>client id: interactive.public.short</b> <br/>
+                grant type: authorization code with PKCE and client credentials<br/>
+                access token lifetime: 75 seconds<br/>
+                allowed scopes: openid profile email api offline_access
+            </li>
+            <li>
+                <b>client id: device</b> <br/>
+                grant type: urn:ietf:params:oauth:grant-type:device_code <br/>
+                access token lifetime: 60 minutues<br/>
+                allowed scopes: openid profile email api
+            </li>
+            <li>
+                <b>client id: login</b> <br/>
+                grant type: id_token
+            </li>
+            <li>
+                You can call a test API at https://demo.duendesoftware.com/api/test.
+            </li>
+        </ul>
+</div>
