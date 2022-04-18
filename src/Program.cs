@@ -23,15 +23,6 @@ try
                 outputTemplate:
                 "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
             .Enrich.FromLogContext();
-
-        // if (ctx.HostingEnvironment.IsProduction())
-        // {
-        //     lc.WriteTo.File(@"/home/LogFiles/Application/identityserver.txt",
-        //         fileSizeLimitBytes: 1_000_000,
-        //         rollOnFileSizeLimit: true,
-        //         shared: true,
-        //         flushToDiskInterval: TimeSpan.FromSeconds(1));
-        // }
     });
         
 
