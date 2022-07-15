@@ -29,10 +29,6 @@ namespace Duende.IdentityServer.Demo
                 // backward compat
                 new ApiScope("api"),
                 
-                // policyserver
-                new ApiScope("policyserver.runtime"),
-                new ApiScope("policyserver.management"),
-                
                 // resource specific scopes
                 new ApiScope("resource1.scope1"),
                 new ApiScope("resource1.scope2"),
@@ -112,6 +108,23 @@ namespace Duende.IdentityServer.Demo
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = AllApiScopes,
                     AccessTokenLifetime = 75
+                },
+                new Client
+                {
+                    ClientId = "m2m.short.jwt",
+                    ClientName = "Machine to machine (client credentials with JWT)",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = AllApiScopes,
+                    AccessTokenLifetime = 75,
+                    
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    }
                 },
 
                 // interactive
