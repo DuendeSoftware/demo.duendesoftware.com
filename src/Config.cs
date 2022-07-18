@@ -101,6 +101,23 @@ namespace Duende.IdentityServer.Demo
                 },
                 new Client
                 {
+                    ClientId = "m2m.jwt",
+                    ClientName = "Machine to machine (client credentials with JWT)",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = AllApiScopes,
+                    
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    }
+                },
+                
+                new Client
+                {
                     ClientId = "m2m.short",
                     ClientName = "Machine to machine with short access token lifetime (client credentials)",
                     ClientSecrets = { new Secret("secret".Sha256()) },
@@ -147,6 +164,32 @@ namespace Duende.IdentityServer.Demo
                 },
                 new Client
                 {
+                    ClientId = "interactive.confidential.jar.jwt",
+                    ClientName = "Interactive client (Code with PKCE) using JAR and private key JWT",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireRequestObject = true,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding
+                },
+                
+                new Client
+                {
                     ClientId = "interactive.confidential.short",
                     ClientName = "Interactive client with short token lifetime (Code with PKCE)",
 
@@ -158,6 +201,33 @@ namespace Duende.IdentityServer.Demo
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequirePkce = true,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+                    
+                    AccessTokenLifetime = 75
+                },
+                new Client
+                {
+                    ClientId = "interactive.confidential.short.jar.jwt",
+                    ClientName = "Interactive client (Code with PKCE) using JAR and private key JWT",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireRequestObject = true,
                     AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
@@ -269,21 +339,6 @@ namespace Duende.IdentityServer.Demo
                     
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = AllIdentityScopes,
-                },
-                
-                new Client
-                {
-                    ClientId = "hybrid",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    RequirePkce = false,
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    AllowOfflineAccess = true,
-                    AllowedScopes = AllScopes
                 }
             };
     }
