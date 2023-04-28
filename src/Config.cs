@@ -115,7 +115,29 @@ namespace Duende.IdentityServer.Demo
                         }
                     }
                 },
-                
+                new Client
+                {
+                    ClientId = "m2m.dpop",
+                    ClientName = "Machine to machine (client credentials)",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = AllApiScopes,
+
+                    RequireDPoP = true,
+                },
+                new Client
+                {
+                    ClientId = "m2m.dpop.nonce",
+                    ClientName = "Machine to machine (client credentials)",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = AllApiScopes,
+                    
+                    RequireDPoP = true,
+                    DPoPValidationMode = DPoPTokenExpirationValidationMode.Nonce,
+                },
                 new Client
                 {
                     ClientId = "m2m.short",

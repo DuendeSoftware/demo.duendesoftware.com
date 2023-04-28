@@ -1,3 +1,4 @@
+using DPoPApi;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
@@ -39,6 +40,16 @@ internal static class HostingExtensions
 
         builder.Services.AddAuthentication()
             .AddLocalApi()
+            .AddJwtBearer("dpop", options =>
+            {
+                //options.Authority = "https://localhost:5001";
+                options.Authority = "https://demo.duendesoftware.com";
+
+                options.TokenValidationParameters.ValidateAudience = false;
+                options.MapInboundClaims = false;
+
+                options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            })
             .AddOpenIdConnect("Google", "Sign-in with Google", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -50,6 +61,11 @@ internal static class HostingExtensions
                 options.CallbackPath = "/signin-google";
                 options.Scope.Add("email");
             });
+
+        builder.Services.ConfigureDPoPTokensForScheme("dpop", options =>
+        {
+            options.Mode = DPoPMode.DPoPOnly;
+        });
 
         // add CORS policy for non-IdentityServer endpoints
         builder.Services.AddCors(options =>
