@@ -276,6 +276,28 @@ namespace Duende.IdentityServer.Demo
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RefreshTokenExpiration = TokenExpiration.Sliding
                 },
+
+                new Client
+                {
+                    ClientId = "native.dpop",
+                    ClientName = "Native client (Code with PKCE + DPop)",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    RequireClientSecret = false,
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+
+                    RequireDPoP = true,
+                    DPoPValidationMode = DPoPTokenExpirationValidationMode.Nonce
+                },
+
                 new Client
                 {
                     ClientId = "interactive.public.short",
