@@ -203,7 +203,7 @@ namespace Duende.IdentityServer.Demo
                     },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequireRequestObject = true,
+                    RequireRequestObject = false,
                     AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
@@ -277,7 +277,7 @@ namespace Duende.IdentityServer.Demo
                     },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequireRequestObject = true,
+                    RequireRequestObject = false,
                     AllowedScopes = AllScopes,
 
                     AllowOfflineAccess = true,
