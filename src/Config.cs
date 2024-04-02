@@ -184,6 +184,33 @@ namespace Duende.IdentityServer.Demo
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding
                 },
+                
+                new Client
+                {
+                    ClientId = "interactive.confidential.jwt",
+                    ClientName = "Interactive client (Code with PKCE) using private key JWT authentication",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireRequestObject = true,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding
+                },
+
                 new Client
                 {
                     ClientId = "interactive.confidential.jar.jwt",
@@ -231,6 +258,35 @@ namespace Duende.IdentityServer.Demo
                     
                     AccessTokenLifetime = 75
                 },
+
+                new Client
+                {
+                    ClientId = "interactive.confidential.short.jwt",
+                    ClientName = "Interactive client (Code with PKCE) using private key JWT authentication with short access token lifetime",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets =
+                    {
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
+                        }
+                    },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireRequestObject = true,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+
+                    AccessTokenLifetime = 75
+                },
+
                 new Client
                 {
                     ClientId = "interactive.confidential.short.jar.jwt",
