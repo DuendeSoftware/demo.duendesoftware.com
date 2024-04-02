@@ -86,6 +86,20 @@ namespace Duende.IdentityServer.Demo
                 }
             };
 
+        private static Secret PublicKey = new Secret
+        {
+            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+            Value = 
+                """
+                {
+                    "e":"AQAB",
+                    "kid":"ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA",
+                    "kty":"RSA",
+                    "n":"wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw"
+                }
+                """
+        };
+
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
@@ -106,14 +120,7 @@ namespace Duende.IdentityServer.Demo
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = AllApiScopes,
                     
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    }
+                    ClientSecrets = { PublicKey }
                 },
                 new Client
                 {
@@ -156,14 +163,7 @@ namespace Duende.IdentityServer.Demo
                     AllowedScopes = AllApiScopes,
                     AccessTokenLifetime = 75,
                     
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    }
+                    ClientSecrets = { PublicKey }
                 },
 
                 // interactive
@@ -193,14 +193,7 @@ namespace Duende.IdentityServer.Demo
                     RedirectUris = { "https://notused" },
                     PostLogoutRedirectUris = { "https://notused" },
 
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    },
+                    ClientSecrets = { PublicKey },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireRequestObject = false,
@@ -219,14 +212,7 @@ namespace Duende.IdentityServer.Demo
                     RedirectUris = { "https://notused" },
                     PostLogoutRedirectUris = { "https://notused" },
 
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    },
+                    ClientSecrets = { PublicKey },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireRequestObject = true,
@@ -267,14 +253,7 @@ namespace Duende.IdentityServer.Demo
                     RedirectUris = { "https://notused" },
                     PostLogoutRedirectUris = { "https://notused" },
 
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    },
+                    ClientSecrets = { PublicKey },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireRequestObject = false,
@@ -295,14 +274,7 @@ namespace Duende.IdentityServer.Demo
                     RedirectUris = { "https://notused" },
                     PostLogoutRedirectUris = { "https://notused" },
 
-                    ClientSecrets =
-                    {
-                        new Secret
-                        {
-                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'ZzAjSnraU3bkWGnnAqLapYGpTyNfLbjbzgAPbbW2GEA','kty':'RSA','n':'wWwQFtSzeRjjerpEM5Rmqz_DsNaZ9S1Bw6UbZkDLowuuTCjBWUax0vBMMxdy6XjEEK4Oq9lKMvx9JzjmeJf1knoqSNrox3Ka0rnxXpNAz6sATvme8p9mTXyp0cX4lF4U2J54xa2_S9NF5QWvpXvBeC4GAJx7QaSw4zrUkrc6XyaAiFnLhQEwKJCwUw4NOqIuYvYp_IXhw-5Ti_icDlZS-282PcccnBeOcX7vc21pozibIdmZJKqXNsL1Ibx5Nkx1F1jLnekJAmdaACDjYRLL_6n3W4wUp19UvzB1lGtXcJKLLkqB6YDiZNu16OSiSprfmrRXvYmvD8m6Fnl5aetgKw'}"
-                        }
-                    },
+                    ClientSecrets = { PublicKey },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireRequestObject = true,
