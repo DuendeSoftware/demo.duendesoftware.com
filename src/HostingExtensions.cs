@@ -1,4 +1,4 @@
-using DPoPApi;
+using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
@@ -42,7 +42,7 @@ internal static class HostingExtensions
             .AddLocalApi()
             .AddJwtBearer("dpop", options =>
             {
-                //options.Authority = "https://localhost:5001";
+                // options.Authority = "https://localhost:5001";
                 options.Authority = "https://demo.duendesoftware.com";
 
                 options.TokenValidationParameters.ValidateAudience = false;
@@ -64,7 +64,7 @@ internal static class HostingExtensions
 
         builder.Services.ConfigureDPoPTokensForScheme("dpop", options =>
         {
-            options.Mode = DPoPMode.DPoPOnly;
+            options.TokenMode = DPoPMode.DPoPOnly;
         });
 
         // add CORS policy for non-IdentityServer endpoints
