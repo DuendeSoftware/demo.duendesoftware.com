@@ -4,6 +4,39 @@
   }
 }
 
+/* Accordion styles */
+.collapsible-link::before {
+  content: '';
+  width: 14px;
+  height: 2px;
+  background: #333;
+  position: absolute;
+  top: calc(50% - 1px);
+  right: 1rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.collapsible-link::after {
+  content: '';
+  width: 2px;
+  height: 14px;
+  background: #333;
+  position: absolute;
+  top: calc(50% - 7px);
+  right: calc(1rem + 6px);
+  display: block;
+  transition: all 0.3s;
+}
+
+.collapsible-link[aria-expanded='true']::after {
+  transform: rotate(90deg) translateX(-1px);
+}
+
+.collapsible-link[aria-expanded='true']::before {
+  transform: rotate(180deg);
+}
+
 .icon-banner {
   width: 32px;
 }
@@ -11,13 +44,6 @@
 .body-container {
   margin-top: 60px;
   padding-bottom: 40px;
-}
-
-.welcome-page {
-  li {
-    list-style: none;
-    padding: 4px;
-  }
 }
 
 .logged-out-page {
