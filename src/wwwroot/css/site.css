@@ -11,11 +11,6 @@
   padding-bottom: 40px;
 }
 
-.welcome-page li {
-  list-style: none;
-  padding: 4px;
-}
-
 .logged-out-page iframe {
   display: none;
   width: 0;
