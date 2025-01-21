@@ -49,109 +49,117 @@
         or use them in the <a href="https://github.com/duendesoftware/samples">IdentityServer sample projects</a>.
     </p>
 
-    <div id="accordion">
+    <div id="accordion" class="mb-3">
         @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()))
         {
-            <h3 id="clientid-@clients.Key">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</h3>
-            @if (clients.Key == "m2m")
-            {
-                <p>
-                    Machine-to-machine communication can be done using <a href="https://docs.duendesoftware.com/identityserver/v7/quickstarts/1_client_credentials/">client credentials</a>.
-                </p>
-                <ul>
-                    <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#client-credentials">Sample using client credentials</a></li>
-                    <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#jwt-based-client-authentication">Sample using client credentials (JWT-based)</a></li>
-                    <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/misc/#dpop">Sample using DPoP</a></li>
-                </ul>
-            }
-            else if (clients.Key == "interactive")
-            {
-                <p>
-                    Interactive clients use <a href="https://docs.duendesoftware.com/identityserver/v7/quickstarts/2_interactive/">interactive user authentication via the OpenID Connect protocol</a>.
-                </p>
-                <ul>
-                    <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#mvc-client-sample">Sample MVC client application</a></li>
-                    <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#mvc-client-with-jar-and-jwt-based-authentication">Sample MVC client application (JAR and JWT)</a></li>
-                </ul>
-            }
+            <div class="card">
+                <div id="clientid-@clients.Key" class="card-header bg-white shadow-sm border-0">
+                    <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#clientid-@clients.Key-collapse" aria-controls="clientid-@clients.Key-collapse" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</a></h6>
+                </div>
+                <div id="clientid-@clients.Key-collapse" aria-labelledby="clientid-@clients.Key" data-parent="#accordion" class="collapse">
+                    <div class="card-body">
+                        @if (clients.Key == "m2m")
+                        {
+                            <p>
+                                Machine-to-machine communication can be done using <a href="https://docs.duendesoftware.com/identityserver/v7/quickstarts/1_client_credentials/">client credentials</a>.
+                            </p>
+                            <ul>
+                                <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#client-credentials">Sample using client credentials</a></li>
+                                <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#jwt-based-client-authentication">Sample using client credentials (JWT-based)</a></li>
+                                <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/misc/#dpop">Sample using DPoP</a></li>
+                            </ul>
+                        }
+                        else if (clients.Key == "interactive")
+                        {
+                            <p>
+                                Interactive clients use <a href="https://docs.duendesoftware.com/identityserver/v7/quickstarts/2_interactive/">interactive user authentication via the OpenID Connect protocol</a>.
+                            </p>
+                            <ul>
+                                <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#mvc-client-sample">Sample MVC client application</a></li>
+                                <li><a href="https://docs.duendesoftware.com/identityserver/v7/samples/basics/#mvc-client-with-jar-and-jwt-based-authentication">Sample MVC client application (JAR and JWT)</a></li>
+                            </ul>
+                        }
 
-            <div class="row">
-                @foreach(var client in clients)
-                {
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-dark m-3">
-                            <div class="card-body bg-light">
-                                <h5 class="card-title">@client.ClientId</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">@client.ClientName</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="card-text">
-                                    Client ID: <code>@client.ClientId</code><br/>
-                                    Grant type: @DemoServerUtilities.HumanizeAllowedGrantTypes(client.AllowedGrantTypes)
-                                    @if (client.RequireRequestObject)
-                                    {
-                                        <text> - requires JAR</text>
-                                    }
-                                    <br/>
+                        <div class="row">
+                            @foreach (var client in clients)
+                            {
+                                <div class="col-12 col-lg-6">
+                                    <div class="card border-light m-3">
+                                        <div class="card-body bg-light">
+                                            <h5 class="card-title">@client.ClientId</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">@client.ClientName</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-text">
+                                                Client ID: <code>@client.ClientId</code><br/>
+                                                Grant type: @DemoServerUtilities.HumanizeAllowedGrantTypes(client.AllowedGrantTypes)
+                                                @if (client.RequireRequestObject)
+                                                {
+                                                    <text> - requires JAR</text>
+                                                }
+                                                <br/>
 
-                                    @if (client.RequirePkce)
-                                    {
-                                        <text>Requires PKCE</text>
-                                        <br/>
-                                    }
-                                    @if (client.RequireDPoP)
-                                    {
-                                        switch (client.DPoPValidationMode)
-                                        {
-                                            case DPoPTokenExpirationValidationMode.Nonce:
-                                                @:Requires the use of DPoP and nonce
-                                                break;
-                                            default:
-                                                @:Requires the use of DPoP
-                                                break;
-                                        }
+                                                @if (client.RequirePkce)
+                                                {
+                                                    <text>Requires PKCE</text>
+                                                    <br/>
+                                                }
+                                                @if (client.RequireDPoP)
+                                                {
+                                                    switch (client.DPoPValidationMode)
+                                                    {
+                                                        case DPoPTokenExpirationValidationMode.Nonce:
+                                                            @:Requires the use of DPoP and nonce
+                                                            break;
+                                                        default:
+                                                            @:Requires the use of DPoP
+                                                            break;
+                                                    }
 
-                                        <br/>
-                                    }
+                                                    <br/>
+                                                }
 
-                                    @if (client.ClientSecrets.Any())
-                                    {
-                                        <text>Client secret:</text>
-                                        @foreach (var clientSecret in client.ClientSecrets)
-                                        {
-                                            switch (clientSecret.Type)
-                                            {
-                                                case IdentityServerConstants.SecretTypes.SharedSecret:
-                                                    <code>secret</code>
-                                                    break;
-                                                case IdentityServerConstants.SecretTypes.JsonWebKey:
-                                                    <a href="#sample-keys">private key JWT</a>
-                                                    break;
-                                                default:
-                                                    @clientSecret.Type
-                                                    break;
-                                            }
-                                        }
+                                                @if (client.ClientSecrets.Any())
+                                                {
+                                                    <text>Client secret:</text>
+                                                    @foreach (var clientSecret in client.ClientSecrets)
+                                                    {
+                                                        switch (clientSecret.Type)
+                                                        {
+                                                            case IdentityServerConstants.SecretTypes.SharedSecret:
+                                                                <code>secret</code>
+                                                                break;
+                                                            case IdentityServerConstants.SecretTypes.JsonWebKey:
+                                                                <a href="#sample-keys">private key JWT</a>
+                                                                break;
+                                                            default:
+                                                                @clientSecret.Type
+                                                                break;
+                                                        }
+                                                    }
 
-                                        <br/>
-                                    }
+                                                    <br/>
+                                                }
 
-                                    Access token lifetime: @DemoServerUtilities.HumanizeLifetime(TimeSpan.FromSeconds(client.AccessTokenLifetime))<br/>
+                                                Access token lifetime: @DemoServerUtilities.HumanizeLifetime(TimeSpan.FromSeconds(client.AccessTokenLifetime))<br/>
 
-                                    Allowed scopes:
-                                    @foreach (var scope in client.AllowedScopes.Where(it => !it.Contains("resource") && !it.Contains("scope") && !it.Contains("transaction")))
-                                    {
-                                        <code>@scope</code>
-                                    }
-                                    @if (client.AllowOfflineAccess)
-                                    {
-                                        <code>offline_access</code>
-                                    }
+                                                Allowed scopes:
+                                                @foreach (var scope in client.AllowedScopes.Where(it => !it.Contains("resource") && !it.Contains("scope") && !it.Contains("transaction")))
+                                                {
+                                                    <code>@scope</code>
+                                                }
+                                                @if (client.AllowOfflineAccess)
+                                                {
+                                                    <code>offline_access</code>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
-                }
+                </div>
             </div>
         }
     </div>
