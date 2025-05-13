@@ -1,3 +1,7 @@
+:root {
+  --font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .welcome-page {
   .logo {
     width: 64px;
@@ -37,8 +41,19 @@
   transform: rotate(180deg);
 }
 
-.icon-banner {
-  width: 32px;
+a.navbar-brand {
+  span {
+    margin-left: 10px;
+  }
+  
+  .icon-banner {
+    margin-top: -4px;
+    height:calc(4rem - 2 * .75rem);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: 0 50%
+  }
 }
 
 .body-container {
