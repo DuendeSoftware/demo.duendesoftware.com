@@ -18,15 +18,6 @@
     <link rel="stylesheet" href="~/lib/bootswatch/dist/pulse/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
-    @if (IsSectionDefined("robots"))
-    {
-        @await RenderSectionAsync("robots")
-    }
-    else
-    {
-        <meta name="robots" content="noindex" />
-    }
 </head>
 <body>
     <partial name="_Nav" />
