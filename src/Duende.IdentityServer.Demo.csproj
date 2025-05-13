@@ -10,4 +10,47 @@
 		<PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="0.1.3" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cerulean\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cerulean\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cerulean\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cerulean\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cyborg\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cyborg\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cyborg\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\cyborg\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\flatly\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\flatly\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\flatly\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\flatly\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\litera\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\litera\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\litera\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\litera\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\lux\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\lux\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\lux\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\lux\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\minty\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\minty\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\minty\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\minty\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\simplex\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\simplex\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\simplex\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\simplex\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\slate\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\slate\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\slate\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\slate\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\spacelab\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\spacelab\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\spacelab\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\spacelab\_variables.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\united\bootstrap.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\united\bootstrap.min.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\united\_bootswatch.scss" />
+	  <_ContentIncludedByDefault Remove="wwwroot\lib\bootswatch\dist\united\_variables.scss" />
+	</ItemGroup>
 </Project>

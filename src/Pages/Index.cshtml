@@ -19,7 +19,6 @@
 
 <div class="welcome-page">
     <h1>
-        <img src="~/duende-logo.svg" class="logo">
         Welcome to Duende IdentityServer
         <small class="text-muted">(version @Model.Version)</small>
     </h1>
@@ -65,7 +64,7 @@
         @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()))
         {
             <div class="card">
-                <div id="clientid-@clients.Key" class="card-header bg-white shadow-sm border-0">
+                <div id="clientid-@clients.Key" class="card-header bg-light shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#clientid-@clients.Key-collapse" aria-controls="clientid-@clients.Key-collapse" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</a></h6>
                 </div>
                 <div id="clientid-@clients.Key-collapse" aria-labelledby="clientid-@clients.Key" data-parent="#accordion" class="collapse">
