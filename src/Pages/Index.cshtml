@@ -12,41 +12,168 @@
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+<section class="text-center container border-bottom mb-3">
+    <div class="row py-lg-2">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <img src="duende-logo.svg" alt="Duende Software Logo" class="img-fluid w-75"/>
+            <h1 class="fw-light">
+                <a class="text-decoration-none" href="https://duendesoftware.com/products/identityserver">Welcome to Duende IdentityServer</a>
+            </h1>
+            <p class="lead text-muted">
+                Meet Duende IdentityServer. A secure, flexible, and standards-compliant framework for OpenID Connect and OAuth 2.0. Use it as-is, or with full control of your UI, UX, business logic, and data. You decide.
+            </p>
+            <p class="display-4">
+                <span class="badge badge-primary">@($"v{Model.Version}")</span>
+            </p>
+            <div>
+                <a href="https://duendesoftware.com" class="btn btn-primary btn-lg">
+                    Get a License
+                </a>
+                <a href="https://docs.duendesoftware.com" class="btn btn-outline-primary btn-lg">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div class="welcome-page">
-    <h1>
-        Welcome to Duende IdentityServer
-        <small class="text-muted">(version @Model.Version)</small>
-    </h1>
-
-    <ul>
-        <li>
-            IdentityServer publishes a
-            <a href="~/.well-known/openid-configuration">discovery document</a>
-            where you can find metadata and links to all the endpoints, key material, etc.
-        </li>
-        <li>
-            Click <a href="~/diagnostics">here</a> to see the claims for your current session.
-        </li>
-        <li>
-            Click <a href="~/grants">here</a> to manage your stored grants.
-        </li>
-        <li>
-            Click <a href="~/serversidesessions">here</a> to view the server side sessions.
-        </li>
-        <li>
-            Click <a href="~/ciba/all">here</a> to view your pending CIBA login requests.
-        </li>
-    </ul>
-
-    <hr/>
+    <h2 id="features">Features</h2>
+    <p>
+        This dashboard provides access to various IdentityServer functionalities for demo purposes only.
+    </p>
+    <div class="d-flex align-content-between flex-wrap mb-3">
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-globe"></i>
+                    Discovery Document
+                </h5>
+                <p class="card-text">
+                    A discovery document
+                    where you can find metadata and links to all the endpoints, key material, etc.
+                </p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/.well-known/openid-configuration" class="btn btn-primary w-100 rounded-bottom">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-user"></i>
+                    Claims
+                </h5>
+                <p class="card-text">See the claims for your current session.</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-book"></i>
+                    Grants
+                </h5>
+                <p class="card-text">Manage your stored grants.</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-paperclip"></i>
+                    Server Side Sessions
+                </h5>
+                <p class="card-text">View your current server side sessions.</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/serversidesessions/" class="btn btn-primary w-100 rounded-bottom">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-phone"></i>
+                    CIBA
+                </h5>
+                <p class="card-text">View your pending Client-Initiated Backchannel Authentication (CIBA) login requests.</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/ciba/all/" class="btn btn-primary w-100 rounded-bottom">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <h2 id="references">References</h2>
-    <p>
-        Here are links to the
-        <a href="https://github.com/duendesoftware/IdentityServer">IdentityServer source code repository</a>,
-        <a href="https://github.com/duendesoftware/samples">ready-to-use samples</a>,
-        and this <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com">demo server</a>.
-    </p>
+    <p>To learn more about Duende products and how to implement them, check out our source repositories and samples.</p>
+    <div class="d-flex align-content-between flex-wrap mb-3">
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-floppy-disk"></i>
+                    Duende IdentityServer Source Code
+                </h5>
+                <p class="card-text">
+                    The source code for the Duende IdentityServer and other Duende Products.
+                </p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="https://github.com/duendesoftware/products" class="btn btn-primary w-100 rounded-bottom">
+                    Source Code
+                    <i class="glyphicon glyphicon-download-alt"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-book"></i>
+                    Ready-to-use Samples
+                </h5>
+                <p class="card-text">Ready-to-use IdentityServer samples for .NET and ASP.NET Core</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                    Source Code
+                    <i class="glyphicon glyphicon-download-alt"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="glyphicon glyphicon-cloud"></i>
+                    Demo Server Source Code
+                </h5>
+                <p class="card-text">The source code for this demo server.</p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                    Source Code
+                    <i class="glyphicon glyphicon-download-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <h2 id="demo-clients">Demo clients</h2>
     <p>
@@ -58,7 +185,7 @@
     <div id="accordion" class="mb-3">
         @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()))
         {
-            <div class="card">
+            <div class="card mb-2">
                 <div id="clientid-@clients.Key" class="card-header bg-light shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#clientid-@clients.Key-collapse" aria-controls="clientid-@clients.Key-collapse" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</a></h6>
                 </div>
@@ -90,10 +217,10 @@
                             @foreach (var client in clients)
                             {
                                 <div class="col-12 col-lg-6">
-                                    <div class="card border-light m-3">
-                                        <div class="card-body bg-light">
+                                    <div class="card border-light m-2">
+                                        <div class="card-header bg-light">
                                             <h5 class="card-title">@client.ClientId</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">@client.ClientName</h6>
+                                            <h6 class="card-subtitle mb-1 text-muted">@client.ClientName</h6>
                                         </div>
                                         <div class="card-body">
                                             <div class="card-text">
