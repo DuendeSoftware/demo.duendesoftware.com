@@ -6,6 +6,36 @@
   width: 64px;
 }
 
+/* List group */
+.list-group-item {
+  color: #444;
+  background-color: #fff;
+}
+
+.list-group-item.disabled, .list-group-item:disabled {
+  color: #5c507c;
+  background-color: #fff;
+}
+
+.list-group-item.active, .list-group-item:hover, .list-group-item:focus {
+  z-index: 2;
+  color: #444;
+  background-color: #eee;
+  border-color: #eee;
+}
+
+.list-group-item.active {
+  font-weight: 700;
+}
+
+.list-group-item.active:hover {
+  background-color: #fff;
+}
+
+.list-group-item.disabled:hover {
+  color: #5c507c;
+}
+
 /* Accordion styles */
 .collapsible-link::before {
   content: "";
