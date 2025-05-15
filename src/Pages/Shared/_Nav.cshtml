@@ -1,6 +1,6 @@
 @using Duende.IdentityServer.Extensions
 @{
-    #nullable enable
+#nullable enable
     string? name = null;
     if (!true.Equals(ViewData["signed-out"]))
     {
@@ -8,26 +8,25 @@
     }
 }
 
-<div class="nav-page">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-        <a href="~/" class="navbar-brand">
-            <img src="~/duende-logo.svg" class="icon-banner" alt="Duende IdentityServer" />
-            <span>IdentityServer (demo.duendesoftware.com)</span>
+<nav class="site-header sticky-top py-1 bg-primary">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a href="~/" class="navbar-brand py-2 d-md-inline-block">
+            <img src="~/duende-white.svg" class="icon-banner" alt="Duende IdentityServer"/>
+            <span class="text-white">IdentityServer</span>
+            <span class="badge badge-dark">demo</span>
         </a>
-
+        <a class="text-white py-3 d-none d-md-inline-block" href="/#features">Features</a>
+        <a class="text-white py-3 d-none d-md-inline-block" href="/#references">References</a>
+        <a class="text-white py-3 d-none d-md-inline-block" href="/#demo-clients">Clients</a>
+        <a class="text-white py-3 d-none d-md-inline-block" href="/#sample-apis">APIs</a>
+        <a class="text-white py-3 d-none d-md-inline-block" href="/#sample-keys">Keys</a>
         @if (!string.IsNullOrWhiteSpace(name))
         {
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                    
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-page="/Account/Logout/Index">Logout</a>
-                    </div>
-              </li>
-            </ul>
+            <a class="text-white py-3 d-md-inline-block" asp-page="/Account/Logout/Index">
+                <span class="font-weight-bold">@name</span>
+                <span class="text-white-50 font-italic">Logout</span>
+                <i class="glyphicon glyphicon-log-out"></i>
+            </a>
         }
-    
-    </nav>
-</div>
+    </div>
+</nav>
