@@ -1,0 +1,22 @@
+{
+  "name": "demo.identityserver",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "parcel build assets/bundle.js --dist-dir wwwroot/dist/",
+    "watch": "parcel watch assets/bundle.js --dist-dir wwwroot/dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DuendeSoftware/demo.duendesoftware.com.git"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.15.0",
+    "parcel": "^2.15.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.6.2",
+    "bootswatch": "^5.3.6",
+    "jquery": "^3.7.1"
+  }
+}

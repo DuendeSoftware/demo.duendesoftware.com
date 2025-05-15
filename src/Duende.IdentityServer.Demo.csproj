@@ -11,4 +11,8 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 	</ItemGroup>
 	
+	<Target Name="Parcel" BeforeTargets="Build">
+		<Exec Command="npm run build" />
+	</Target>
+	
 </Project>
