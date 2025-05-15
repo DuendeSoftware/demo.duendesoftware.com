@@ -12,6 +12,7 @@
 	</ItemGroup>
 	
 	<Target Name="Parcel" BeforeTargets="Build">
+		<Exec Command="npm install" Condition="'$(Configuration)' == 'Release'"/>
 		<Exec Command="npm run build" />
 	</Target>
 	
