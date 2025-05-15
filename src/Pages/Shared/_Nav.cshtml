@@ -9,44 +9,43 @@
 }
 
 <nav class="navbar navbar-expand-lg bg-primary navbar-dark site-header sticky-top py-1">
-    <div class="container d-flex flex-column flex-md-row justify-content-between">
-        <a href="~/" class="navbar-brand py-2 d-md-inline-block">
-            <img src="~/duende-white.svg" class="icon-banner" alt="Duende IdentityServer"/>
-            <span class="text-white">IdentityServer</span>
-            <span class="badge badge-dark">demo</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/#features">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/#references">References</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/#demo-clients">Clients</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/#sample-apis">APIs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/#sample-keys">Keys</a>
-                </li>
-                <li class="nav-item">
+    <a href="~/" class="navbar-brand py-2 d-md-inline-block">
+        <img src="~/duende-white.svg" class="icon-banner" alt="Duende IdentityServer"/>
+        <span class="text-white">IdentityServer</span>
+        <span class="badge badge-dark">demo</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/#features">Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/#references">References</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/#demo-clients">Clients</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/#sample-apis">APIs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/#sample-keys">Keys</a>
+            </li>
+            <li class="nav-item">
                 @if (!string.IsNullOrWhiteSpace(name))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-page="/Account/Logout/Index">
-                            <span class="font-weight-bold">@name</span>
-                            <span class="text-white-50 font-italic">Logout</span>
-                            <i class="text-white-50 glyphicon glyphicon-log-out"></i>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </div>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-page="/Account/Logout/Index">
+                        <span class="font-weight-bold">@name</span>
+                        <span class="text-white-50 font-italic">Logout</span>
+                        <i class="text-white-50 glyphicon glyphicon-log-out"></i>
+                    </a>
+                </li>
+            }
+        </ul>
     </div>
 </nav>
