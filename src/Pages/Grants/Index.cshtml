@@ -53,10 +53,11 @@
 
                         <dt>Created</dt>
                         <dd>@grant.Created.ToString("yyyy-MM-dd")</dd>
-
-                        <dt>Expires</dt>
-                        <dd>@grant.Expires.Value.ToString("yyyy-MM-dd")</dd>
-
+                        @if (grant.Expires.HasValue)
+                        {
+                            <dt>Expires</dt>
+                            <dd>@grant.Expires.Value.ToString("yyyy-MM-dd")</dd>
+                        }
                         @if (grant.IdentityGrantNames.Any())
                         {
                             <dt>Identity Grants</dt>
