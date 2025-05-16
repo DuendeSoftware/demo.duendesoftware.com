@@ -42,8 +42,8 @@
     <p>
         This dashboard provides access to various IdentityServer functionalities for demo purposes only.
     </p>
-    <div class="d-flex align-content-between flex-wrap mb-3">
-        <div class="card m-2" style="width: 18rem;">
+    <div class="d-flex align-content-center flex-wrap mb-3">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-globe"></i>
@@ -55,13 +55,13 @@
                 </p>
             </div>
             <div class="card-footer p-0">
-                <a href="/.well-known/openid-configuration" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/.well-known/openid-configuration" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-user"></i>
@@ -70,13 +70,13 @@
                 <p class="card-text">See the claims for your current session.</p>
             </div>
             <div class="card-footer p-0">
-                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/diagnostics/" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-book"></i>
@@ -85,13 +85,13 @@
                 <p class="card-text">Manage your stored grants.</p>
             </div>
             <div class="card-footer p-0">
-                <a href="/grants/" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/grants/" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-phone"></i>
@@ -100,7 +100,7 @@
                 <p class="card-text">View your pending Client-Initiated Backchannel Authentication (CIBA) login requests.</p>
             </div>
             <div class="card-footer p-0">
-                <a href="/ciba/all/" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/ciba/all/" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
@@ -111,7 +111,7 @@
     <h2 id="references" style="scroll-margin-top: 3em;">References</h2>
     <p>To learn more about Duende products and how to implement them, check out our source repositories and samples.</p>
     <div class="d-flex align-content-between flex-wrap mb-3">
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-floppy-disk"></i>
@@ -122,13 +122,13 @@
                 </p>
             </div>
             <div class="card-footer p-0">
-                <a href="https://github.com/duendesoftware/products" class="btn btn-primary w-100 rounded-bottom">
+                <a href="https://github.com/duendesoftware/products" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
             </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-book"></i>
@@ -137,13 +137,13 @@
                 <p class="card-text">Ready-to-use IdentityServer samples for .NET and ASP.NET Core</p>
             </div>
             <div class="card-footer p-0">
-                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/diagnostics/" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
             </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="card mr-2 mb-2" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-cloud"></i>
@@ -152,7 +152,7 @@
                 <p class="card-text">The source code for this demo server.</p>
             </div>
             <div class="card-footer p-0">
-                <a href="/diagnostics/" class="btn btn-primary w-100 rounded-bottom">
+                <a href="/diagnostics/" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
@@ -329,25 +329,4 @@
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MMR39D3G');</script>
     <!-- End Google Tag Manager -->
-
-    <script src="~/lib/clipboardjs/dist/clipboard.min.js"></script>
-    <script>
-        $('.clipboard').tooltip({
-            trigger: 'click',
-            placement: 'top'
-        });
-
-        const clipboard = new ClipboardJS('.clipboard');
-        clipboard.on('success', function(e) {
-            $(e.trigger).tooltip('hide')
-                .attr('data-original-title', 'Copied!')
-                .tooltip('show');
-            e.clearSelection();
-
-            setTimeout(function() {
-                $(e.trigger).tooltip('hide');
-            }, 1500);
-        });
-
-    </script>
 }
