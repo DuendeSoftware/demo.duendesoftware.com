@@ -33,6 +33,9 @@ public sealed class SecurityHeadersAttribute : ActionFilterAttribute
             //csp += "upgrade-insecure-requests;";
             // also an example if you need client images to be displayed from twitter
             // csp += "img-src 'self' https://pbs.twimg.com;";
+            
+            // allow Google Fonts
+            csp += "style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;";
 
             // once for standards compliant browsers
             if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
