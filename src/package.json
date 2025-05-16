@@ -15,6 +15,7 @@
     "parcel": "^2.15.0"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.2.5",
     "bootstrap": "^4.6.2",
     "bootswatch": "^5.3.6",
     "jquery": "^3.7.1"

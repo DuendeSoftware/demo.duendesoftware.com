@@ -1,3 +1,5 @@
+$font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
 @import "~bootswatch/dist/pulse/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "../lib/bootstrap4-glyphicons/css/bootstrap-glyphicons.css";
@@ -6,10 +8,6 @@
 $prefix: "";
 
 @import "~bootswatch/dist/pulse/bootswatch";
-
-:root {
-  --font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
 
 .welcome-page {
   .logo {
