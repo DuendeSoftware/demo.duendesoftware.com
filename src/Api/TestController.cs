@@ -10,7 +10,7 @@ namespace Duende.IdentityServer.Demo
         [Authorize(AuthenticationSchemes = IdentityServerConstants.LocalApi.AuthenticationScheme)]
         public IActionResult Get()
         {
-            var scheme = GetAuthorizationScheme(Request);
+            var scheme = GetAuthorizationScheme(Request) ?? throw new ArgumentNullException();
             var proofToken = GetDPoPProofToken(Request);
 
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
@@ -28,8 +28,8 @@ namespace Duende.IdentityServer.Demo
         [Authorize(AuthenticationSchemes = "dpop")]
         public IActionResult GetDPoP()
         {
-            var scheme = GetAuthorizationScheme(Request);
-            var proofToken = GetDPoPProofToken(Request);
+            var scheme = GetAuthorizationScheme(Request) ?? throw new ArgumentNullException();
+            var proofToken = GetDPoPProofToken(Request) ?? throw new ArgumentNullException();
 
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
             claims.Add(new { Type = "authorization_scheme", Value = scheme });
@@ -38,12 +38,14 @@ namespace Duende.IdentityServer.Demo
             return new JsonResult(claims);
         }
 
-        private static string GetAuthorizationScheme(HttpRequest request)
+        private static string? GetAuthorizationScheme(HttpRequest request)
         {
-            return request.Headers.Authorization.FirstOrDefault()?.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0];
+            return request.Headers.Authorization.FirstOrDefault()?
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault();
         }
 
-        private static string GetDPoPProofToken(HttpRequest request)
+        private static string? GetDPoPProofToken(HttpRequest request)
         {
             return request.Headers[OidcConstants.HttpHeaders.DPoP].FirstOrDefault();
         }
