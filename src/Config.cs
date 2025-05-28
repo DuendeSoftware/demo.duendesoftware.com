@@ -404,6 +404,19 @@ namespace Duende.IdentityServer.Demo
                 // oidc login only
                 new Client
                 {
+                    ClientId = "interactive.implicit",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes = AllIdentityScopes,
+                },
+
+                // oidc login only - legacy client name. Keep until end of 2026
+                // to not break existing demos.
+                new Client
+                {
                     ClientId = "login",
                     
                     RedirectUris = { "https://notused" },
