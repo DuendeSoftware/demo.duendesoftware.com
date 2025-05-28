@@ -168,7 +168,11 @@
     </p>
 
     <div id="accordion" class="mb-3">
-        @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()))
+        @* 
+            We have a legacy login client that has been used in various demos. It's now renamed to interactive.implicit, but we need to have the
+            old entry around for some time, but don't want to show it any more. The login client and the .Where(g => g.Key != "login") can be removed after 2026.
+        *@
+        @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()).Where(g => g.Key != "login"))
         {
             <div class="card mb-2">
                 <div id="clientid-@clients.Key" class="card-header bg-light shadow-sm border-0">
