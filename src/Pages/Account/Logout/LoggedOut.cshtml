@@ -25,6 +25,15 @@
 {
     @if (Model.View.AutomaticRedirectAfterSignOut)
     {
-        <script src="~/js/signout-redirect.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const anchor = document
+                    .querySelector("a.PostLogoutRedirectUri");
+
+                if (anchor) {
+                    window.location = anchor.href;
+                }
+            });
+        </script>
     }
 }
