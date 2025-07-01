@@ -1,0 +1,109 @@
+﻿@page "~/jwt-decoder"
+@model IdentityServerHost.Pages.Home.JwtDecoder
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMR39D3G"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="jwt-decoder-page">
+    <h2 id="jwt-decoder" style="scroll-margin-top: 3em;">JSON Web Token (JWT) Decoder</h2>
+    <p class="lead">
+        Using this tool, you can decode and validate JSON Web Tokens (JWTs) issued by IdentityServer or another token issuer.
+    </p>
+    <p>
+        TODO more information about JWTs, link to RFC 7519, our docs...
+    </p>
+    <div class="alert alert-warning row">
+        <div>
+            <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 3em" title="Warning"></i>
+        </div>
+        <div class="mx-3">
+            <strong>This tool does not send JWTs to any server, it only decodes the JWT locally in your browser.</strong><br/>
+            Always be cautious when pasting JWTs, as they may contain credentials or sensitive information.
+        </div>
+    </div>
+    <div class="jwt-decoder-container row">
+        <div class="col-6">
+            <h3>Encoded JWT</h3>
+            <div class="form-group">
+                <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
+                <textarea id="jwt-input" class="form-control bg-dark text-light p-2" rows="8" cols="70" placeholder="Paste your JWT here..."></textarea>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3>Decoded JWT</h3>
+            <div class="jwt-decoded-output">
+                <h4>Header</h4>
+                <pre id="jwt-header" class="bg-dark text-light p-2"></pre>
+                <h4>Payload</h4>
+                <pre id="jwt-payload" class="bg-dark text-light p-2"></pre>
+                <h4>Signature</h4>
+                <pre id="jwt-signature" class="bg-dark text-light p-2"></pre>
+            </div>
+            <div class="jwt-decoder-error">
+                <pre id="jwt-decoder-error-message" class="alert-danger p-2"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MMR39D3G');</script>
+    <!-- End Google Tag Manager -->
+
+    <script>
+        $(document).ready(initializeJwtDecoder);
+        
+        function initializeJwtDecoder() {
+            $('#jwt-input').on('input', function() {
+                const jwt = $(this).val();
+                if (jwt) {
+                    try {
+                        const parts = jwt.split('.');
+                        if (parts.length === 3) {
+                            const header = JSON.parse(atob(parts[0]));
+                            const payload = JSON.parse(atob(parts[1]));
+                            const signature = parts[2];
+
+                            showDecodedJwt(header, payload, signature);
+                        } else {
+                            showError('Invalid JWT format. A JWT should have three parts separated by dots.');
+                        }
+                    } catch (e) {
+                        showError('Error decoding JWT: ' + e.message);
+                    }
+                } else {
+                    showDecodedJwt({}, {}, '');
+                }
+            });
+        }
+        
+        function showDecodedJwt(header, payload, signature) {
+            clearError();
+            $('#jwt-header').text(JSON.stringify(header, null, 2));
+            $('#jwt-payload').text(JSON.stringify(payload, null, 2));
+            $('#jwt-signature').text(signature);
+        }
+        
+        function showError(message) {
+            $('#jwt-decoder-error-message').text(message);
+            $('.jwt-decoded-output').hide();
+            $('.jwt-decoder-error').show();
+        }
+        
+        function clearError() {
+            $('#jwt-decoder-error-message').text('');
+            $('.jwt-decoder-error').hide();
+            $('.jwt-decoded-output').show();
+        }
+    </script>
+}
