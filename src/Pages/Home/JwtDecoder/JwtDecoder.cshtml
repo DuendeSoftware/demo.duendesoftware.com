@@ -25,26 +25,38 @@
             Always be cautious when pasting JWTs, as they may contain credentials or sensitive information.
         </div>
     </div>
-    <div class="jwt-decoder-container row">
-        <div class="col-6">
-            <h3>Encoded JWT</h3>
-            <div class="form-group">
-                <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
-                <textarea id="jwt-input" class="form-control bg-dark text-light p-2" rows="8" cols="70" placeholder="Paste your JWT here..."></textarea>
+    <div class="jwt-decoder-container container">
+        <div class="row align-items-stretch">
+            <div class="col">
+                <h3>Encoded JWT</h3>
+                <div class="h-100 d-flex flex-column">
+                    <div class="form-group flex-grow-1">
+                        <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
+                        <textarea id="jwt-input" class="form-control bg-dark text-light p-2 h-100" rows="8" cols="70" placeholder="Paste your JWT here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
+                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" value="https://demo.duendesoftware.com" aria-describedby="jwks-url-help" />
+                        <small id="jwks-url-help" class="form-text text-muted">
+                            Optionally, you can provide the issuer, discovery document or JWKs URI to validate the JWT's signature.
+                            If you leave this field empty, the JWT will only be decoded without validation.
+                        </small>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-6">
-            <h3>Decoded JWT</h3>
-            <div class="jwt-decoded-output">
-                <h4>Header</h4>
-                <pre id="jwt-header" class="bg-dark text-light p-2"></pre>
-                <h4>Payload</h4>
-                <pre id="jwt-payload" class="bg-dark text-light p-2"></pre>
-                <h4>Signature</h4>
-                <pre id="jwt-signature" class="bg-dark text-light p-2"></pre>
-            </div>
-            <div class="jwt-decoder-error">
-                <pre id="jwt-decoder-error-message" class="alert-danger p-2"></pre>
+            <div class="col">
+                <h3>Decoded JWT</h3>
+                <div class="jwt-decoded-output">
+                    <h4>Header</h4>
+                    <pre id="jwt-header" class="bg-dark text-light p-2">&nbsp;</pre>
+                    <h4>Payload</h4>
+                    <pre id="jwt-payload" class="bg-dark text-light p-2">&nbsp;</pre>
+                    <h4>Signature</h4>
+                    <pre id="jwt-signature" class="bg-dark text-light p-2">&nbsp;</pre>
+                    <div class="jwt-decoder-error d-none">
+                        <pre id="jwt-decoder-error-message" class="alert-danger p-2">&nbsp;</pre>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -61,10 +73,15 @@
     <!-- End Google Tag Manager -->
 
     <script>
+        let jwks = {
+            keys: [],
+            loadedFrom: null
+        };
+        
         $(document).ready(initializeJwtDecoder);
         
-        function initializeJwtDecoder() {
-            $('#jwt-input').on('input', function() {
+        async function initializeJwtDecoder() {
+            $('#jwt-input').on('input', async function() {
                 const jwt = $(this).val();
                 if (jwt) {
                     try {
@@ -74,7 +91,7 @@
                             const payload = JSON.parse(atob(parts[1]));
                             const signature = parts[2];
 
-                            showDecodedJwt(header, payload, signature);
+                            await showDecodedJwt(parts, header, payload, signature);
                         } else {
                             showError('Invalid JWT format. A JWT should have three parts separated by dots.');
                         }
@@ -82,28 +99,101 @@
                         showError('Error decoding JWT: ' + e.message);
                     }
                 } else {
-                    showDecodedJwt({}, {}, '');
+                    await showDecodedJwt(null, null, null, ' ');
                 }
             });
+
+            await showDecodedJwt(null, null, null, ' ');
         }
         
-        function showDecodedJwt(header, payload, signature) {
+        async function showDecodedJwt(jwtParts, header, payload, signature) {
             clearError();
-            $('#jwt-header').text(JSON.stringify(header, null, 2));
-            $('#jwt-payload').text(JSON.stringify(payload, null, 2));
-            $('#jwt-signature').text(signature);
+            $('#jwt-header').text(header ? JSON.stringify(header, null, 2) : ' ');
+            $('#jwt-payload').text(payload ? JSON.stringify(payload, null, 2) : ' ');
+            $('#jwt-signature').text(signature || ' ');
+            
+            if (jwtParts && Array.isArray(jwtParts) && jwtParts.length === 3) {
+                await attemptSignatureValidation(jwtParts);
+            }
+        }
+        
+        async function attemptSignatureValidation(jwtParts) {
+            const jwksUrl = $('#jwks-url').val().trim();
+            
+            if (jwksUrl) {
+                await loadJwks(jwksUrl);
+                
+                if (jwks.keys.length === 0) {
+                    return;
+                }
+                
+                const headerAndPayload = jwtParts[0] + '.' + jwtParts[1];
+                const signature = jwtParts[2];
+                //const isValid = await validateSignature(headerAndPayload, signature, jwks.keys);
+            }
+        }
+        
+        async function loadJwks(jwksUrl) {
+            if (jwks.loadedFrom === jwksUrl && jwks.keys.length > 0) {
+                return; // Already loaded
+            }
+
+            jwks.loadedFrom = null;
+            jwks.keys = [];
+            
+            try {
+                const keys = await fetchJwks(jwksUrl);
+                if (keys === undefined || keys === null) {
+                    return;
+                }
+                
+                jwks.keys = keys;
+                jwks.loadedFrom = jwksUrl;
+                console.log(`JWKs loaded from: ${jwksUrl}`, jwks.keys);
+            } catch (error) {
+                showError('Error loading JWKs: ' + error.message);
+            }
+        }
+        
+        async function fetchJwks(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                return null;
+            }
+
+            if (!response.headers.get('Content-Type').startsWith('application/json')) {
+                if (url.toLowerCase().indexOf('.well-known') !== -1 || url.toLowerCase().endsWith('.json')) {
+                    showError('The provided JWKs URL does not return a valid JSON response.');
+                    return null;
+                }
+                else {
+                    // retry with a discovery document
+                    return await fetchJwks(url + (url.slice(url.length - 1) === '/' ? '' : '/') + '.well-known/openid-configuration');
+                }
+            }
+            
+            // Response is most likely JSON, but could be a discovery document.
+            const json = await response.json();
+            if (json.keys && Array.isArray(json.keys)) {
+                return json.keys;
+            } else if (json['jwks_uri']) {
+                // If it's a discovery document, retry using the jwks_uri.
+                return await fetchJwks(json['jwks_uri']);
+            } else {
+                showError('The provided URL does not contain valid JWKs or a JWKs URI.');
+            }
+            
+            return null;
         }
         
         function showError(message) {
             $('#jwt-decoder-error-message').text(message);
-            $('.jwt-decoded-output').hide();
-            $('.jwt-decoder-error').show();
+            $('.jwt-decoder-error').removeClass('d-none');
         }
         
         function clearError() {
             $('#jwt-decoder-error-message').text('');
-            $('.jwt-decoder-error').hide();
-            $('.jwt-decoded-output').show();
+            $('.jwt-decoder-error').addClass('d-none');
         }
     </script>
 }
