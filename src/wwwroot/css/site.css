@@ -107,3 +107,7 @@ a.navbar-brand .icon-banner {
 .grants-page .card label {
   font-weight: bold;
 }
+
+.jwt-decoder-container .row {
+  height: 40vh;
+}

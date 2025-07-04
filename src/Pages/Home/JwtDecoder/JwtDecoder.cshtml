@@ -16,10 +16,8 @@
     <p>
         TODO more information about JWTs, link to RFC 7519, our docs...
     </p>
-    <div class="alert alert-warning row">
-        <div>
-            <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 3em" title="Warning"></i>
-        </div>
+    <div class="alert alert-warning d-flex align-items-center">
+        <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 3em" title="Warning"></i>
         <div class="mx-3">
             <strong>This tool does not send JWTs to any server, it only decodes the JWT locally in your browser.</strong><br/>
             Always be cautious when pasting JWTs, as they may contain credentials or sensitive information.
@@ -27,7 +25,7 @@
     </div>
     <div class="jwt-decoder-container container">
         <div class="row align-items-stretch">
-            <div class="col">
+            <div class="col-6">
                 <h3>Encoded JWT</h3>
                 <div class="h-100 d-flex flex-column">
                     <div class="form-group flex-grow-1">
@@ -44,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-6">
                 <h3>Decoded JWT</h3>
                 <div class="jwt-decoded-output">
                     <h4>Header</h4>
@@ -53,6 +51,18 @@
                     <pre id="jwt-payload" class="bg-dark text-light p-2">&nbsp;</pre>
                     <h4>Signature</h4>
                     <pre id="jwt-signature" class="bg-dark text-light p-2">&nbsp;</pre>
+                    <div class="jwt-signature-validation-result alert alert-success align-items-center d-none">
+                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 3em" title="Valid signature"></i>
+                        <div class="result-message mx-3">This JWT has a valid signature.</div>
+                    </div>
+                    <div class="jwt-signature-validation-result alert alert-danger align-items-center d-none">
+                        <i class="glyphicon glyphicon-remove-sign" style="font-size: 3em" title="Invalid signature"></i>
+                        <div class="result-message mx-3">This JWT has an invalid signature.</div>
+                    </div>
+                    <div class="jwt-signature-validation-result alert alert-warning align-items-center d-none">
+                        <i class="glyphicon glyphicon-question-sign" style="font-size: 3em" title="Validation failed"></i>
+                        <div class="result-message mx-3">Signature validation failed.</div>
+                    </div>
                     <div class="jwt-decoder-error d-none">
                         <pre id="jwt-decoder-error-message" class="alert-danger p-2">&nbsp;</pre>
                     </div>
@@ -108,31 +118,122 @@
         
         async function showDecodedJwt(jwtParts, header, payload, signature) {
             clearError();
+            hideSignatureValidationResults();
+            
             $('#jwt-header').text(header ? JSON.stringify(header, null, 2) : ' ');
             $('#jwt-payload').text(payload ? JSON.stringify(payload, null, 2) : ' ');
             $('#jwt-signature').text(signature || ' ');
             
             if (jwtParts && Array.isArray(jwtParts) && jwtParts.length === 3) {
-                await attemptSignatureValidation(jwtParts);
+                await attemptSignatureValidation(header, jwtParts);
             }
         }
         
-        async function attemptSignatureValidation(jwtParts) {
+        async function attemptSignatureValidation(header, jwtParts) {
             const jwksUrl = $('#jwks-url').val().trim();
             
             if (jwksUrl) {
                 await loadJwks(jwksUrl);
                 
                 if (jwks.keys.length === 0) {
+                    showSignatureValidationResult('warning', 'No JWKs loaded. Cannot validate signature.');
                     return;
                 }
                 
                 const headerAndPayload = jwtParts[0] + '.' + jwtParts[1];
                 const signature = jwtParts[2];
-                //const isValid = await validateSignature(headerAndPayload, signature, jwks.keys);
+                const result = await validateSignature(header, headerAndPayload, signature, jwks.keys);
+                
+                if (result.signatureValidated) {
+                    if (result.isValid) {
+                        showSignatureValidationResult('success');
+                    } else {
+                        showSignatureValidationResult('danger');
+                    }
+                }
+                else {
+                    showSignatureValidationResult('warning', result.errorMessage || 'Signature validation failed.');
+                }
             }
         }
         
+        async function validateSignature(header, headerAndPayload, signature, keys) {
+            try {
+                if (!header || !header.alg) {
+                    return { signatureValidated: false, isValid: false, errorMessage: 'JWT header does not contain an algorithm.' };
+                }
+                
+                if (!header.kid) {
+                    return { signatureValidated: false, isValid: false, errorMessage: 'JWT kid is missing.' };
+                }
+                
+                const key = keys.find(k => k.kid && k.kid === header.kid);
+                if (!key) {
+                    return { signatureValidated: false, isValid: false, errorMessage: `No matching key found for kid: ${header.kid}` };
+                }
+                
+                if (key.kty !== 'RSA' && key.kty !== 'EC') {
+                    return { signatureValidated: false, isValid: false, errorMessage: `Unsupported key type: ${key.kty}. Only RSA and EC keys are supported.` };
+                }
+                
+                const algorithmType = header.alg;
+                
+                // algorithmType can be RS256, RS384, RS512, ES256, ES384, ES512, PS256, PS384, PS512, etc.
+                if (!algorithmType || (key.kty === 'RSA' && !algorithmType.startsWith('RS')) && (key.kty === 'EC' && !algorithmType.startsWith('ES'))) {
+                    return { signatureValidated: false, isValid: false, errorMessage: `Unsupported algorithm: ${algorithmType}. Expected RS* or PS* for RSA, or ES* for EC keys.` };
+                }
+                
+                const algorithmName = 
+                    algorithmType.startsWith('RS') ? 'RSASSA-PKCS1-v1_5' :
+                        algorithmType.startsWith('PS') ? 'RSA-PSS' :
+                            algorithmType.startsWith('ES') ? 'ECDSA' : null;
+                
+                let algorithm = { name: algorithmName };
+                switch (algorithmType) {
+                    case 'RS256':
+                    case 'RS384':
+                    case 'RS512':
+                        algorithm.hash = { name: 'SHA-' + algorithmType.slice(2) };
+                        break;
+                    case 'PS256':
+                    case 'PS384':
+                    case 'PS512':
+                        algorithm.hash = { name: 'SHA-' + algorithmType.slice(2) };
+                        // Salt length is either 0 or the length of the digest algorithm that was selected when this key was created.
+                        algorithm.saltLength = algorithmType === 'PS256' ? 32 : (algorithmType === 'PS384' ? 48 : 64);
+                        break;
+                    case 'ES256':
+                        algorithm.namedCurve = 'P-256';
+                        break;
+                    case 'ES384':
+                        algorithm.namedCurve = 'P-384';
+                        break;
+                    case 'ES512':
+                        algorithm.namedCurve = 'P-521';
+                        break;
+                    default:
+                        return { signatureValidated: false, isValid: false, errorMessage: `Unsupported algorithm: ${algorithmType}` };
+                }
+                
+                const subtle = window.crypto.subtle;
+                const publicKey = await subtle.importKey(
+                    'jwk',
+                    key,
+                    algorithm,
+                    false,
+                    ['verify']
+                );
+                
+                signature = signature.replace(/-/g, '+').replace(/_/g, '/'); // Replace URL-safe characters with standard Base64 characters
+                const binarySignature = atob(signature);
+                const signatureBuffer = Uint8Array.from(binarySignature, c => c.charCodeAt(0));
+                const isValid = await subtle.verify(algorithm, publicKey, signatureBuffer, new TextEncoder().encode(headerAndPayload));
+                return { signatureValidated: true, isValid: isValid };
+            } catch (error) {
+                return { signatureValidated: false, isValid: false, errorMessage: 'Error validating signature: ' + error.message };
+            }
+        }
+               
         async function loadJwks(jwksUrl) {
             if (jwks.loadedFrom === jwksUrl && jwks.keys.length > 0) {
                 return; // Already loaded
@@ -194,6 +295,21 @@
         function clearError() {
             $('#jwt-decoder-error-message').text('');
             $('.jwt-decoder-error').addClass('d-none');
+        }
+
+        function showSignatureValidationResult(type, message) {
+            hideSignatureValidationResults();
+
+            const resultElement = $('.jwt-signature-validation-result.alert-' + type);
+            resultElement.removeClass('d-none').addClass('d-flex');
+
+            if (message) {
+                resultElement.find('.result-message').text(message);
+            }
+        }        
+        
+        function hideSignatureValidationResults() {
+            $('.jwt-signature-validation-result').removeClass('d-flex').addClass('d-none');
         }
     </script>
 }
