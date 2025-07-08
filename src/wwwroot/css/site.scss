@@ -124,4 +124,20 @@ a.navbar-brand {
   .row {
     height: 40vh;
   }
+  
+  .jwt-decoded {
+    text-wrap: auto;
+    
+    &.jwt-header {
+      color: #fc3939;
+    }
+
+    &.jwt-payload {
+      color: #13b955;
+    }
+
+    &.jwt-signature {
+      color: #efa31d;
+    }
+  }
 }
