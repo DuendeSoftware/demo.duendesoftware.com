@@ -1,4 +1,4 @@
-﻿@page "~/jwt-decoder"
+@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <!-- Google Tag Manager (noscript) -->
@@ -23,9 +23,23 @@
             Always be cautious when pasting JWTs, as they may contain credentials or sensitive information.
         </div>
     </div>
-    <div class="jwt-decoder-container container-fluid container-lg">
-        <div class="row align-items-stretch">
-            <div class="col-12 col-md-6 pb-4 pb-md-0">
+    <div class="pb-2">
+        <div class="custom-control custom-switch custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="explainClaims">
+            <label class="custom-control-label" for="explainClaims">
+                Show claim information
+            </label>
+        </div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="togglePresenterMode">
+            <label class="custom-control-label" for="togglePresenterMode">
+                Presenter mode
+            </label>
+        </div>
+    </div>
+    <div class="jwt-decoder-container container-fluid container-lg p-0">
+        <div class="row-jwt row align-items-stretch">
+            <div class="col-jwt col-12 col-md-6 pb-4 pb-md-0">
                 <h3>Encoded JWT</h3>
                 <div class="h-100 d-flex flex-column">
                     <div class="form-group flex-grow-1">
@@ -44,12 +58,6 @@
             </div>
             <div class="col-12 col-md-6 pb-4 pb-md-0">
                 <h3>Decoded JWT</h3>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="explainClaims">
-                    <label class="form-check-label" for="explainClaims">
-                        Show claim information
-                    </label>
-                </div>
                 <div class="jwt-decoded-output">
                     <h4>Header</h4>
                     <pre id="jwt-header" class="jwt-decoded jwt-header bg-dark p-2">&nbsp;</pre>
