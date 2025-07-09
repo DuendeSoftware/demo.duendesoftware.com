@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <!-- Google Tag Manager (noscript) -->
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 pb-4 pb-md-0">
+            <div class="col-jwt col-12 col-md-6 pb-4 pb-md-0">
                 <h3>Decoded JWT</h3>
                 <div class="jwt-decoded-output">
                     <h4>Header</h4>
@@ -108,7 +108,11 @@
             signature: null
         };
         
-        let explainClaims = false;
+        const optionsKey = 'jwtDecoderSettings';
+        let options = {
+            presenterMode: false,
+            explainClaims: false
+        };
         
         function defaultJsonStringifyReplacer(key, value) {
             if (value === null || value === undefined) {
@@ -277,13 +281,56 @@
         
         $(document).ready(initializeJwtDecoder);
         
+        function readSettingsFromStorage() {
+            try {
+                const settings = window.localStorage.getItem(optionsKey);
+                if (settings) {
+                    options = JSON.parse(settings);
+                }
+
+                $('#explainClaims').prop('checked', options.explainClaims);
+                $('#togglePresenterMode').prop('checked', options.presenterMode);
+                jsonStringifyReplacer = options.explainClaims ? expandedJsonStringifyReplacer : defaultJsonStringifyReplacer;
+                setPresenterMode(options.presenterMode);
+            }
+            catch (e) {}
+        }
+        
+        function saveSettingsToStorage() {
+            window.localStorage.setItem(optionsKey, JSON.stringify({
+                explainClaims: options.explainClaims,
+                presenterMode: options.presenterMode
+            }));
+        }
+        
+        function setPresenterMode(enabled) {
+            if (enabled) {
+                $('.row-jwt').removeClass('align-items-stretch');
+                $('.col-jwt').removeClass('col-md-6');
+                $('#jwt-input').parent().removeClass('flex-grow-1');
+            }
+            else {
+                $('.row-jwt').addClass('align-items-stretch');
+                $('.col-jwt').addClass('col-md-6');
+                $('#jwt-input').parent().addClass('flex-grow-1');
+            }
+        }
+        
         async function initializeJwtDecoder() {
-            const explainClaimsCheckbox = $('#explainClaims');
-            explainClaims = explainClaimsCheckbox.is(':checked');
-            explainClaimsCheckbox.on('change', function() {
-                explainClaims = this.checked;
-                jsonStringifyReplacer = explainClaims ? expandedJsonStringifyReplacer : defaultJsonStringifyReplacer;
+            await readSettingsFromStorage();
+            
+            $('#explainClaims').on('change', async function() {
+                options.explainClaims = this.checked;
+                await saveSettingsToStorage();
+                jsonStringifyReplacer = options.explainClaims ? expandedJsonStringifyReplacer : defaultJsonStringifyReplacer;
                 updateClaimsExplanation();
+            });
+
+            $('#togglePresenterMode').on('change', async function() {
+                options.presenterMode = this.checked;
+                await saveSettingsToStorage();
+                
+                setPresenterMode(options.presenterMode);
             });
             
             $('#jwt-input').on('input', async function() {
