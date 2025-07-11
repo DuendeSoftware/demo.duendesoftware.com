@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
-                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" />
+                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
                         <small id="jwks-url-help" class="form-text text-muted">
                             Optionally, you can provide the issuer, discovery document or JWKs URI to validate the JWT's signature.
                             If you leave this field empty, the tool will use the value of the 'iss' claim.
@@ -333,6 +333,18 @@
                 setPresenterMode(options.presenterMode);
             });
             
+            // Little helper to track if the JWKS URL field is pristine (not modified). 
+            // While it is pristine or empty, we will use the 'iss' claim from the JWT payload to load JWKs.
+            const jwksUrlField = $('#jwks-url');
+            jwksUrlField.on('input', function() {
+                const val = $(this).val();
+                if (val === '' || val === null || val === undefined) {
+                    jwksUrlField.data('pristine', true);
+                } else {
+                    jwksUrlField.data('pristine', false);
+                }
+            });
+            
             $('#jwt-input').on('input', async function() {
                 decodedJwt = {
                     header: null,
@@ -407,11 +419,14 @@
         }
         
         async function attemptSignatureValidation(header, payload, jwtParts) {
-            let jwksUrl = $('#jwks-url').val().trim();
-            if (!jwksUrl && payload && payload.iss) {
-                // If no JWKs URL is provided, use the issuer from the payload.
+            const jwksUrlField = $('#jwks-url');
+            
+            const isPristine = jwksUrlField.data('pristine') !== false;
+            let jwksUrl = jwksUrlField.val().trim();
+            if ((!jwksUrl || isPristine) && payload && payload.iss) {
+                // If no JWKs URL is provided (or previously set from a different token's issuer), use the issuer from the payload.
                 jwksUrl = payload.iss;
-                $('#jwks-url').val(jwksUrl);
+                jwksUrlField.val(jwksUrl);
             }
             
             if (jwksUrl) {
