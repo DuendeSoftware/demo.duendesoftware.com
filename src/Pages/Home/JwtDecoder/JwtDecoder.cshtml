@@ -1,13 +1,6 @@
 ﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
-<!-- Google Tag Manager (noscript) -->
-<noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMR39D3G"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-<!-- End Google Tag Manager (noscript) -->
-
 <div class="jwt-decoder-page">
     <h2 id="jwt-decoder" style="scroll-margin-top: 3em;">JSON Web Token (JWT) Decoder</h2>
     <p class="lead">
@@ -93,14 +86,6 @@
 
 @section scripts
 {
-    <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-MMR39D3G');</script>
-    <!-- End Google Tag Manager -->
-
     <script>
         let jwks = {
             keys: [],
