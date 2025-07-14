@@ -1,0 +1,667 @@
+﻿@page "~/jwt-decoder"
+@model IdentityServerHost.Pages.Home.JwtDecoder
+
+<div class="jwt-decoder-page">
+    <h2 id="jwt-decoder" style="scroll-margin-top: 3em;">JSON Web Token (JWT) Decoder</h2>
+    <p class="lead">
+        Using this tool, you can decode and validate JSON Web Tokens (JWTs) issued by IdentityServer or another token issuer.
+    </p>
+    <p>
+        A JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two parties. 
+        It is commonly used for authentication and information exchange in web applications. 
+        A JWT consists of three parts: a header, a payload, and a signature, separated by dots. 
+        <br />
+        <br />
+        For more details, see <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank">RFC 7519</a>.
+    </p>
+    <div class="alert alert-warning d-flex align-items-center">
+        <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 3em" title="Warning"></i>
+        <div class="mx-3">
+            <strong>This tool does not send JWTs to any server, it only decodes the JWT locally in your browser.</strong><br/>
+            Always be cautious when pasting JWTs, as they may contain credentials or sensitive information.<br/>
+            To validate how this page decodes and validates JWTs, you can inspect <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com/blob/main/src/Pages/Home/JwtDecoder/JwtDecoder.cshtml" target="_blank">the source code of this page</a>.
+        </div>
+    </div>
+    <div class="pb-2">
+        <div class="custom-control custom-switch custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="explainClaims">
+            <label class="custom-control-label" for="explainClaims">
+                Show claim information
+            </label>
+        </div>
+        <div class="custom-control custom-switch custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="togglePresenterMode">
+            <label class="custom-control-label" for="togglePresenterMode">
+                Presenter mode
+            </label>
+        </div>
+    </div>
+    <div class="jwt-decoder-container container-fluid container-lg p-0">
+        <div class="row-jwt row align-items-stretch">
+            <div class="col-jwt col-12 col-md-6 pb-4 pb-md-0">
+                <h3>Encoded JWT</h3>
+                <div class="h-100 d-flex flex-column">
+                    <div class="form-group flex-grow-1">
+                        <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
+                        <div id="jwt-input" class="form-control bg-dark text-light p-2 h-100 jwt-input-editable" contenteditable="true" rows="8" style="min-height: 10em;" placeholder="Paste your JWT here..."></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
+                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
+                        <small id="jwks-url-help" class="form-text text-muted">
+                            Optionally, you can provide the issuer, discovery document or JWKs URI to validate the JWT's signature.
+                            If you leave this field empty, the tool will use the value of the 'iss' claim.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-jwt col-12 col-md-6 pb-4 pb-md-0">
+                <h3>Decoded JWT</h3>
+                <div class="jwt-decoded-output">
+                    <h4 class="pt-1">Header</h4>
+                    <div id="jwt-header" class="jwt-decoded jwt-header bg-dark p-2">&nbsp;</div>
+                    <h4 class="pt-1">Payload</h4>
+                    <div id="jwt-payload" class="jwt-decoded jwt-payload bg-dark p-2">&nbsp;</div>
+                    <h4 class="pt-1">Signature</h4>
+                    <pre id="jwt-signature" class="jwt-decoded jwt-signature bg-dark p-2">&nbsp;</pre>
+                    <div class="jwt-signature-validation-result alert alert-success align-items-center d-none">
+                        <i class="glyphicon glyphicon-ok-sign" style="font-size: 3em" title="Valid signature"></i>
+                        <div class="result-message mx-3">This JWT has a valid signature.</div>
+                    </div>
+                    <div class="jwt-signature-validation-result alert alert-danger align-items-center d-none">
+                        <i class="glyphicon glyphicon-remove-sign" style="font-size: 3em" title="Invalid signature"></i>
+                        <div class="result-message mx-3">This JWT has an invalid signature.</div>
+                    </div>
+                    <div class="jwt-signature-validation-result alert alert-warning align-items-center d-none">
+                        <i class="glyphicon glyphicon-question-sign" style="font-size: 3em" title="Validation failed"></i>
+                        <div class="result-message mx-3">Signature validation failed.</div>
+                    </div>
+                    <div class="jwt-decoder-error d-none">
+                        <pre id="jwt-decoder-error-message" class="alert-danger p-2">&nbsp;</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        let jwks = {
+            keys: [],
+            loadedFrom: null
+        };
+        
+        let decodedJwt = {
+            header: null,
+            payload: null,
+            signature: null
+        };
+        
+        const optionsKey = 'jwtDecoderSettings';
+        let options = {
+            presenterMode: false,
+            explainClaims: false
+        };
+                
+        function explainJwtClaim(claimType, value) {
+            // Add explanations for common JWT claims using a comment-like syntax
+            switch (claimType) {
+                // header claims
+                case 'alg':
+                    return '// ' + explainAlgorithm(value) + 'Algorithm used to sign the JWT';
+                case 'kid':
+                    return '// Key ID, identifying which key was used to sign the JWT';
+                case 'typ':
+                    return '// Type of the token, typically "JWT"';
+                case 'cty':
+                    return '// Content type, similar to MIME type, indicating the media type of the JWT.';
+                case 'jwk':
+                    return '// JWK, a JSON Web Key representing the public key used to verify the JWT signature';
+                case 'jku':
+                    return '// JWK Set URL, a URL pointing to the JSON Web Key Set containing the public key used to verify the JWT signature';
+                case 'x5u':
+                    return '// X.509 URL, a URL pointing to an X.509 certificate chain used to verify the JWT signature';
+                case 'x5c':
+                    return '// X.509 certificate chain used to verify the JWT signature';
+                case 'x5t':
+                    return '// X.509 certificate SHA-1 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
+                case 'x5t#S256':
+                    return '// X.509 certificate SHA-256 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
+                case 'crit':
+                    return '// Critical header parameters that must be understood by the recipient';
+                    
+                // payload claims
+                case 'iss':
+                    return '// Issuer of the JWT, typically the authorization server';
+                case 'aud':
+                    return '// Recipient(s) for which the JWT is intended';
+                case 'iat':
+                    return '// ' + convertEpoch(value) + 'Issued at time, in seconds since epoch';
+                case 'exp':
+                    return '// ' + convertEpoch(value) + 'Expiration time, in seconds since epoch';
+                case 'nbf':
+                    return '// ' + convertEpoch(value) + 'Not before time, in seconds since epoch';
+                case 'jti':
+                    return '// JWT ID, a unique identifier for the JWT';
+                case 'at_hash':
+                    return '// Hash of the access token, used to verify the integrity of the access token';
+                case 'c_hash':
+                    return '// Hash of the authorization code, used to verify the integrity of the authorization code';
+                case 'nonce':
+                    return '// Nonce (number used only once), a unique value used to associate a client session with an ID Token, preventing replay attacks';
+                case 'acr':
+                    return '// Authentication Context Class Reference, indicating the authentication method used';
+                case 'amr':
+                    return '// Authentication Methods References, indicating the methods used for authentication';
+                    
+                // OIDC claims
+                case 'sub':
+                    return '// Subject identifier';
+                case 'name':
+                    return '// Display name of the user';
+                case 'given_name':
+                    return '// Given name(s) or first name(s) of the user';
+                case 'family_name':
+                    return '// Surname(s) or last name(s) of the user';
+                case 'middle_name':
+                    return '// Middle name(s) of the user';
+                case 'nickname':
+                    return '// Casual name of the user';
+                case 'preferred_username':
+                    return '// Preferred username of the user, often used for login';
+                case 'birthdate':
+                    return '// Birthdate of the user, typically in ISO 8601 format (YYYY-MM-DD)';
+                case 'gender':
+                    return '// Gender of the user';
+                case 'email':
+                    return '// Email address of the user';
+                case 'email_verified':
+                    return '// Indicates whether the email address has been verified (true/false)';
+                case 'phone_number':
+                    return '// Phone number of the user';
+                case 'phone_number_verified':
+                    return '// Indicates whether the phone number has been verified (true/false)';
+                case 'address':
+                    return '// Address of the user, typically an object with street, city, state, postal code, and country';
+                case 'locale':
+                    return '// Locale of the user, typically a language code like "en-US"';
+                case 'zoneinfo':
+                    return '// Time zone of the user, typically a string like "America/New_York"';
+                case 'profile':
+                    return '// URL of the user\'s profile, often a link to their social media or personal page';
+                case 'picture':
+                    return '// URL of the user\'s profile picture';
+                case 'website':
+                    return '// URL of the user\'s personal website or profile';
+            }
+                        
+            return undefined;
+        }
+        
+        function explainAlgorithm(alg) {
+            switch (alg) {
+                case 'RS256':
+                    return 'RSA with SHA-256. ';
+                case 'RS384':
+                    return 'RSA with SHA-384. ';
+                case 'RS512':
+                    return 'RSA with SHA-512. ';
+                case 'ES256':
+                    return 'ECDSA with P-256 curve. ';
+                case 'ES384':
+                    return 'ECDSA with P-384 curve. ';
+                case 'ES512':
+                    return 'ECDSA with P-521 curve. ';
+                case 'PS256':
+                    return 'RSA-PSS with SHA-256. ';
+                case 'PS384':
+                    return 'RSA-PSS with SHA-384. ';
+                case 'PS512':
+                    return 'RSA-PSS with SHA-512. ';
+                case 'HS256':
+                    return 'HMAC with SHA-256 shared secret. ';
+                case 'HS384':
+                    return 'HMAC with SHA-384 shared secret. ';
+                case 'HS512':
+                    return 'HMAC with SHA-512 shared secret. ';
+                case 'none':
+                    return 'No signature algorithm. This JWT is unsigned and should not be trusted. ';
+                default:
+                    return 'Unknown algorithm. ';
+            }
+        }
+        
+        function convertEpoch(epoch) {
+            if (typeof epoch === 'number') {
+                const date = new Date(epoch * 1000);
+                return date.toLocaleString() + '. ';
+            }
+            
+            return '';
+        }
+        
+        $(document).ready(initializeJwtDecoder);
+        
+        function readSettingsFromStorage() {
+            try {
+                const settings = window.localStorage.getItem(optionsKey);
+                if (settings) {
+                    options = JSON.parse(settings);
+                }
+
+                $('#explainClaims').prop('checked', options.explainClaims);
+                $('#togglePresenterMode').prop('checked', options.presenterMode);
+                setPresenterMode(options.presenterMode);
+            }
+            catch (e) {}
+        }
+        
+        function saveSettingsToStorage() {
+            window.localStorage.setItem(optionsKey, JSON.stringify({
+                explainClaims: options.explainClaims,
+                presenterMode: options.presenterMode
+            }));
+        }
+        
+        function setPresenterMode(enabled) {
+            if (enabled) {
+                $('.row-jwt').removeClass('align-items-stretch');
+                $('.col-jwt').removeClass('col-md-6');
+                $('#jwt-input').parent().removeClass('flex-grow-1');
+            }
+            else {
+                $('.row-jwt').addClass('align-items-stretch');
+                $('.col-jwt').addClass('col-md-6');
+                $('#jwt-input').parent().addClass('flex-grow-1');
+            }
+        }
+        
+        async function initializeJwtDecoder() {
+            await readSettingsFromStorage();
+            
+            $('#explainClaims').on('change', async function() {
+                options.explainClaims = this.checked;
+                await saveSettingsToStorage();
+                
+                updateClaimsExplanation();
+            });
+
+            $('#togglePresenterMode').on('change', async function() {
+                options.presenterMode = this.checked;
+                await saveSettingsToStorage();
+                
+                setPresenterMode(options.presenterMode);
+            });
+            
+            // Little helper to track if the JWKS URL field is pristine (not modified). 
+            // While it is pristine or empty, we will use the 'iss' claim from the JWT payload to load JWKs.
+            const jwksUrlField = $('#jwks-url');
+            jwksUrlField.on('input', function() {
+                const val = $(this).val();
+                if (val === '' || val === null || val === undefined) {
+                    jwksUrlField.data('pristine', true);
+                } else {
+                    jwksUrlField.data('pristine', false);
+                }
+            });
+            
+            $('#jwt-input').on('input', async function() {
+                decodedJwt = {
+                    header: null,
+                    payload: null,
+                    signature: null
+                };
+                
+                const jwt = $(this).text();
+                if (jwt) {
+                    try {
+                        const parts = jwt.split('.');
+                        if (parts.length === 3) {
+                            const header = JSON.parse(atob(parts[0]));
+                            const payload = JSON.parse(atob(parts[1]));
+                            const signature = parts[2];
+
+                            decodedJwt = {
+                                header: header,
+                                payload: payload,
+                                signature: signature
+                            };
+                            await showDecodedJwt(parts, header, payload, signature);
+                            colorJwtInput($(this), parts);
+                        } else {
+                            showError('Invalid JWT format. A JWT should have three parts separated by dots.');
+                        }
+                    } catch (e) {
+                        showError('Error decoding JWT: ' + e.message);
+                    }
+                } else {
+                    await showDecodedJwt(null, null, null, ' ');
+                }
+            });
+
+            await showDecodedJwt(null, null, null, ' ');
+        }
+
+        function colorJwtInput(target, parts) {
+            let html = '';
+            if (parts.length > 0) {
+                html += `<span class="text-danger">${parts[0] || ''}</span>`;
+            }
+            if (parts.length > 1) {
+                html += `<span class="text-success">.${parts[1] || ''}</span>`;
+            }
+            if (parts.length > 2) {
+                html += `<span class="text-warning">.${parts.slice(2).join('.') || ''}</span>`;
+            }
+            target.html(html);
+        }
+        
+        async function showDecodedJwt(jwtParts, header, payload, signature) {
+            clearError();
+            hideSignatureValidationResults();
+            
+            writeJson($('#jwt-header'), header);
+            writeJson($('#jwt-payload'), payload);
+            
+            $('#jwt-signature').text(signature || ' ');
+            
+            if (jwtParts && Array.isArray(jwtParts) && jwtParts.length === 3) {
+                await attemptSignatureValidation(header, payload, jwtParts);
+            }
+        }
+
+        function updateClaimsExplanation() {
+            if (!decodedJwt.payload) {
+                return;
+            }
+
+            writeJson($('#jwt-header'), decodedJwt.header);
+            writeJson($('#jwt-payload'), decodedJwt.payload);
+        }
+        
+        function writeJson(target, data) {
+            if (data === null || data === undefined || !data) {
+                target.html('&nbsp;'); // Empty space
+                return;
+            }
+            
+            try {
+                const jsonContent = buildJsonHtmlContent(data);
+                target.empty();
+                target.append(jsonContent);
+            } catch (e) {
+                target.html('&nbsp;'); // Empty space
+                showError('Error formatting JSON: ' + e.message);
+            }
+        }
+        
+        function buildJsonHtmlContent(data) {
+            const jsonContent = $('<div class="json-content"></div>');
+            
+            if (Array.isArray(data)) {
+                jsonContent.append('<span class="json-array-begin">[</span>');
+                data.forEach((item, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(buildJsonValueHtml(item, null, index === arr.length - 1, false));
+                    jsonContent.append(itemDiv);
+                });
+                jsonContent.append('<span class="json-array-end">]</span>');
+            } else if (typeof data === 'object') {
+                jsonContent.append('<span class="json-object-begin">{</span>');
+                Object.keys(data).forEach((key, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(`<span class="json-key">"${key}"</span>: `);
+                    itemDiv.append(buildJsonValueHtml(data[key], key, index === arr.length - 1, true));
+                    jsonContent.append(itemDiv);
+                });
+                jsonContent.append('<span class="json-object-end">}</span>');
+            } else {
+                jsonContent.text(data);
+            }
+            
+            return jsonContent;
+        }
+        
+        function buildJsonValueHtml(value, key, isLastItem = false, explain = true) {
+            let contents = $('<span class="json-value"></span>');
+
+            if (Array.isArray(value)) {
+                contents = $('<span class="json-array-begin">[</span>');
+                value.forEach((item, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(buildJsonValueHtml(item, null, index === arr.length - 1, false));
+                    contents.append(itemDiv);
+                });
+                contents.append(`<span class="json-array-end">]${(isLastItem ? '' : ',')}</span>`);
+            }
+            else if (typeof value === 'object') {
+                contents = $('<span class="json-object-begin">{</span>');
+                Object.keys(value).forEach((key, index, arr) => {
+                    const itemDiv = $('<div class="json-item" style="padding-left: 1em"></div>');
+                    itemDiv.append(`<span class="json-key">"${key}"</span>: `);
+                    itemDiv.append(buildJsonValueHtml(value[key], key, index === arr.length - 1, false)); // disable explanation for nested objects
+                    contents.append(itemDiv);
+                });
+                contents.append(`<span class="json-object-end">}${(isLastItem ? '' : ',')}</span>`);
+            } else if (typeof value === 'string') {
+                const text = JSON.stringify(value) + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-string');
+            } else if (typeof value === 'number') {
+                const text = value + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-number');
+            } else if (typeof value === 'boolean') {
+                const text = (value ? 'true' : 'false') + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-boolean');
+            } else {
+                const text = String(value) + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-unknown');
+            }
+
+            if (options.explainClaims && key && explain) {
+                const explanation = explainJwtClaim(key, value);
+                if (explanation) {
+                    contents.append(`<span class="json-explanation"> ${explanation}</span>`);
+                }
+            }
+
+            return contents;
+        }
+                        
+        async function attemptSignatureValidation(header, payload, jwtParts) {
+            const jwksUrlField = $('#jwks-url');
+            
+            const isPristine = jwksUrlField.data('pristine') !== false;
+            let jwksUrl = jwksUrlField.val().trim();
+            if ((!jwksUrl || isPristine) && payload && payload.iss) {
+                // If no JWKs URL is provided (or previously set from a different token's issuer), use the issuer from the payload.
+                jwksUrl = payload.iss;
+                jwksUrlField.val(jwksUrl);
+            }
+            
+            if (jwksUrl) {
+                await loadJwks(jwksUrl);
+                
+                if (jwks.keys.length === 0) {
+                    showSignatureValidationResult('warning', 'No JWKs loaded. Cannot validate signature.');
+                    return;
+                }
+                
+                const headerAndPayload = jwtParts[0] + '.' + jwtParts[1];
+                const signature = jwtParts[2];
+                const result = await validateSignature(header, headerAndPayload, signature, jwks.keys);
+                
+                if (result.signatureValidated) {
+                    if (result.isValid) {
+                        showSignatureValidationResult('success');
+                    } else {
+                        showSignatureValidationResult('danger');
+                    }
+                }
+                else {
+                    showSignatureValidationResult('warning', result.errorMessage || 'Signature validation failed.');
+                }
+            }
+        }
+        
+        async function validateSignature(header, headerAndPayload, signature, keys) {
+            try {
+                if (!header || !header.alg) {
+                    return { signatureValidated: false, isValid: false, errorMessage: 'JWT header does not contain an algorithm.' };
+                }
+                
+                if (!header.kid) {
+                    return { signatureValidated: false, isValid: false, errorMessage: 'JWT kid is missing.' };
+                }
+                
+                const key = keys.find(k => k.kid && k.kid === header.kid);
+                if (!key) {
+                    return { signatureValidated: false, isValid: false, errorMessage: `No matching key found for kid: ${header.kid}` };
+                }
+                
+                if (key.kty !== 'RSA' && key.kty !== 'EC') {
+                    return { signatureValidated: false, isValid: false, errorMessage: `Unsupported key type: ${key.kty}. Only RSA and EC keys are supported.` };
+                }
+                
+                const algorithmType = header.alg;
+                
+                // algorithmType can be RS256, RS384, RS512, ES256, ES384, ES512, PS256, PS384, PS512, etc.
+                if (!algorithmType || (key.kty === 'RSA' && !algorithmType.startsWith('RS')) && (key.kty === 'EC' && !algorithmType.startsWith('ES'))) {
+                    return { signatureValidated: false, isValid: false, errorMessage: `Unsupported algorithm: ${algorithmType}. Expected RS* or PS* for RSA, or ES* for EC keys.` };
+                }
+                
+                const algorithmName = 
+                    algorithmType.startsWith('RS') ? 'RSASSA-PKCS1-v1_5' :
+                        algorithmType.startsWith('PS') ? 'RSA-PSS' :
+                            algorithmType.startsWith('ES') ? 'ECDSA' : null;
+                
+                let algorithm = { name: algorithmName };
+                switch (algorithmType) {
+                    case 'RS256':
+                    case 'RS384':
+                    case 'RS512':
+                        algorithm.hash = { name: 'SHA-' + algorithmType.slice(2) };
+                        break;
+                    case 'PS256':
+                    case 'PS384':
+                    case 'PS512':
+                        algorithm.hash = { name: 'SHA-' + algorithmType.slice(2) };
+                        // Salt length is either 0 or the length of the digest algorithm that was selected when this key was created.
+                        algorithm.saltLength = algorithmType === 'PS256' ? 32 : (algorithmType === 'PS384' ? 48 : 64);
+                        break;
+                    case 'ES256':
+                        algorithm.namedCurve = 'P-256';
+                        break;
+                    case 'ES384':
+                        algorithm.namedCurve = 'P-384';
+                        break;
+                    case 'ES512':
+                        algorithm.namedCurve = 'P-521';
+                        break;
+                    default:
+                        return { signatureValidated: false, isValid: false, errorMessage: `Unsupported algorithm: ${algorithmType}` };
+                }
+                
+                const subtle = window.crypto.subtle;
+                const publicKey = await subtle.importKey(
+                    'jwk',
+                    key,
+                    algorithm,
+                    false,
+                    ['verify']
+                );
+                
+                signature = signature.replace(/-/g, '+').replace(/_/g, '/'); // Replace URL-safe characters with standard Base64 characters
+                const binarySignature = atob(signature);
+                const signatureBuffer = Uint8Array.from(binarySignature, c => c.charCodeAt(0));
+                const isValid = await subtle.verify(algorithm, publicKey, signatureBuffer, new TextEncoder().encode(headerAndPayload));
+                return { signatureValidated: true, isValid: isValid };
+            } catch (error) {
+                return { signatureValidated: false, isValid: false, errorMessage: 'Error validating signature: ' + error.message };
+            }
+        }
+               
+        async function loadJwks(jwksUrl) {
+            if (jwks.loadedFrom === jwksUrl && jwks.keys.length > 0) {
+                return; // Already loaded
+            }
+
+            jwks.loadedFrom = null;
+            jwks.keys = [];
+            
+            try {
+                const keys = await fetchJwks(jwksUrl);
+                if (keys === undefined || keys === null) {
+                    return;
+                }
+                
+                jwks.keys = keys;
+                jwks.loadedFrom = jwksUrl;
+                console.log(`JWKs loaded from: ${jwksUrl}`, jwks.keys);
+            } catch (error) {
+                showError('Error loading JWKs: ' + error.message);
+            }
+        }
+        
+        async function fetchJwks(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                return null;
+            }
+
+            if (!response.headers.get('Content-Type').startsWith('application/json')) {
+                if (url.toLowerCase().indexOf('.well-known') !== -1 || url.toLowerCase().endsWith('.json')) {
+                    showError('The provided JWKs URL does not return a valid JSON response.');
+                    return null;
+                }
+                else {
+                    // retry with a discovery document
+                    return await fetchJwks(url + (url.slice(url.length - 1) === '/' ? '' : '/') + '.well-known/openid-configuration');
+                }
+            }
+            
+            // Response is most likely JSON, but could be a discovery document.
+            const json = await response.json();
+            if (json.keys && Array.isArray(json.keys)) {
+                return json.keys;
+            } else if (json['jwks_uri']) {
+                // If it's a discovery document, retry using the jwks_uri.
+                return await fetchJwks(json['jwks_uri']);
+            } else {
+                showError('The provided URL does not contain valid JWKs or a JWKs URI.');
+            }
+            
+            return null;
+        }
+        
+        function showError(message) {
+            $('#jwt-decoder-error-message').text(message);
+            $('.jwt-decoder-error').removeClass('d-none');
+        }
+        
+        function clearError() {
+            $('#jwt-decoder-error-message').text('');
+            $('.jwt-decoder-error').addClass('d-none');
+        }
+
+        function showSignatureValidationResult(type, message) {
+            hideSignatureValidationResults();
+
+            const resultElement = $('.jwt-signature-validation-result.alert-' + type);
+            resultElement.removeClass('d-none').addClass('d-flex');
+
+            if (message) {
+                resultElement.find('.result-message').text(message);
+            }
+        }        
+        
+        function hideSignatureValidationResults() {
+            $('.jwt-signature-validation-result').removeClass('d-flex').addClass('d-none');
+        }
+    </script>
+}

@@ -119,3 +119,51 @@ a.navbar-brand {
     }
   }
 }
+
+.jwt-decoder-container {
+  .row {
+    height: 40vh;
+  }
+  
+  .jwt-decoded {
+    text-wrap: auto;
+    background-color: #000000;
+    
+    &.jwt-header {
+      color: lighten(#fc3939, 20%);
+    }
+
+    &.jwt-payload {
+      color: lighten(#13b955, 20%);
+    }
+
+    &.jwt-signature {
+      color: lighten(#efa31d, 20%);
+    }
+  }
+
+  .jwt-input-editable {
+    word-wrap: anywhere;
+    
+    .text-danger {
+      color: lighten(#fc3939, 20%) !important;
+    }
+
+    .text-success {
+      color: lighten(#13b955, 20%) !important;
+    }
+
+    .text-warning {
+      color: lighten(#efa31d, 20%) !important;
+    }
+  }
+  
+  .json-content, .jwt-input-editable {
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-size: 1em;
+  }
+  
+  .jwt-signature {
+    font-size: 1em;
+  }
+}

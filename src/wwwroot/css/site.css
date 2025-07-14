@@ -107,3 +107,39 @@ a.navbar-brand .icon-banner {
 .grants-page .card label {
   font-weight: bold;
 }
+
+.jwt-decoder-container .row {
+  height: 40vh;
+}
+.jwt-decoder-container .jwt-decoded {
+  text-wrap: auto;
+  background-color: #000000;
+}
+.jwt-decoder-container .jwt-decoded.jwt-header {
+  color: rgb(253.5223880597, 157.4776119403, 157.4776119403);
+}
+.jwt-decoder-container .jwt-decoded.jwt-payload {
+  color: #46ec88;
+}
+.jwt-decoder-container .jwt-decoded.jwt-signature {
+  color: rgb(245.7438016529, 201.7768595041, 124.2561983471);
+}
+.jwt-decoder-container .jwt-input-editable {
+  word-wrap: anywhere;
+}
+.jwt-decoder-container .jwt-input-editable .text-danger {
+  color: rgb(253.5223880597, 157.4776119403, 157.4776119403) !important;
+}
+.jwt-decoder-container .jwt-input-editable .text-success {
+  color: #46ec88 !important;
+}
+.jwt-decoder-container .jwt-input-editable .text-warning {
+  color: rgb(245.7438016529, 201.7768595041, 124.2561983471) !important;
+}
+.jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1em;
+}
+.jwt-decoder-container .jwt-signature {
+  font-size: 1em;
+}
