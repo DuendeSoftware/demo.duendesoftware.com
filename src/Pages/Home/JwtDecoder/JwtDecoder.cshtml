@@ -1,4 +1,4 @@
-﻿@page "~/jwt-decoder"
+@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <!-- Google Tag Manager (noscript) -->
@@ -113,126 +113,100 @@
             presenterMode: false,
             explainClaims: false
         };
-        
-        function defaultJsonStringifyReplacer(key, value) {
-            if (value === null || value === undefined) {
-                return '';
-            }
-            return value;
-        }
-        
-        function expandedJsonStringifyReplacer(key, value) {
-            if (value === null || value === undefined) {
-                return '';
-            }
-            
+                
+        function explainJwtClaim(claimType, value) {
             // Add explanations for common JWT claims using a comment-like syntax
-            switch (key) {
+            switch (claimType) {
                 // header claims
                 case 'alg':
-                    return value + ' // ' + explainAlgorithm(value) + 'Algorithm used to sign the JWT';
+                    return '// ' + explainAlgorithm(value) + 'Algorithm used to sign the JWT';
                 case 'kid':
-                    return value + ' // Key ID, identifying which key was used to sign the JWT';
+                    return '// Key ID, identifying which key was used to sign the JWT';
                 case 'typ':
-                    return value + ' // Type of the token, typically "JWT"';
+                    return '// Type of the token, typically "JWT"';
                 case 'cty':
-                    return value + ' // Content type, similar to MIME type, indicating the media type of the JWT.';
+                    return '// Content type, similar to MIME type, indicating the media type of the JWT.';
                 case 'jwk':
-                    if (typeof value === 'object') {
-                        return JSON.stringify(value, defaultJsonStringifyReplacer) + ' // JWK, a JSON Web Key representing the public key used to verify the JWT signature';
-                    }
-                    return value + ' // JWK, a JSON Web Key representing the public key used to verify the JWT signature';
+                    return '// JWK, a JSON Web Key representing the public key used to verify the JWT signature';
                 case 'jku':
-                    return value + ' // JWK Set URL, a URL pointing to the JSON Web Key Set containing the public key used to verify the JWT signature';
+                    return '// JWK Set URL, a URL pointing to the JSON Web Key Set containing the public key used to verify the JWT signature';
                 case 'x5u':
-                    return value + ' // X.509 URL, a URL pointing to an X.509 certificate chain used to verify the JWT signature';
+                    return '// X.509 URL, a URL pointing to an X.509 certificate chain used to verify the JWT signature';
                 case 'x5c':
-                    if (Array.isArray(value)) {
-                        return JSON.stringify(value, defaultJsonStringifyReplacer) + ' // X.509 certificate chain used to verify the JWT signature';
-                    }
-                    return value + ' // X.509 certificate chain used to verify the JWT signature';
+                    return '// X.509 certificate chain used to verify the JWT signature';
                 case 'x5t':
-                    return value + ' // X.509 certificate SHA-1 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
+                    return '// X.509 certificate SHA-1 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
                 case 'x5t#S256':
-                    return value + ' // X.509 certificate SHA-256 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
+                    return '// X.509 certificate SHA-256 thumbprint, a hash of the X.509 certificate used to verify the JWT signature';
                 case 'crit':
-                    if (Array.isArray(value)) {
-                        return JSON.stringify(value, defaultJsonStringifyReplacer) + ' // Critical header parameters that must be understood by the recipient';
-                    }
-                    return value + ' // Critical header parameters that must be understood by the recipient';
+                    return '// Critical header parameters that must be understood by the recipient';
                     
                 // payload claims
                 case 'iss':
-                    return value + ' // Issuer of the JWT, typically the authorization server';
+                    return '// Issuer of the JWT, typically the authorization server';
                 case 'aud':
-                    return value + ' // Recipient(s) for which the JWT is intended';
+                    return '// Recipient(s) for which the JWT is intended';
                 case 'iat':
-                    return value + ' // ' + convertEpoch(value) + 'Issued at time, in seconds since epoch';
+                    return '// ' + convertEpoch(value) + 'Issued at time, in seconds since epoch';
                 case 'exp':
-                    return value + ' // ' + convertEpoch(value) + 'Expiration time, in seconds since epoch';
+                    return '// ' + convertEpoch(value) + 'Expiration time, in seconds since epoch';
                 case 'nbf':
-                    return value + ' // ' + convertEpoch(value) + 'Not before time, in seconds since epoch';
+                    return '// ' + convertEpoch(value) + 'Not before time, in seconds since epoch';
                 case 'jti':
-                    return value + ' // JWT ID, a unique identifier for the JWT';
+                    return '// JWT ID, a unique identifier for the JWT';
                 case 'at_hash':
-                    return value + ' // Hash of the access token, used to verify the integrity of the access token';
+                    return '// Hash of the access token, used to verify the integrity of the access token';
                 case 'c_hash':
-                    return value + ' // Hash of the authorization code, used to verify the integrity of the authorization code';
+                    return '// Hash of the authorization code, used to verify the integrity of the authorization code';
                 case 'nonce':
-                    return value + ' // Nonce (number used only once), a unique value used to associate a client session with an ID Token, preventing replay attacks';
+                    return '// Nonce (number used only once), a unique value used to associate a client session with an ID Token, preventing replay attacks';
                 case 'acr':
-                    return value + ' // Authentication Context Class Reference, indicating the authentication method used';
+                    return '// Authentication Context Class Reference, indicating the authentication method used';
                 case 'amr':
-                    if (Array.isArray(value)) {
-                        return JSON.stringify(value, defaultJsonStringifyReplacer) + ' // Authentication Methods References, indicating the methods used for authentication';
-                    }
-                    return value + ' // Authentication Methods References, indicating the methods used for authentication';
+                    return '// Authentication Methods References, indicating the methods used for authentication';
                     
                 // OIDC claims
                 case 'sub':
-                    return value + ' // Subject identifier';
+                    return '// Subject identifier';
                 case 'name':
-                    return value + ' // Display name of the user';
+                    return '// Display name of the user';
                 case 'given_name':
-                    return value + ' // Given name(s) or first name(s) of the user';
+                    return '// Given name(s) or first name(s) of the user';
                 case 'family_name':
-                    return value + ' // Surname(s) or last name(s) of the user';
+                    return '// Surname(s) or last name(s) of the user';
                 case 'middle_name':
-                    return value + ' // Middle name(s) of the user';
+                    return '// Middle name(s) of the user';
                 case 'nickname':
-                    return value + ' // Casual name of the user';
+                    return '// Casual name of the user';
                 case 'preferred_username':
-                    return value + ' // Preferred username of the user, often used for login';
+                    return '// Preferred username of the user, often used for login';
                 case 'birthdate':
-                    return value + ' // Birthdate of the user, typically in ISO 8601 format (YYYY-MM-DD)';
+                    return '// Birthdate of the user, typically in ISO 8601 format (YYYY-MM-DD)';
                 case 'gender':
-                    return value + ' // Gender of the user';
+                    return '// Gender of the user';
                 case 'email':
-                    return value + ' // Email address of the user';
+                    return '// Email address of the user';
                 case 'email_verified':
-                    return value + ' // Indicates whether the email address has been verified (true/false)';
+                    return '// Indicates whether the email address has been verified (true/false)';
                 case 'phone_number':
-                    return value + ' // Phone number of the user';
+                    return '// Phone number of the user';
                 case 'phone_number_verified':
-                    return value + ' // Indicates whether the phone number has been verified (true/false)';
+                    return '// Indicates whether the phone number has been verified (true/false)';
                 case 'address':
-                    if (typeof value === 'object') {
-                        return JSON.stringify(value, defaultJsonStringifyReplacer) + ' // Address of the user, typically an object with street, city, state, postal code, and country';
-                    }
-                    return value + ' // Address of the user, typically an object with street, city, state, postal code, and country';
+                    return '// Address of the user, typically an object with street, city, state, postal code, and country';
                 case 'locale':
-                    return value + ' // Locale of the user, typically a language code like "en-US"';
+                    return '// Locale of the user, typically a language code like "en-US"';
                 case 'zoneinfo':
-                    return value + ' // Time zone of the user, typically a string like "America/New_York"';
+                    return '// Time zone of the user, typically a string like "America/New_York"';
                 case 'profile':
-                    return value + ' // URL of the user\'s profile, often a link to their social media or personal page';
+                    return '// URL of the user\'s profile, often a link to their social media or personal page';
                 case 'picture':
-                    return value + ' // URL of the user\'s profile picture';
+                    return '// URL of the user\'s profile picture';
                 case 'website':
-                    return value + ' // URL of the user\'s personal website or profile';
+                    return '// URL of the user\'s personal website or profile';
             }
                         
-            return value;
+            return undefined;
         }
         
         function explainAlgorithm(alg) {
@@ -271,13 +245,11 @@
         function convertEpoch(epoch) {
             if (typeof epoch === 'number') {
                 const date = new Date(epoch * 1000);
-                return date.toISOString() + '. ';
+                return date.toLocaleString() + '. ';
             }
             
             return '';
         }
-        
-        let jsonStringifyReplacer = defaultJsonStringifyReplacer;
         
         $(document).ready(initializeJwtDecoder);
         
@@ -290,7 +262,6 @@
 
                 $('#explainClaims').prop('checked', options.explainClaims);
                 $('#togglePresenterMode').prop('checked', options.presenterMode);
-                jsonStringifyReplacer = options.explainClaims ? expandedJsonStringifyReplacer : defaultJsonStringifyReplacer;
                 setPresenterMode(options.presenterMode);
             }
             catch (e) {}
@@ -322,7 +293,7 @@
             $('#explainClaims').on('change', async function() {
                 options.explainClaims = this.checked;
                 await saveSettingsToStorage();
-                jsonStringifyReplacer = options.explainClaims ? expandedJsonStringifyReplacer : defaultJsonStringifyReplacer;
+                
                 updateClaimsExplanation();
             });
 
@@ -400,24 +371,117 @@
             clearError();
             hideSignatureValidationResults();
             
-            $('#jwt-header').text(header ? JSON.stringify(header, jsonStringifyReplacer, 2) : ' ');
-            $('#jwt-payload').text(payload ? JSON.stringify(payload, jsonStringifyReplacer, 2) : ' ');
+            writeJson($('#jwt-header'), header);
+            writeJson($('#jwt-payload'), payload);
+            
             $('#jwt-signature').text(signature || ' ');
             
             if (jwtParts && Array.isArray(jwtParts) && jwtParts.length === 3) {
                 await attemptSignatureValidation(header, payload, jwtParts);
             }
         }
-        
+
         function updateClaimsExplanation() {
             if (!decodedJwt.payload) {
                 return;
             }
 
-            $('#jwt-header').text(decodedJwt.header ? JSON.stringify(decodedJwt.header, jsonStringifyReplacer, 2) : ' ');
-            $('#jwt-payload').text(decodedJwt.payload ? JSON.stringify(decodedJwt.payload, jsonStringifyReplacer, 2) : ' ');
+            writeJson($('#jwt-header'), decodedJwt.header);
+            writeJson($('#jwt-payload'), decodedJwt.payload);
         }
         
+        function writeJson(target, data) {
+            if (data === null || data === undefined || !data) {
+                target.html('&nbsp;'); // Empty space
+                return;
+            }
+            
+            try {
+                const jsonContent = buildJsonHtmlContent(data);
+                target.empty();
+                target.append(jsonContent);
+            } catch (e) {
+                target.html('&nbsp;'); // Empty space
+                showError('Error formatting JSON: ' + e.message);
+            }
+        }
+        
+        function buildJsonHtmlContent(data) {
+            const jsonContent = $('<div class="json-content"></div>');
+            
+            if (Array.isArray(data)) {
+                jsonContent.append('<span class="json-array-begin">[</span>');
+                data.forEach((item, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(buildJsonValueHtml(item, null, index === arr.length - 1, false));
+                    jsonContent.append(itemDiv);
+                });
+                jsonContent.append('<span class="json-array-end">]</span>');
+            } else if (typeof data === 'object') {
+                jsonContent.append('<span class="json-object-begin">{</span>');
+                Object.keys(data).forEach((key, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(`<span class="json-key">"${key}"</span>: `);
+                    itemDiv.append(buildJsonValueHtml(data[key], key, index === arr.length - 1, true));
+                    jsonContent.append(itemDiv);
+                });
+                jsonContent.append('<span class="json-object-end">}</span>');
+            } else {
+                jsonContent.text(data);
+            }
+            
+            return jsonContent;
+        }
+        
+        function buildJsonValueHtml(value, key, isLastItem = false, explain = true) {
+            let contents = $('<span class="json-value"></span>');
+
+            if (Array.isArray(value)) {
+                contents = $('<span class="json-array-begin">[</span>');
+                value.forEach((item, index, arr) => {
+                    const itemDiv = $(`<div class="json-item" style="padding-left: 1em"></div>`);
+                    itemDiv.append(buildJsonValueHtml(item, null, index === arr.length - 1, false));
+                    contents.append(itemDiv);
+                });
+                contents.append(`<span class="json-array-end">]${(isLastItem ? '' : ',')}</span>`);
+            }
+            else if (typeof value === 'object') {
+                contents = $('<span class="json-object-begin">{</span>');
+                Object.keys(value).forEach((key, index, arr) => {
+                    const itemDiv = $('<div class="json-item" style="padding-left: 1em"></div>');
+                    itemDiv.append(`<span class="json-key">"${key}"</span>: `);
+                    itemDiv.append(buildJsonValueHtml(value[key], key, index === arr.length - 1, false)); // disable explanation for nested objects
+                    contents.append(itemDiv);
+                });
+                contents.append(`<span class="json-object-end">}${(isLastItem ? '' : ',')}</span>`);
+            } else if (typeof value === 'string') {
+                const text = JSON.stringify(value) + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-string');
+            } else if (typeof value === 'number') {
+                const text = value + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-number');
+            } else if (typeof value === 'boolean') {
+                const text = (value ? 'true' : 'false') + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-boolean');
+            } else {
+                const text = String(value) + (isLastItem ? '' : ',');
+                contents.text(text);
+                contents.addClass('json-unknown');
+            }
+
+            if (options.explainClaims && key && explain) {
+                const explanation = explainJwtClaim(key, value);
+                if (explanation) {
+                    contents.append(`<span class="json-explanation"> ${explanation}</span>`);
+                }
+            }
+
+            return contents;
+        }
+                        
         async function attemptSignatureValidation(header, payload, jwtParts) {
             const jwksUrlField = $('#jwks-url');
             
