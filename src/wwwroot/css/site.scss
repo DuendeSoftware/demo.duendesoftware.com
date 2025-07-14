@@ -143,6 +143,8 @@ a.navbar-brand {
   }
 
   .jwt-input-editable {
+    word-wrap: anywhere;
+    
     .text-danger {
       color: lighten(#fc3939, 20%) !important;
     }

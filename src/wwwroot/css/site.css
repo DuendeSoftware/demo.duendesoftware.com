@@ -124,6 +124,9 @@ a.navbar-brand .icon-banner {
 .jwt-decoder-container .jwt-decoded.jwt-signature {
   color: rgb(245.7438016529, 201.7768595041, 124.2561983471);
 }
+.jwt-decoder-container .jwt-input-editable {
+  word-wrap: anywhere;
+}
 .jwt-decoder-container .jwt-input-editable .text-danger {
   color: rgb(253.5223880597, 157.4776119403, 157.4776119403) !important;
 }
