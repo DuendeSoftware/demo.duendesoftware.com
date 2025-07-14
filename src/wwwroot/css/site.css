@@ -133,3 +133,10 @@ a.navbar-brand .icon-banner {
 .jwt-decoder-container .jwt-input-editable .text-warning {
   color: rgb(245.7438016529, 201.7768595041, 124.2561983471) !important;
 }
+.jwt-decoder-container .json-content {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1em;
+}
+.jwt-decoder-container .jwt-signature {
+  font-size: 1em;
+}

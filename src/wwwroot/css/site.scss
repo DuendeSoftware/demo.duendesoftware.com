@@ -155,4 +155,13 @@ a.navbar-brand {
       color: lighten(#efa31d, 20%) !important;
     }
   }
+  
+  .json-content {
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-size: 1em;
+  }
+  
+  .jwt-signature {
+    font-size: 1em;
+  }
 }

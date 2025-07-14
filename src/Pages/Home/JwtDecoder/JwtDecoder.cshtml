@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <!-- Google Tag Manager (noscript) -->
@@ -59,11 +59,11 @@
             <div class="col-jwt col-12 col-md-6 pb-4 pb-md-0">
                 <h3>Decoded JWT</h3>
                 <div class="jwt-decoded-output">
-                    <h4>Header</h4>
-                    <pre id="jwt-header" class="jwt-decoded jwt-header bg-dark p-2">&nbsp;</pre>
-                    <h4>Payload</h4>
-                    <pre id="jwt-payload" class="jwt-decoded jwt-payload bg-dark p-2">&nbsp;</pre>
-                    <h4>Signature</h4>
+                    <h4 class="pt-1">Header</h4>
+                    <div id="jwt-header" class="jwt-decoded jwt-header bg-dark p-2">&nbsp;</div>
+                    <h4 class="pt-1">Payload</h4>
+                    <div id="jwt-payload" class="jwt-decoded jwt-payload bg-dark p-2">&nbsp;</div>
+                    <h4 class="pt-1">Signature</h4>
                     <pre id="jwt-signature" class="jwt-decoded jwt-signature bg-dark p-2">&nbsp;</pre>
                     <div class="jwt-signature-validation-result alert alert-success align-items-center d-none">
                         <i class="glyphicon glyphicon-ok-sign" style="font-size: 3em" title="Valid signature"></i>
