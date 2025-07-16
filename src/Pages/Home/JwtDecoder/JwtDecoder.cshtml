@@ -29,7 +29,7 @@
                 Show claim information
             </label>
         </div>
-        <div class="custom-control custom-switch custom-control-inline">
+        <div class="custom-control custom-switch custom-control-inline d-none d-md-inline-flex">
             <input class="custom-control-input" type="checkbox" id="togglePresenterMode">
             <label class="custom-control-label" for="togglePresenterMode">
                 Presenter mode
@@ -43,11 +43,11 @@
                 <div class="h-100 d-flex flex-column">
                     <div class="form-group flex-grow-1">
                         <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
-                        <div id="jwt-input" class="form-control bg-dark text-light p-2 h-100 jwt-input-editable" contenteditable="true" rows="8" style="min-height: 10em;" placeholder="Paste your JWT here..."></div>
+                        <div id="jwt-input" class="form-control bg-dark text-light p-2 h-100 jwt-input-editable" contenteditable="true" rows="8" style="min-height: 10em;" placeholder="Paste your JWT here...">@Model.View?.Token</div>
                     </div>
                     <div class="form-group">
                         <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
-                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
+                        <input type="url" class="form-control mb-2 mr-sm-2 bg-dark text-light" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
                         <small id="jwks-url-help" class="form-text text-muted">
                             Optionally, you can provide the issuer, discovery document or JWKs URI to validate the JWT's signature.
                             If you leave this field empty, the tool will use the value of the 'iss' claim.
@@ -114,7 +114,7 @@
                 case 'kid':
                     return '// Key ID, identifying which key was used to sign the JWT';
                 case 'typ':
-                    return '// Type of the token, typically "JWT"';
+                    return `// Token type: ${explainTokenType(value)}`;
                 case 'cty':
                     return '// Content type, similar to MIME type, indicating the media type of the JWT.';
                 case 'jwk':
@@ -233,6 +233,26 @@
             }
         }
         
+        function explainTokenType(type) {
+            switch (type.toLowerCase()) {
+                case 'jwt':
+                case 'http://openid.net/specs/jwt/1.0':
+                    return 'JSON Web Token';
+                case 'jws':
+                    return 'JSON Web Signature, a signed JWT';
+                case 'jwe':
+                    return 'JSON Web Encryption, an encrypted JWT';
+                case 'at+jwt':
+                    return 'Access Token';
+                case 'token-introspection+jwt':
+                    return 'JWT response from the Introspection endpoint';
+                case 'secevent+jwt':
+                    return 'Security Event Token';
+                default:
+                    return type;
+            }
+        }
+        
         function convertEpoch(epoch) {
             if (typeof epoch === 'number') {
                 const date = new Date(epoch * 1000);
@@ -307,7 +327,8 @@
                 }
             });
             
-            $('#jwt-input').on('input', async function() {
+            const jwtInput = $('#jwt-input');
+            jwtInput.on('input', async function() {
                 decodedJwt = {
                     header: null,
                     payload: null,
@@ -341,7 +362,14 @@
                 }
             });
 
-            await showDecodedJwt(null, null, null, ' ');
+            @if (Model.View?.Token != null)
+            {
+                @:jwtInput.trigger('input'); // Trigger input event to decode the JWT if it was provided
+            }
+            else
+            {
+                @:await showDecodedJwt(null, null, null, ' ');
+            }
         }
 
         function colorJwtInput(target, parts) {
