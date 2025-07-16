@@ -114,7 +114,7 @@
                 case 'kid':
                     return '// Key ID, identifying which key was used to sign the JWT';
                 case 'typ':
-                    return '// Type of the token, typically "JWT"';
+                    return `// Token type: ${explainTokenType(value)}`;
                 case 'cty':
                     return '// Content type, similar to MIME type, indicating the media type of the JWT.';
                 case 'jwk':
@@ -230,6 +230,26 @@
                     return 'No signature algorithm. This JWT is unsigned and should not be trusted. ';
                 default:
                     return 'Unknown algorithm. ';
+            }
+        }
+        
+        function explainTokenType(type) {
+            switch (type.toLowerCase()) {
+                case 'jwt':
+                case 'http://openid.net/specs/jwt/1.0':
+                    return 'JSON Web Token';
+                case 'jws':
+                    return 'JSON Web Signature, a signed JWT';
+                case 'jwe':
+                    return 'JSON Web Encryption, an encrypted JWT';
+                case 'at+jwt':
+                    return 'Access Token';
+                case 'token-introspection+jwt':
+                    return 'JWT response from the Introspection endpoint';
+                case 'secevent+jwt':
+                    return 'Security Event Token';
+                default:
+                    return type;
             }
         }
         
