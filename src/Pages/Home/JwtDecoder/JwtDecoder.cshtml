@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group">
                         <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
-                        <input type="url" class="form-control mb-2 mr-sm-2" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
+                        <input type="url" class="form-control mb-2 mr-sm-2 bg-dark text-light" id="jwks-url" name="jwks-url" aria-describedby="jwks-url-help" data-pristine="true" />
                         <small id="jwks-url-help" class="form-text text-muted">
                             Optionally, you can provide the issuer, discovery document or JWKs URI to validate the JWT's signature.
                             If you leave this field empty, the tool will use the value of the 'iss' claim.
