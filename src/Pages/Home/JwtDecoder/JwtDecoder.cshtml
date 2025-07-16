@@ -43,7 +43,7 @@
                 <div class="h-100 d-flex flex-column">
                     <div class="form-group flex-grow-1">
                         <label for="jwt-input" class="sr-only">Paste your JWT here...</label>
-                        <div id="jwt-input" class="form-control bg-dark text-light p-2 h-100 jwt-input-editable" contenteditable="true" rows="8" style="min-height: 10em;" placeholder="Paste your JWT here..."></div>
+                        <div id="jwt-input" class="form-control bg-dark text-light p-2 h-100 jwt-input-editable" contenteditable="true" rows="8" style="min-height: 10em;" placeholder="Paste your JWT here...">@Model.View?.Token</div>
                     </div>
                     <div class="form-group">
                         <label for="jwks-url">Issuer, Discovery Document or JWKs URI</label>
@@ -327,7 +327,8 @@
                 }
             });
             
-            $('#jwt-input').on('input', async function() {
+            const jwtInput = $('#jwt-input');
+            jwtInput.on('input', async function() {
                 decodedJwt = {
                     header: null,
                     payload: null,
@@ -361,7 +362,14 @@
                 }
             });
 
-            await showDecodedJwt(null, null, null, ' ');
+            @if (Model.View?.Token != null)
+            {
+                @:jwtInput.trigger('input'); // Trigger input event to decode the JWT if it was provided
+            }
+            else
+            {
+                @:await showDecodedJwt(null, null, null, ' ');
+            }
         }
 
         function colorJwtInput(target, parts) {
