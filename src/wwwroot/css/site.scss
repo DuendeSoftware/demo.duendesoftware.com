@@ -129,15 +129,17 @@ a.navbar-brand {
     text-wrap: auto;
     
     &.jwt-header {
-      border: 4px solid lighten(#fc3939, 20%);
+      border: 4px solid #c586c0;
     }
 
     &.jwt-payload {
-      border: 4px solid lighten(#13b955, 20%);
+      border: 4px solid #4ec9b0;
     }
 
     &.jwt-signature {
-      border: 4px solid lighten(#efa31d, 20%);
+      border: 4px solid #d16969;
+      color: #dcdcaa !important;
+      overflow-wrap: anywhere;
     }
   }
 
@@ -145,15 +147,15 @@ a.navbar-brand {
     word-wrap: anywhere;
     
     .text-danger {
-      color: lighten(#fc3939, 20%) !important;
+      color: #c586c0 !important;
     }
 
     .text-success {
-      color: lighten(#13b955, 20%) !important;
+      color: #4ec9b0 !important;
     }
 
     .text-warning {
-      color: lighten(#efa31d, 20%) !important;
+      color: #d16969 !important;
     }
   }
   
@@ -163,27 +165,27 @@ a.navbar-brand {
   }
   
   .json-content {
-    color: #eee !important;
+    color: #dcdcaa !important;
     
     .json-key {
-        color: gold !important;
+        color: #9cdcfe !important;
     }
     
     .json-boolean, .json-number {
-      color: cyan !important;
+      color: #b5cea8 !important;
     }
     
     .json-string {
-      color: coral !important;
+      color: #ce9178 !important;
     }
     
     .json-explanation {
-      color: springgreen !important;
+      color: #6a9955 !important;
       font-style: italic;
     }
     
     .json-structure {
-      color: #eee !important;
+      color: #dcdcaa !important;
     }
   }
   

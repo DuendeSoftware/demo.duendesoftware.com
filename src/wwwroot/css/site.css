@@ -115,48 +115,50 @@ a.navbar-brand .icon-banner {
   text-wrap: auto;
 }
 .jwt-decoder-container .jwt-decoded.jwt-header {
-  border: 4px solid rgb(253.5223880597, 157.4776119403, 157.4776119403);
+  border: 4px solid #c586c0;
 }
 .jwt-decoder-container .jwt-decoded.jwt-payload {
-  border: 4px solid #46ec88;
+  border: 4px solid #4ec9b0;
 }
 .jwt-decoder-container .jwt-decoded.jwt-signature {
-  border: 4px solid rgb(245.7438016529, 201.7768595041, 124.2561983471);
+  border: 4px solid #d16969;
+  color: #dcdcaa !important;
+  overflow-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
-  color: rgb(253.5223880597, 157.4776119403, 157.4776119403) !important;
+  color: #c586c0 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-success {
-  color: #46ec88 !important;
+  color: #4ec9b0 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-warning {
-  color: rgb(245.7438016529, 201.7768595041, 124.2561983471) !important;
+  color: #d16969 !important;
 }
 .jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1em;
 }
 .jwt-decoder-container .json-content {
-  color: #eee !important;
+  color: #dcdcaa !important;
 }
 .jwt-decoder-container .json-content .json-key {
-  color: gold !important;
+  color: #9cdcfe !important;
 }
 .jwt-decoder-container .json-content .json-boolean, .jwt-decoder-container .json-content .json-number {
-  color: cyan !important;
+  color: #b5cea8 !important;
 }
 .jwt-decoder-container .json-content .json-string {
-  color: coral !important;
+  color: #ce9178 !important;
 }
 .jwt-decoder-container .json-content .json-explanation {
-  color: springgreen !important;
+  color: #6a9955 !important;
   font-style: italic;
 }
 .jwt-decoder-container .json-content .json-structure {
-  color: #eee !important;
+  color: #dcdcaa !important;
 }
 .jwt-decoder-container .jwt-signature {
   font-size: 1em;
