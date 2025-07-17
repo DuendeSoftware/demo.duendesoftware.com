@@ -115,25 +115,25 @@ a.navbar-brand .icon-banner {
   text-wrap: auto;
 }
 .jwt-decoder-container .jwt-decoded.jwt-header {
-  border: 4px solid #fc3939;
+  border: 4px solid rgb(253.5223880597, 157.4776119403, 157.4776119403);
 }
 .jwt-decoder-container .jwt-decoded.jwt-payload {
-  border: 4px solid #13b955;
+  border: 4px solid #46ec88;
 }
 .jwt-decoder-container .jwt-decoded.jwt-signature {
-  border: 4px solid #efa31d;
+  border: 4px solid rgb(245.7438016529, 201.7768595041, 124.2561983471);
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
-  color: #fc3939 !important;
+  color: rgb(253.5223880597, 157.4776119403, 157.4776119403) !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-success {
-  color: #13b955 !important;
+  color: #46ec88 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-warning {
-  color: #efa31d !important;
+  color: rgb(245.7438016529, 201.7768595041, 124.2561983471) !important;
 }
 .jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
