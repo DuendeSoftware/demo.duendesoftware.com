@@ -3,17 +3,19 @@
 
 <div class="jwt-decoder-page">
     <h2 id="jwt-decoder" style="scroll-margin-top: 3em;">JSON Web Token (JWT) Decoder</h2>
-    <p class="lead">
-        Using this tool, you can decode and validate JSON Web Tokens (JWTs) issued by IdentityServer or another token issuer.
-    </p>
-    <p>
-        A JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two parties. 
-        It is commonly used for authentication and information exchange in web applications. 
-        A JWT consists of three parts: a header, a payload, and a signature, separated by dots. 
-        <br />
-        <br />
-        For more details, see <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank">RFC 7519</a>.
-    </p>
+    <div id="intro">
+        <p class="lead">
+            Using this tool, you can decode and validate JSON Web Tokens (JWTs) issued by IdentityServer or another token issuer.
+        </p>
+        <p>
+            A JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two parties. 
+            It is commonly used for authentication and information exchange in web applications. 
+            A JWT consists of three parts: a header, a payload, and a signature, separated by dots. 
+            <br />
+            <br />
+            For more details, see <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank">RFC 7519</a>.
+        </p>
+    </div>
     <div class="alert alert-warning d-flex align-items-center">
         <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 3em" title="Warning"></i>
         <div class="mx-3">
@@ -290,11 +292,13 @@
                 $('.row-jwt').removeClass('align-items-stretch');
                 $('.col-jwt').removeClass('col-md-6');
                 $('#jwt-input').parent().removeClass('flex-grow-1');
+                $('#intro').addClass('d-none');
             }
             else {
                 $('.row-jwt').addClass('align-items-stretch');
                 $('.col-jwt').addClass('col-md-6');
                 $('#jwt-input').parent().addClass('flex-grow-1');
+                $('#intro').removeClass('d-none');
             }
         }
         
