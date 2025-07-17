@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -478,21 +478,33 @@
                 });
                 contents.append(`<span class="json-object-end">}${(isLastItem ? '' : ',')}</span>`);
             } else if (typeof value === 'string') {
-                const text = JSON.stringify(value) + (isLastItem ? '' : ',');
+                const text = JSON.stringify(value);
                 contents.text(text);
                 contents.addClass('json-string');
+                if (!isLastItem) {
+                    contents.append('<span class="json-structure">,</span>');
+                }
             } else if (typeof value === 'number') {
-                const text = value + (isLastItem ? '' : ',');
+                const text = value;
                 contents.text(text);
                 contents.addClass('json-number');
+                if (!isLastItem) {
+                    contents.append('<span class="json-structure">,</span>');
+                }
             } else if (typeof value === 'boolean') {
-                const text = (value ? 'true' : 'false') + (isLastItem ? '' : ',');
+                const text = value ? 'true' : 'false';
                 contents.text(text);
                 contents.addClass('json-boolean');
+                if (!isLastItem) {
+                    contents.append('<span class="json-structure">,</span>');
+                }
             } else {
-                const text = String(value) + (isLastItem ? '' : ',');
+                const text = String(value);
                 contents.text(text);
                 contents.addClass('json-unknown');
+                if (!isLastItem) {
+                    contents.append('<span class="json-structure">,</span>');
+                }
             }
 
             if (options.explainClaims && key && explain) {
