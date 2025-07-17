@@ -127,21 +127,17 @@ a.navbar-brand {
   
   .jwt-decoded {
     text-wrap: auto;
-    background-color: #000000;
-    color: #eee !important;
     
-    &.jwt-header .json-content {
-      background-color: #fc393930 !important;
+    &.jwt-header {
+      border: 4px solid #fc3939;
     }
 
-    &.jwt-payload .json-content {
-      background-color: #13b95530 !important;
+    &.jwt-payload {
+      border: 4px solid #13b955;
     }
 
-    .jwt-signature {
-      color: #eee !important;
-      background-color: #efa31d30;
-      margin: 0;
+    &.jwt-signature {
+      border: 4px solid #efa31d;
     }
   }
 
@@ -149,18 +145,15 @@ a.navbar-brand {
     word-wrap: anywhere;
     
     .text-danger {
-      color: #eee !important;
-      background-color: #fc393930;
+      color: #fc3939 !important;
     }
 
     .text-success {
-      color: #eee !important;
-      background-color: #13b95530;
+      color: #13b955 !important;
     }
 
     .text-warning {
-      color: #eee !important;
-      background-color: #efa31d30;
+      color: #efa31d !important;
     }
   }
   
@@ -173,20 +166,24 @@ a.navbar-brand {
     color: #eee !important;
     
     .json-key {
-        color: goldenrod !important;
+        color: gold !important;
     }
     
     .json-boolean, .json-number {
-      color: chocolate !important;
+      color: cyan !important;
     }
     
     .json-string {
-      color: darkcyan !important;
+      color: coral !important;
     }
     
     .json-explanation {
       color: springgreen !important;
       font-style: italic;
+    }
+    
+    .json-structure {
+      color: #eee !important;
     }
   }
   

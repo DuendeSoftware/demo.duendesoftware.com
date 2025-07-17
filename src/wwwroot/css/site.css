@@ -113,34 +113,27 @@ a.navbar-brand .icon-banner {
 }
 .jwt-decoder-container .jwt-decoded {
   text-wrap: auto;
-  background-color: #000000;
-  color: #eee !important;
 }
-.jwt-decoder-container .jwt-decoded.jwt-header .json-content {
-  background-color: rgba(252, 57, 57, 0.1882352941) !important;
+.jwt-decoder-container .jwt-decoded.jwt-header {
+  border: 4px solid #fc3939;
 }
-.jwt-decoder-container .jwt-decoded.jwt-payload .json-content {
-  background-color: rgba(19, 185, 85, 0.1882352941) !important;
+.jwt-decoder-container .jwt-decoded.jwt-payload {
+  border: 4px solid #13b955;
 }
-.jwt-decoder-container .jwt-decoded .jwt-signature {
-  color: #eee !important;
-  background-color: rgba(239, 163, 29, 0.1882352941);
-  margin: 0;
+.jwt-decoder-container .jwt-decoded.jwt-signature {
+  border: 4px solid #efa31d;
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
-  color: #eee !important;
-  background-color: rgba(252, 57, 57, 0.1882352941);
+  color: #fc3939 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-success {
-  color: #eee !important;
-  background-color: rgba(19, 185, 85, 0.1882352941);
+  color: #13b955 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-warning {
-  color: #eee !important;
-  background-color: rgba(239, 163, 29, 0.1882352941);
+  color: #efa31d !important;
 }
 .jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -150,17 +143,20 @@ a.navbar-brand .icon-banner {
   color: #eee !important;
 }
 .jwt-decoder-container .json-content .json-key {
-  color: goldenrod !important;
+  color: gold !important;
 }
 .jwt-decoder-container .json-content .json-boolean, .jwt-decoder-container .json-content .json-number {
-  color: chocolate !important;
+  color: cyan !important;
 }
 .jwt-decoder-container .json-content .json-string {
-  color: darkcyan !important;
+  color: coral !important;
 }
 .jwt-decoder-container .json-content .json-explanation {
   color: springgreen !important;
   font-style: italic;
+}
+.jwt-decoder-container .json-content .json-structure {
+  color: #eee !important;
 }
 .jwt-decoder-container .jwt-signature {
   font-size: 1em;
