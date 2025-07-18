@@ -113,32 +113,52 @@ a.navbar-brand .icon-banner {
 }
 .jwt-decoder-container .jwt-decoded {
   text-wrap: auto;
-  background-color: #000000;
 }
 .jwt-decoder-container .jwt-decoded.jwt-header {
-  color: rgb(253.5223880597, 157.4776119403, 157.4776119403);
+  border: 4px solid #c586c0;
 }
 .jwt-decoder-container .jwt-decoded.jwt-payload {
-  color: #46ec88;
+  border: 4px solid #d0872f;
 }
 .jwt-decoder-container .jwt-decoded.jwt-signature {
-  color: rgb(245.7438016529, 201.7768595041, 124.2561983471);
+  border: 4px solid #86c0c5;
+  color: #dcdcaa !important;
+  overflow-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
-  color: rgb(253.5223880597, 157.4776119403, 157.4776119403) !important;
+  color: #c586c0 !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-success {
-  color: #46ec88 !important;
+  color: #d0872f !important;
 }
 .jwt-decoder-container .jwt-input-editable .text-warning {
-  color: rgb(245.7438016529, 201.7768595041, 124.2561983471) !important;
+  color: #86c0c5 !important;
 }
 .jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1em;
+}
+.jwt-decoder-container .json-content {
+  color: #dcdcaa !important;
+}
+.jwt-decoder-container .json-content .json-key {
+  color: #9cdcfe !important;
+}
+.jwt-decoder-container .json-content .json-boolean, .jwt-decoder-container .json-content .json-number {
+  color: #b5cea8 !important;
+}
+.jwt-decoder-container .json-content .json-string {
+  color: #ce9178 !important;
+}
+.jwt-decoder-container .json-content .json-explanation {
+  color: #6a9955 !important;
+  font-style: italic;
+}
+.jwt-decoder-container .json-content .json-structure {
+  color: #dcdcaa !important;
 }
 .jwt-decoder-container .jwt-signature {
   font-size: 1em;
