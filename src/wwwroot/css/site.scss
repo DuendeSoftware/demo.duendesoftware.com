@@ -133,11 +133,11 @@ a.navbar-brand {
     }
 
     &.jwt-payload {
-      border: 4px solid #4ec9b0;
+      border: 4px solid #d0872f;
     }
 
     &.jwt-signature {
-      border: 4px solid #d16969;
+      border: 4px solid #86c0c5;
       color: #dcdcaa !important;
       overflow-wrap: anywhere;
     }
@@ -151,11 +151,11 @@ a.navbar-brand {
     }
 
     .text-success {
-      color: #4ec9b0 !important;
+      color: #d0872f !important;
     }
 
     .text-warning {
-      color: #d16969 !important;
+      color: #86c0c5 !important;
     }
   }
   
