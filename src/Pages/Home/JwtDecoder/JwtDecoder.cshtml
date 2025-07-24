@@ -561,14 +561,20 @@
             
             if (jwksUrl) {
                 await loadJwks(jwksUrl);
-                
-                if (jwks.keys.length === 0) {
-                    showSignatureValidationResult('warning', 'No JWKs loaded. Cannot validate signature.');
-                    return;
-                }
-                
+
                 const headerAndPayload = jwtParts[0] + '.' + jwtParts[1];
                 const signature = jwtParts[2];
+                
+                if (jwks.keys.length === 0) {
+                    if (signature) {
+                        showSignatureValidationResult('warning', 'The JWT has a signature, but no JWKs could be loaded to verify whether the signature is valid.');
+                    }
+                    else {
+                        showSignatureValidationResult('warning', 'No JWKs loaded and no signature to validate.');
+                    }
+                    return;
+                }
+                                
                 const result = await validateSignature(header, headerAndPayload, signature, jwks.keys);
                 
                 if (result.signatureValidated) {
