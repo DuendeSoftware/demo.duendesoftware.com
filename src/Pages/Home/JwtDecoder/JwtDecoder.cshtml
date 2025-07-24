@@ -1,4 +1,4 @@
-﻿@page "~/jwt-decoder"
+@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -332,38 +332,10 @@
             });
             
             const jwtInput = $('#jwt-input');
-            jwtInput.on('input', async function() {
-                decodedJwt = {
-                    header: null,
-                    payload: null,
-                    signature: null
-                };
-                
-                const jwt = $(this).text();
-                if (jwt) {
-                    try {
-                        const parts = jwt.split('.');
-                        if (parts.length === 3) {
-                            const header = JSON.parse(atob(parts[0]));
-                            const payload = JSON.parse(atob(parts[1]));
-                            const signature = parts[2];
-
-                            decodedJwt = {
-                                header: header,
-                                payload: payload,
-                                signature: signature
-                            };
-                            await showDecodedJwt(parts, header, payload, signature);
-                            colorJwtInput($(this), parts);
-                        } else {
-                            showError('Invalid JWT format. A JWT should have three parts separated by dots.');
-                        }
-                    } catch (e) {
-                        showError('Error decoding JWT: ' + e.message);
-                    }
-                } else {
-                    await showDecodedJwt(null, null, null, ' ');
-                }
+            let debounceTimeout;
+            jwtInput.on('input', function() {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(async () => await parseJwt.call(this), 300); // 300ms debounce
             });
 
             @if (Model.View?.Token != null)
@@ -373,6 +345,41 @@
             else
             {
                 @:await showDecodedJwt(null, null, null, ' ');
+            }
+        }
+
+        async function parseJwt() {
+            decodedJwt = {
+                header: null,
+                payload: null,
+                signature: null
+            };
+
+            await showDecodedJwt(null, null, null, ' ');
+            const jwt = $(this).text();
+            if (jwt) {
+                try {
+                    const parts = jwt.split('.');
+                    if (parts.length === 3) {
+                        const header = JSON.parse(decodeBase64UrlSafe(parts[0]));
+                        const payload = JSON.parse(decodeBase64UrlSafe(parts[1]));
+                        const signature = parts[2];
+
+                        decodedJwt = {
+                            header: header,
+                            payload: payload,
+                            signature: signature
+                        };
+                        await showDecodedJwt(parts, header, payload, signature);
+                        colorJwtInput($(this), parts);
+                    } else {
+                        showError('Invalid JWT format. A JWT should have three parts separated by dots.');
+                    }
+                } catch (e) {
+                    showError('Error decoding JWT: ' + e.message);
+                }
+            } else {
+                await showDecodedJwt(null, null, null, ' ');
             }
         }
 
