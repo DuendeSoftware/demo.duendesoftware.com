@@ -407,25 +407,33 @@
                 return []; // No JSON object found
             }
             
-            // Find the base64 marker for a JSON object to end parsing ('In0' for '"}' or 'fQ' for '}')
+            /*  Finding a valid ending for base64 URL safe encoded JSON object is a bit trickier, as the encoded version 
+                is different for JSON objects ending with ']' to close an array, '"' for ending a string value,
+                 a number value or a boolean value.
+             */
             let jsonEndPos = part.length;
-            while (jsonEndPos > jsonStartPos && (part.substring(jsonEndPos - 3, jsonEndPos) !== 'In0') && (part.substring(jsonEndPos - 2, jsonEndPos) !== 'fQ')) {
-                jsonEndPos--;
-            }
-            if (jsonEndPos <= jsonStartPos) {
-                return []; // No valid JSON object found
-            }
+            let encodedPart = part.substring(jsonStartPos, jsonEndPos);
+            let decodedPart = '';
+            let json = null;
             
-            try {
-                const encodedPart = part.substring(jsonStartPos, jsonEndPos);
-                const decodedPart = decodeBase64UrlSafe(encodedPart);
-                return [JSON.parse(decodedPart), encodedPart];
+            do {
+                try {
+                    decodedPart = decodeBase64UrlSafe(encodedPart);
+                    json = JSON.parse(decodedPart);
+                    if (json && typeof json === 'object') {
+                        // If we successfully parsed a JSON object, we can return it
+                        return [json, encodedPart];
+                    }
+                }
+                catch {
+                    // If decoding fails, we need to reduce the end position until we find a valid JSON object
+                    jsonEndPos--;
+                    encodedPart = part.substring(jsonStartPos, jsonEndPos);
+                }
             }
-            catch {
-                
-            }
+            while (jsonEndPos > jsonStartPos);
             
-            return [];
+            return []; // No valid JSON object found
         }
         
         function colorJwtInput(target, originalParts, encodedHeader, encodedPayload, signature) {
