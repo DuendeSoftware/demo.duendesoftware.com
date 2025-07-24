@@ -355,24 +355,27 @@
                 signature: null
             };
 
+            // Clear previous state before attempting to parse a new JWT
             await showDecodedJwt(null, null, null, ' ');
+            
             const jwt = $(this).text();
             if (jwt) {
                 try {
-                    const parts = jwt.split('.');
-                    if (parts.length === 3) {
-                        const header = JSON.parse(decodeBase64UrlSafe(parts[0]));
-                        const payload = JSON.parse(decodeBase64UrlSafe(parts[1]));
-                        const signature = parts[2];
+                    const parts = jwt.indexOf('.') === -1 ? [jwt] : jwt.split('.');
+                    const header = parseJwtPart(parts, 0);
+                    const payload = parseJwtPart(parts, 1);
+                    const signature = parts.length > 2 ? parts[2] : '';
 
-                        decodedJwt = {
-                            header: header,
-                            payload: payload,
-                            signature: signature
-                        };
-                        await showDecodedJwt(parts, header, payload, signature);
-                        colorJwtInput($(this), parts);
-                    } else {
+                    decodedJwt = {
+                        header: header,
+                        payload: payload,
+                        signature: signature
+                    };
+                    
+                    await showDecodedJwt(parts, header, payload, signature);
+                    colorJwtInput($(this), parts);
+                    
+                    if (parts.length !== 3) {
                         showError('Invalid JWT format. A JWT should have three parts separated by dots.');
                     }
                 } catch (e) {
@@ -383,6 +386,27 @@
             }
         }
 
+        function parseJwtPart(parts, index) {
+            if (index < 0 || index >= parts.length) {
+                return null;
+            }
+            
+            const part = parts[index];
+            if (!part) {
+                return null;
+            }
+            
+            try {
+                const decodedPart = decodeBase64UrlSafe(part);
+                return JSON.parse(decodedPart);
+            }
+            catch {
+                
+            }
+            
+            return null;
+        }
+        
         function colorJwtInput(target, parts) {
             let html = '';
             if (parts.length > 0) {

@@ -127,6 +127,7 @@ a.navbar-brand .icon-banner {
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
+  max-width: 100vw;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
   color: #c586c0 !important;
