@@ -627,8 +627,7 @@
                     ['verify']
                 );
                 
-                signature = signature.replace(/-/g, '+').replace(/_/g, '/'); // Replace URL-safe characters with standard Base64 characters
-                const binarySignature = atob(signature);
+                const binarySignature = decodeBase64UrlSafe(signature);
                 const signatureBuffer = Uint8Array.from(binarySignature, c => c.charCodeAt(0));
                 const isValid = await subtle.verify(algorithm, publicKey, signatureBuffer, new TextEncoder().encode(headerAndPayload));
                 return { signatureValidated: true, isValid: isValid };
@@ -713,6 +712,10 @@
         
         function hideSignatureValidationResults() {
             $('.jwt-signature-validation-result').removeClass('d-flex').addClass('d-none');
+        }
+        
+        function decodeBase64UrlSafe(base64Data) {
+            return atob(base64Data.replace(/-/g, '+').replace(/_/g, '/'));
         }
     </script>
 }
