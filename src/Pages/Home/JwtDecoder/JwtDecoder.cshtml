@@ -344,7 +344,7 @@
             }
             else
             {
-                @:await showDecodedJwt(null, null, null, ' ');
+                @:await showDecodedJwt(null, null, '', '', ' ');
             }
         }
 
@@ -356,24 +356,26 @@
             };
 
             // Clear previous state before attempting to parse a new JWT
-            await showDecodedJwt(null, null, null, ' ');
+            await showDecodedJwt(null, null, '', '', ' ');
             
             const jwt = $(this).text();
             if (jwt) {
                 try {
                     const parts = jwt.indexOf('.') === -1 ? [jwt] : jwt.split('.');
-                    const header = parseJwtPart(parts, 0);
-                    const payload = parseJwtPart(parts, 1);
+                    const headerInfo = parseJwtPart(parts, 0);
+                    const payloadInfo = parseJwtPart(parts, 1);
                     const signature = parts.length > 2 ? parts[2] : '';
 
                     decodedJwt = {
-                        header: header,
-                        payload: payload,
+                        header: headerInfo.length > 0 ? headerInfo[0] : null,
+                        encodedHeader: headerInfo.length > 1 ? headerInfo[1] : '',
+                        payload: payloadInfo.length > 0 ? payloadInfo[0] : null,
+                        encodedPayload: payloadInfo.length > 1 ? payloadInfo[1] : '',
                         signature: signature
                     };
                     
-                    await showDecodedJwt(parts, header, payload, signature);
-                    colorJwtInput($(this), parts);
+                    await showDecodedJwt(decodedJwt.header, decodedJwt.payload, decodedJwt.encodedHeader, decodedJwt.encodedPayload, signature);
+                    colorJwtInput($(this), parts, decodedJwt.encodedHeader, decodedJwt.encodedPayload, decodedJwt.signature);
                     
                     if (parts.length !== 3) {
                         showError('Invalid JWT format. A JWT should have three parts separated by dots.');
@@ -382,46 +384,95 @@
                     showError('Error decoding JWT: ' + e.message);
                 }
             } else {
-                await showDecodedJwt(null, null, null, ' ');
+                await showDecodedJwt(null, null, '', '', ' ');
             }
         }
 
         function parseJwtPart(parts, index) {
             if (index < 0 || index >= parts.length) {
-                return null;
+                return [];
             }
             
             const part = parts[index];
             if (!part) {
-                return null;
+                return [];
+            }
+            
+            // Find the base64 marker for a JSON object to start parsing
+            let jsonStartPos = 0;
+            while (jsonStartPos < part.length && part.substring(jsonStartPos, jsonStartPos + 3) !== 'eyJ') {
+                jsonStartPos++;
+            }
+            if (jsonStartPos >= part.length) {
+                return []; // No JSON object found
+            }
+            
+            // Find the base64 marker for a JSON object to end parsing ('In0' for '"}' or 'fQ' for '}')
+            let jsonEndPos = part.length;
+            while (jsonEndPos > jsonStartPos && (part.substring(jsonEndPos - 3, jsonEndPos) !== 'In0') && (part.substring(jsonEndPos - 2, jsonEndPos) !== 'fQ')) {
+                jsonEndPos--;
+            }
+            if (jsonEndPos <= jsonStartPos) {
+                return []; // No valid JSON object found
             }
             
             try {
-                const decodedPart = decodeBase64UrlSafe(part);
-                return JSON.parse(decodedPart);
+                const encodedPart = part.substring(jsonStartPos, jsonEndPos);
+                const decodedPart = decodeBase64UrlSafe(encodedPart);
+                return [JSON.parse(decodedPart), encodedPart];
             }
             catch {
                 
             }
             
-            return null;
+            return [];
         }
         
-        function colorJwtInput(target, parts) {
+        function colorJwtInput(target, originalParts, encodedHeader, encodedPayload, signature) {
             let html = '';
-            if (parts.length > 0) {
-                html += `<span class="text-danger">${parts[0] || ''}</span>`;
+            if (encodedHeader) {
+                const originalHeader = originalParts[0];
+                if (originalHeader === encodedHeader) {
+                    html += `<span class="text-danger">${encodedHeader}</span>`;
+                }
+                else {
+                    // Show the additional characters before and after the "encodedHeader" part that are found in originalHeader
+                    const start = originalHeader.indexOf(encodedHeader);
+                    const end = start + encodedHeader.length;
+                    if (start > 0) {
+                        html += `<span class="skipped">${originalHeader.substring(0, start)}</span>`;
+                    }
+                    html += `<span class="text-danger">${encodedHeader}</span>`;
+                    if (end < originalHeader.length) {
+                        html += `<span class="skipped">${originalHeader.substring(end)}</span>`;
+                    }
+                }
             }
-            if (parts.length > 1) {
-                html += `<span class="text-success">.${parts[1] || ''}</span>`;
+            if (encodedPayload) {
+                const originalPayload = originalParts[1];
+                if (originalPayload === encodedPayload) {
+                    html += '<span class="jwt-divider">.</span>' + `<span class="text-success">${encodedPayload}</span>`;
+                }
+                else {
+                    // Show the additional characters before and after the "encodedPayload" part that are found in originalPayload
+                    const start = originalPayload.indexOf(encodedPayload);
+                    const end = start + encodedPayload.length;
+                    if (start > 0) {
+                        html += `<span class="skipped">${originalPayload.substring(0, start)}</span>`;
+                    }
+                    html += '<span class="jwt-divider">.</span>' + `<span class="text-success">${encodedPayload}</span>`;
+                    if (end < originalPayload.length) {
+                        html += `<span class="skipped">${originalPayload.substring(end)}</span>`;
+                    }
+                }
             }
-            if (parts.length > 2) {
-                html += `<span class="text-warning">.${parts.slice(2).join('.') || ''}</span>`;
+            if (signature) {
+                html += '<span class="jwt-divider">.</span>' + `<span class="text-warning">${signature}</span>`;
             }
             target.html(html);
         }
         
-        async function showDecodedJwt(jwtParts, header, payload, signature) {
+        async function showDecodedJwt(header, payload, encodedHeader, encodedPayload, signature) {
             clearError();
             hideSignatureValidationResults();
             
@@ -430,8 +481,8 @@
             
             $('#jwt-signature').text(signature || ' ');
             
-            if (jwtParts && Array.isArray(jwtParts) && jwtParts.length === 3) {
-                await attemptSignatureValidation(header, payload, jwtParts);
+            if (encodedHeader && encodedPayload && signature) {
+                await attemptSignatureValidation(header, payload, encodedHeader, encodedPayload, signature);
             }
         }
 
@@ -548,7 +599,7 @@
             return contents;
         }
                         
-        async function attemptSignatureValidation(header, payload, jwtParts) {
+        async function attemptSignatureValidation(header, payload, encodedHeader, encodedPayload, signature) {
             const jwksUrlField = $('#jwks-url');
             
             const isPristine = jwksUrlField.data('pristine') !== false;
@@ -562,9 +613,7 @@
             if (jwksUrl) {
                 await loadJwks(jwksUrl);
 
-                const headerAndPayload = jwtParts[0] + '.' + jwtParts[1];
-                const signature = jwtParts[2];
-                
+                const headerAndPayload = encodedHeader + '.' + encodedPayload;
                 if (jwks.keys.length === 0) {
                     if (signature) {
                         showSignatureValidationResult('warning', 'The JWT has a signature, but no JWKs could be loaded to verify whether the signature is valid.');

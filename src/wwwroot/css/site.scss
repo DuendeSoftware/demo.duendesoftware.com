@@ -158,6 +158,10 @@ a.navbar-brand {
     .text-warning {
       color: #86c0c5 !important;
     }
+    
+    .skipped {
+      text-decoration: line-through;
+    }
   }
   
   .json-content, .jwt-input-editable {
