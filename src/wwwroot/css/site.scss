@@ -145,6 +145,7 @@ a.navbar-brand {
 
   .jwt-input-editable {
     word-wrap: anywhere;
+    max-width: 100vw;
     
     .text-danger {
       color: #c586c0 !important;
@@ -156,6 +157,10 @@ a.navbar-brand {
 
     .text-warning {
       color: #86c0c5 !important;
+    }
+    
+    .skipped {
+      text-decoration: line-through;
     }
   }
   

@@ -127,6 +127,7 @@ a.navbar-brand .icon-banner {
 }
 .jwt-decoder-container .jwt-input-editable {
   word-wrap: anywhere;
+  max-width: 100vw;
 }
 .jwt-decoder-container .jwt-input-editable .text-danger {
   color: #c586c0 !important;
@@ -136,6 +137,9 @@ a.navbar-brand .icon-banner {
 }
 .jwt-decoder-container .jwt-input-editable .text-warning {
   color: #86c0c5 !important;
+}
+.jwt-decoder-container .jwt-input-editable .skipped {
+  text-decoration: line-through;
 }
 .jwt-decoder-container .json-content, .jwt-decoder-container .jwt-input-editable {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
