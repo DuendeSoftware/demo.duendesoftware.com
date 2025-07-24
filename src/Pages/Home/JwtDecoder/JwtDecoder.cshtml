@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -664,7 +664,8 @@
                 return null;
             }
 
-            if (!response.headers.get('Content-Type').startsWith('application/json')) {
+            const contentType = response.headers.get('Content-Type');
+            if (!contentType || !contentType.startsWith('application/json')) {
                 if (url.toLowerCase().indexOf('.well-known') !== -1 || url.toLowerCase().endsWith('.json')) {
                     showError('The provided JWKs URL does not return a valid JSON response.');
                     return null;
