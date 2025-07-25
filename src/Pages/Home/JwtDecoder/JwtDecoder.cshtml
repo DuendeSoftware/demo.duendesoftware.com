@@ -1,4 +1,4 @@
-﻿@page "~/jwt-decoder"
+@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -335,7 +335,7 @@
             let debounceTimeout;
             jwtInput.on('input', function() {
                 clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(async () => await parseJwt.call(this), 300); // 300ms debounce
+                debounceTimeout = setTimeout(async () => await parseJwt.call(this), 100); // 100ms debounce
             });
 
             @if (Model.View?.Token != null)
