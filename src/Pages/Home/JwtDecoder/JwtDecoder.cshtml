@@ -373,10 +373,10 @@
                         encodedPayload: payloadInfo.length > 1 ? payloadInfo[1] : '',
                         signature: signature
                     };
-                    
-                    await showDecodedJwt(decodedJwt.header, decodedJwt.payload, decodedJwt.encodedHeader, decodedJwt.encodedPayload, signature);
+
                     colorJwtInput($(this), parts, decodedJwt.encodedHeader, decodedJwt.encodedPayload, decodedJwt.signature);
-                    
+                    await showDecodedJwt(decodedJwt.header, decodedJwt.payload, decodedJwt.encodedHeader, decodedJwt.encodedPayload, signature);
+                                        
                     if (parts.length !== 3) {
                         showError('Invalid JWT format. A JWT should have three parts separated by dots.');
                     }
