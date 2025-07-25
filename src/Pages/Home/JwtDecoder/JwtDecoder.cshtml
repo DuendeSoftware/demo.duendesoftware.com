@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -456,10 +456,16 @@
                     }
                 }
             }
+            else if (originalParts.length > 1) {
+                html += `<span class="skipped">${originalParts[0]}</span>`;
+            }
+
+            html += '<span class="jwt-divider">.</span>';
+            
             if (encodedPayload) {
                 const originalPayload = originalParts[1];
                 if (originalPayload === encodedPayload) {
-                    html += '<span class="jwt-divider">.</span>' + `<span class="text-success">${encodedPayload}</span>`;
+                    html += `<span class="text-success">${encodedPayload}</span>`;
                 }
                 else {
                     // Show the additional characters before and after the "encodedPayload" part that are found in originalPayload
@@ -468,14 +474,20 @@
                     if (start > 0) {
                         html += `<span class="skipped">${originalPayload.substring(0, start)}</span>`;
                     }
-                    html += '<span class="jwt-divider">.</span>' + `<span class="text-success">${encodedPayload}</span>`;
+                    html += `<span class="text-success">${encodedPayload}</span>`;
                     if (end < originalPayload.length) {
                         html += `<span class="skipped">${originalPayload.substring(end)}</span>`;
                     }
                 }
             }
+            else if (originalParts.length > 2) {
+                html += `<span class="skipped">${originalParts[1]}</span>`;
+            }
+
+            html += '<span class="jwt-divider">.</span>';
+            
             if (signature) {
-                html += '<span class="jwt-divider">.</span>' + `<span class="text-warning">${signature}</span>`;
+                html += `<span class="text-warning">${signature}</span>`;
             }
             target.html(html);
         }
