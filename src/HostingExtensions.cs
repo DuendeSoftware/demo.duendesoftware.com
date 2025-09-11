@@ -2,6 +2,7 @@ using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 
 namespace Duende.IdentityServer.Demo;
@@ -12,6 +13,12 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
         builder.Services.AddControllers();
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
 
         // cookie policy to deal with temporary browser incompatibilities
         builder.Services.AddSameSiteCookiePolicy();
@@ -30,6 +37,7 @@ internal static class HostingExtensions
                 //         UseX509Certificate = true
                 //     }
                 // };
+                options.KeyManagement.KeyPath = "/tmp/keys";
             })
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryIdentityResources(Config.IdentityResources)
@@ -62,10 +70,7 @@ internal static class HostingExtensions
                 options.Scope.Add("email");
             });
 
-        builder.Services.ConfigureDPoPTokensForScheme("dpop", options =>
-        {
-            options.TokenMode = DPoPMode.DPoPOnly;
-        });
+        builder.Services.ConfigureDPoPTokensForScheme("dpop", options => { options.TokenMode = DPoPMode.DPoPOnly; });
 
         // add CORS policy for non-IdentityServer endpoints
         builder.Services.AddCors(options =>
@@ -87,6 +92,7 @@ internal static class HostingExtensions
 
         app.UseCookiePolicy();
         app.UseDeveloperExceptionPage();
+        app.UseForwardedHeaders();
 
         app.UseCors("allow_all");
 
@@ -100,7 +106,7 @@ internal static class HostingExtensions
 
             return next();
         });
-        
+
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
