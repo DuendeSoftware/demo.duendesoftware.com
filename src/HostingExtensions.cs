@@ -92,6 +92,15 @@ internal static class HostingExtensions
 
         app.UseStaticFiles();
 
+        app.Use((context, next) =>
+        {
+            context.Response.Headers.TryAdd(
+                "X-REVISION",
+                RunningEnvironmentConfiguration.ApplicationVersion);
+
+            return next();
+        });
+        
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
