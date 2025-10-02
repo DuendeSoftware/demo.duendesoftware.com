@@ -3,6 +3,7 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Serilog;
 
 namespace Duende.IdentityServer.Demo;
@@ -18,6 +19,12 @@ internal static class HostingExtensions
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             options.KnownNetworks.Clear();
             options.KnownProxies.Clear();
+        });
+
+        builder.Services.Configure<HstsOptions>(options =>
+        {
+            options.MaxAge = TimeSpan.FromDays(365);
+            options.IncludeSubDomains = true;
         });
 
         // cookie policy to deal with temporary browser incompatibilities
@@ -88,6 +95,11 @@ internal static class HostingExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHsts();
+        }
+        
         app.UseSerilogRequestLogging();
 
         app.UseCookiePolicy();
