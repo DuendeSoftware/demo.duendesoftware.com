@@ -23,7 +23,7 @@ internal static class HostingExtensions
 
         builder.Services.Configure<HstsOptions>(options =>
         {
-            options.MaxAge = TimeSpan.FromDays(365);
+            options.MaxAge = TimeSpan.FromDays(30);
             options.IncludeSubDomains = true;
         });
 
