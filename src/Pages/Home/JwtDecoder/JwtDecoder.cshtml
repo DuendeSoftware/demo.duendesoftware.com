@@ -1,4 +1,4 @@
-@page "~/jwt-decoder"
+﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
 <div class="jwt-decoder-page">
@@ -337,6 +337,13 @@
             });
             
             const jwtInput = $('#jwt-input');
+            jwtInput.on('paste', function(e) {
+                e.preventDefault();
+                const data = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+                jwtInput.text(data);
+                jwtInput.trigger('input');
+            });
+            
             let debounceTimeout;
             jwtInput.on('input', function() {
                 clearTimeout(debounceTimeout);
