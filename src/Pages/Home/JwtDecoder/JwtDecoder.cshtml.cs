@@ -13,7 +13,13 @@ public class JwtDecoder(IHttpClientFactory clientFactory, IMemoryCache cache) : 
     
     public ViewModel View { get; set; } = default!;
 
-    public async Task<IActionResult> OnGet()
+    public IActionResult OnGet()
+    {
+        View = new ViewModel();
+        return Page();
+    }
+    
+    public async Task<IActionResult> OnPost()
     {
         var token = await GetOrCreateToken();
         View = new ViewModel { Token = token };
