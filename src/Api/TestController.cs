@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using IdentityModel;
+using Duende.IdentityModel;
 
 namespace Duende.IdentityServer.Demo
 {
