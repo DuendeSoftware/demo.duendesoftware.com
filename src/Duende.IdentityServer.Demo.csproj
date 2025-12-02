@@ -8,9 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer" Version="7.4.0-rc.1" />
-		<PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="0.3.0-rc.1" />
-		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+		<PackageReference Include="Duende.IdentityServer" Version="7.4.0" />
+		<PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="0.3.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
