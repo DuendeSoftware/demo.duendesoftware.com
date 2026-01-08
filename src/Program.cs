@@ -12,7 +12,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, logger) =>
+    builder.Services.AddSerilog(logger =>
     {
         logger
             .MinimumLevel.Debug()
@@ -24,7 +24,6 @@ try
                 "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
             .Enrich.FromLogContext();
     });
-        
 
     var app = builder
         .ConfigureServices()
