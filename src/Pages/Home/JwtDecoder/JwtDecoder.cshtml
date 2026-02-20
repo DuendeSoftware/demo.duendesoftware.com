@@ -638,7 +638,7 @@
             let jwksUrl = jwksUrlField.val().trim();
             if ((!jwksUrl || isPristine) && payload && payload.iss) {
                 // If no JWKs URL is provided (or previously set from a different token's issuer), use the issuer from the payload.
-                jwksUrl = payload.iss;
+                jwksUrl = appendDiscoveryPath(payload.iss);
                 jwksUrlField.val(jwksUrl);
             }
             
@@ -774,20 +774,8 @@
         }
         
         async function fetchJwks(url) {
-            let response;
-            try {
-                response = await fetch(url);
-            } catch (error) {
-                if (url.toLowerCase().indexOf('.well-known') === -1) {
-                    return await fetchJwks(appendDiscoveryPath(url));
-                }
-                throw error;
-            }
-            
+            const response = await fetch(url);
             if (!response.ok) {
-                if (url.toLowerCase().indexOf('.well-known') === -1) {
-                    return await fetchJwks(appendDiscoveryPath(url));
-                }
                 return null;
             }
 
