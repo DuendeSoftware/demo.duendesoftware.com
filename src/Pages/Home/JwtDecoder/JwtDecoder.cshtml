@@ -769,9 +769,25 @@
             }
         }
         
+        function appendDiscoveryPath(url) {
+            return url + (url.slice(-1) === '/' ? '' : '/') + '.well-known/openid-configuration';
+        }
+        
         async function fetchJwks(url) {
-            const response = await fetch(url);
+            let response;
+            try {
+                response = await fetch(url);
+            } catch (error) {
+                if (url.toLowerCase().indexOf('.well-known') === -1) {
+                    return await fetchJwks(appendDiscoveryPath(url));
+                }
+                throw error;
+            }
+            
             if (!response.ok) {
+                if (url.toLowerCase().indexOf('.well-known') === -1) {
+                    return await fetchJwks(appendDiscoveryPath(url));
+                }
                 return null;
             }
 
@@ -783,7 +799,7 @@
                 }
                 else {
                     // retry with a discovery document
-                    return await fetchJwks(url + (url.slice(url.length - 1) === '/' ? '' : '/') + '.well-known/openid-configuration');
+                    return await fetchJwks(appendDiscoveryPath(url));
                 }
             }
             
