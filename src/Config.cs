@@ -119,7 +119,7 @@ namespace Duende.IdentityServer.Demo
                     ClientName = "Machine to machine (client credentials with JWT)",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = AllApiScopes,
-                    
+
                     ClientSecrets = { PublicKey }
                 },
                 new Client
@@ -141,7 +141,7 @@ namespace Duende.IdentityServer.Demo
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = AllApiScopes,
-                    
+
                     RequireDPoP = true,
                     DPoPValidationMode = DPoPTokenExpirationValidationMode.Nonce,
                 },
@@ -162,7 +162,7 @@ namespace Duende.IdentityServer.Demo
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = AllApiScopes,
                     AccessTokenLifetime = 75,
-                    
+
                     ClientSecrets = { PublicKey }
                 },
 
@@ -184,7 +184,7 @@ namespace Duende.IdentityServer.Demo
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding
                 },
-                
+
                 new Client
                 {
                     ClientId = "interactive.confidential.jwt",
@@ -206,6 +206,30 @@ namespace Duende.IdentityServer.Demo
 
                 new Client
                 {
+                    ClientId = "interactive.confidential.jwt.dpop",
+                    ClientName = "Interactive client (Code with PKCE) using private key JWT authentication and requiring DPoP with server-issued nonces",
+
+                    RedirectUris = { "https://notused" },
+                    PostLogoutRedirectUris = { "https://notused" },
+
+                    ClientSecrets = { PublicKey },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireRequestObject = false,
+                    AllowedScopes = AllScopes,
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+
+                    RequireDPoP = true,
+                    DPoPValidationMode = DPoPTokenExpirationValidationMode.Nonce,
+
+                    AccessTokenLifetime = 75
+                },
+
+                new Client
+                {
                     ClientId = "interactive.confidential.jar.jwt",
                     ClientName = "Interactive client (Code with PKCE) using JAR and private key JWT",
 
@@ -222,7 +246,7 @@ namespace Duende.IdentityServer.Demo
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding
                 },
-                
+
                 new Client
                 {
                     ClientId = "interactive.confidential.short",
@@ -241,7 +265,7 @@ namespace Duende.IdentityServer.Demo
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
+
                     AccessTokenLifetime = 75
                 },
 
@@ -283,7 +307,7 @@ namespace Duende.IdentityServer.Demo
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
+
                     AccessTokenLifetime = 75
                 },
 
@@ -342,7 +366,7 @@ namespace Duende.IdentityServer.Demo
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
+
                     AccessTokenLifetime = 75
                 },
 
@@ -397,7 +421,7 @@ namespace Duende.IdentityServer.Demo
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
-                    
+
                     AllowedScopes = AllScopes,
                 },
                 
@@ -418,10 +442,10 @@ namespace Duende.IdentityServer.Demo
                 new Client
                 {
                     ClientId = "login",
-                    
+
                     RedirectUris = { "https://notused" },
                     PostLogoutRedirectUris = { "https://notused" },
-                    
+
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = AllIdentityScopes,
                 }
