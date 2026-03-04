@@ -1,15 +1,22 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace SmokeTests;
 
-public class DemoWebApplicationFactory : WebApplicationFactory<Program>
+public sealed class DemoWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // Replace Serilog with the default ASP.NET Core logger so that
+        // parallel WebApplicationFactory instances don't hit the
+        // ReloadableLogger.Freeze() "already frozen" exception.
         builder.ConfigureServices(services =>
         {
+            services.AddSerilog(_ => { }, preserveStaticLogger: true);
+
             // Override IdentityServer options for test isolation
             services.PostConfigure<Duende.IdentityServer.Configuration.IdentityServerOptions>(options =>
             {

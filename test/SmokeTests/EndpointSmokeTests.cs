@@ -1,23 +1,17 @@
 using System.Net;
 using System.Text.Json;
-using AngleSharp.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Shouldly;
 using Xunit;
 
 namespace SmokeTests;
 
-public class EndpointSmokeTests : IClassFixture<DemoWebApplicationFactory>
+public sealed class EndpointSmokeTests(DemoWebApplicationFactory factory) : IClassFixture<DemoWebApplicationFactory>
 {
-    private readonly HttpClient _client;
-
-    public EndpointSmokeTests(DemoWebApplicationFactory factory)
+    private readonly HttpClient _client = factory.CreateClient(new WebApplicationFactoryClientOptions
     {
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
-    }
+        AllowAutoRedirect = false
+    });
 
     [Fact]
     public async Task Homepage_Returns_Ok_With_Expected_Content()
