@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Duende.IdentityServer.Models;
 
@@ -449,6 +450,48 @@ namespace Duende.IdentityServer.Demo
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = AllIdentityScopes,
                 }
+            };
+
+        public static IEnumerable<SamlServiceProvider> SamlServiceProviders =>
+            new List<SamlServiceProvider>
+            {
+                // basic SP - minimal config with HTTP-POST binding
+                new SamlServiceProvider
+                {
+                    EntityId = "https://saml-sp1.example.com",
+                    DisplayName = "Simple SAML SP",
+                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp1.example.com/acs")],
+                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
+                },
+
+                // SP with Single Logout
+                new SamlServiceProvider
+                {
+                    EntityId = "https://saml-sp2.example.com",
+                    DisplayName = "SAML SP with SLO",
+                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp2.example.com/acs")],
+                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
+                    SingleLogoutServiceUrl = new SamlEndpointType
+                    {
+                        Location = new Uri("https://saml-sp2.example.com/saml/slo"),
+                        Binding = SamlBinding.HttpPost,
+                    },
+                },
+
+                // SP with IdP-initiated SSO enabled
+                new SamlServiceProvider
+                {
+                    EntityId = "https://saml-sp3.example.com",
+                    DisplayName = "SAML SP (IdP-initiated)",
+                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp3.example.com/acs")],
+                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
+                    AllowIdpInitiated = true,
+                    SingleLogoutServiceUrl = new SamlEndpointType
+                    {
+                        Location = new Uri("https://saml-sp3.example.com/saml/slo"),
+                        Binding = SamlBinding.HttpPost,
+                    },
+                },
             };
     }
 }

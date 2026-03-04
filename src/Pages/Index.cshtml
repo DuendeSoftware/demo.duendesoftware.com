@@ -64,6 +64,23 @@
         <div class="card m-2" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">
+                    <i class="glyphicon glyphicon-globe"></i>
+                    SAML Metadata
+                </h5>
+                <p class="card-text">
+                    SAML 2.0 IdP metadata document with entity descriptor, endpoints, and signing certificates.
+                </p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/saml/metadata" rel="nofollow" class="btn btn-primary w-100">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
                     <i class="glyphicon glyphicon-user"></i>
                     Claims
                 </h5>
@@ -160,7 +177,7 @@
         </div>
     </div>
 
-    <h2 id="demo-clients" style="scroll-margin-top: 3em;">Demo clients</h2>
+    <h2 id="demo-clients" style="scroll-margin-top: 3em;">Demo OAuth/OIDC Clients</h2>
     <p>
         You can use this demo server for different types of clients.
         Use the below configurations to work with them in your own demo applications
@@ -278,6 +295,44 @@
                                         </div>
                                     </div>
                                 </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">Demo SAML Service Providers (alpha)</h2>
+    <p>
+        This demo server also acts as a SAML 2.0 Identity Provider. The following service providers are configured for testing.
+        Use the <a href="/saml/metadata">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
+    </p>
+
+    <div id="saml-accordion" class="mb-3">
+        @foreach (var sp in Config.SamlServiceProviders)
+        {
+            var spKey = sp.EntityId.Replace(":", "-").Replace("/", "-").Replace(".", "-");
+            <div class="card mb-2">
+                <div id="sp-@spKey" class="card-header bg-light shadow-sm border-0">
+                    <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#sp-@spKey-collapse" aria-controls="sp-@spKey-collapse" class="d-block position-relative text-dark collapsible-link py-2">@sp.DisplayName</a></h6>
+                </div>
+                <div id="sp-@spKey-collapse" aria-labelledby="sp-@spKey" data-parent="#saml-accordion" class="collapse">
+                    <div class="card-body">
+                        <div class="card-text">
+                            Entity ID: <code>@sp.EntityId</code><br/>
+                            ACS Binding: <code>@sp.AssertionConsumerServiceBinding</code><br/>
+                            @foreach (var acs in sp.AssertionConsumerServiceUrls)
+                            {
+                                <text>ACS URL: <code>@acs</code><br/></text>
+                            }
+                            @if (sp.SingleLogoutServiceUrl != null)
+                            {
+                                <text>SLO URL: <code>@sp.SingleLogoutServiceUrl.Location</code><br/></text>
+                            }
+                            @if (sp.AllowIdpInitiated)
+                            {
+                                <text>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></text>
                             }
                         </div>
                     </div>

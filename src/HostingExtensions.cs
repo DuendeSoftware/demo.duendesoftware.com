@@ -1,4 +1,5 @@
 using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
+using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
@@ -38,21 +39,25 @@ internal static class HostingExtensions
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
-                // options.KeyManagement.SigningAlgorithms = new[]
-                // {
-                //     new SigningAlgorithmOptions("RS256")
-                //     {
-                //         UseX509Certificate = true
-                //     }
-                // };
+                // SAML signing requires X509 certificates (not raw RSA keys).
+                // This tells key management to wrap auto-generated keys in
+                // self-signed X509 certificates.
+                options.KeyManagement.SigningAlgorithms.Add(new SigningAlgorithmOptions("RS256")
+                {
+                    UseX509Certificate = true
+                });
                 options.KeyManagement.KeyPath = "/tmp/keys";
+
+                options.Endpoints.EnableSamlIdpInitiatedEndpoint = true;
             })
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiResources(Config.ApiResources)
             .AddInMemoryClients(Config.Clients)
             .AddTestUsers(TestUsers.Users)
-            .AddJwtBearerClientAuthentication();
+            .AddJwtBearerClientAuthentication()
+            .AddSaml()
+            .AddInMemorySamlServiceProviders(Config.SamlServiceProviders);
 
         builder.Services.AddAuthentication()
             .AddLocalApi()
