@@ -177,7 +177,7 @@
         </div>
     </div>
 
-    <h2 id="demo-clients" style="scroll-margin-top: 3em;">Demo clients</h2>
+    <h2 id="demo-clients" style="scroll-margin-top: 3em;">Demo OAuth/OIDC Clients</h2>
     <p>
         You can use this demo server for different types of clients.
         Use the below configurations to work with them in your own demo applications
@@ -303,20 +303,21 @@
         }
     </div>
 
-    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">SAML Service Providers</h2>
+    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">Demo SAML Service Providers (alpha)</h2>
     <p>
         This demo server also acts as a SAML 2.0 Identity Provider. The following service providers are configured for testing.
         Use the <a href="/saml/metadata">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
     </p>
 
-    <div class="row mb-3">
+    <div id="saml-accordion" class="mb-3">
         @foreach (var sp in Config.SamlServiceProviders)
         {
-            <div class="col-12 col-lg-6">
-                <div class="card border-light m-2">
-                    <div class="card-header bg-light">
-                        <h5 class="card-title">@sp.DisplayName</h5>
-                    </div>
+            var spKey = sp.EntityId.Replace(":", "-").Replace("/", "-").Replace(".", "-");
+            <div class="card mb-2">
+                <div id="sp-@spKey" class="card-header bg-light shadow-sm border-0">
+                    <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#sp-@spKey-collapse" aria-controls="sp-@spKey-collapse" class="d-block position-relative text-dark collapsible-link py-2">@sp.DisplayName</a></h6>
+                </div>
+                <div id="sp-@spKey-collapse" aria-labelledby="sp-@spKey" data-parent="#saml-accordion" class="collapse">
                     <div class="card-body">
                         <div class="card-text">
                             Entity ID: <code>@sp.EntityId</code><br/>
