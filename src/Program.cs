@@ -40,3 +40,6 @@ finally
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }
+
+// Expose the auto-generated Program class for WebApplicationFactory<Program> in tests
+public partial class Program;
