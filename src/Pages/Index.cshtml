@@ -64,6 +64,23 @@
         <div class="card m-2" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">
+                    <i class="glyphicon glyphicon-globe"></i>
+                    SAML Metadata
+                </h5>
+                <p class="card-text">
+                    SAML 2.0 IdP metadata document with entity descriptor, endpoints, and signing certificates.
+                </p>
+            </div>
+            <div class="card-footer p-0">
+                <a href="/saml/metadata" rel="nofollow" class="btn btn-primary w-100">
+                    Go
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
                     <i class="glyphicon glyphicon-user"></i>
                     Claims
                 </h5>
@@ -278,6 +295,43 @@
                                         </div>
                                     </div>
                                 </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">SAML Service Providers</h2>
+    <p>
+        This demo server also acts as a SAML 2.0 Identity Provider. The following service providers are configured for testing.
+        Use the <a href="/saml/metadata">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
+    </p>
+
+    <div class="row mb-3">
+        @foreach (var sp in Config.SamlServiceProviders)
+        {
+            <div class="col-12 col-lg-6">
+                <div class="card border-light m-2">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title">@sp.DisplayName</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            Entity ID: <code>@sp.EntityId</code><br/>
+                            ACS Binding: <code>@sp.AssertionConsumerServiceBinding</code><br/>
+                            @foreach (var acs in sp.AssertionConsumerServiceUrls)
+                            {
+                                <text>ACS URL: <code>@acs</code><br/></text>
+                            }
+                            @if (sp.SingleLogoutServiceUrl != null)
+                            {
+                                <text>SLO URL: <code>@sp.SingleLogoutServiceUrl.Location</code><br/></text>
+                            }
+                            @if (sp.AllowIdpInitiated)
+                            {
+                                <text>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></text>
                             }
                         </div>
                     </div>

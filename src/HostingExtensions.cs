@@ -46,13 +46,17 @@ internal static class HostingExtensions
                 //     }
                 // };
                 options.KeyManagement.KeyPath = "/tmp/keys";
+
+                options.Endpoints.EnableSamlIdpInitiatedEndpoint = true;
             })
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiResources(Config.ApiResources)
             .AddInMemoryClients(Config.Clients)
             .AddTestUsers(TestUsers.Users)
-            .AddJwtBearerClientAuthentication();
+            .AddJwtBearerClientAuthentication()
+            .AddSaml()
+            .AddInMemorySamlServiceProviders(Config.SamlServiceProviders);
 
         builder.Services.AddAuthentication()
             .AddLocalApi()
