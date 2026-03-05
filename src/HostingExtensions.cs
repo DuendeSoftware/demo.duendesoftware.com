@@ -1,5 +1,7 @@
 using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
+using Duende.ConformanceReport.Endpoints;
 using Duende.IdentityServer.Configuration;
+using Duende.IdentityServer.ConformanceReport;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
 using IdentityServerHost;
@@ -57,7 +59,11 @@ internal static class HostingExtensions
             .AddTestUsers(TestUsers.Users)
             .AddJwtBearerClientAuthentication()
             .AddSaml()
-            .AddInMemorySamlServiceProviders(Config.SamlServiceProviders);
+            .AddInMemorySamlServiceProviders(Config.SamlServiceProviders)
+            .AddConformanceReport(options =>
+            {
+                options.Enabled = true;
+            });
 
         builder.Services.AddAuthentication()
             .AddLocalApi()
@@ -128,8 +134,9 @@ internal static class HostingExtensions
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
-
-
+        
+        app.MapConformanceReport();
+        
         app.MapRazorPages()
             .RequireAuthorization();
         app.MapControllers();
