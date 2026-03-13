@@ -34,6 +34,8 @@ internal static class HostingExtensions
         // cookie policy to deal with temporary browser incompatibilities
         builder.Services.AddSameSiteCookiePolicy();
 
+        builder.Services.AddKeyedHybridCache("ProofTokenReplayHybridCache");
+        
         builder.Services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -69,7 +71,7 @@ internal static class HostingExtensions
             .AddLocalApi()
             .AddJwtBearer("dpop", options =>
             {
-                // options.Authority = "https://localhost:5001";
+                //options.Authority = "https://localhost:5001";
                 options.Authority = "https://demo.duendesoftware.com";
 
                 options.TokenValidationParameters.ValidateAudience = false;
