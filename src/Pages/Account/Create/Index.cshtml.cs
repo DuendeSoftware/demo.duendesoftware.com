@@ -85,7 +85,10 @@ public class Index : PageModel
                 DisplayName = user.Username
             };
 
-            await HttpContext.SignInAsync(isuser);
+            var props = new AuthenticationProperties();
+            props.SetString("Location", "Demoland");
+            
+            await HttpContext.SignInAsync(isuser, props);
 
             if (context != null)
             {

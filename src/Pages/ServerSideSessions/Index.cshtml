@@ -98,7 +98,16 @@
                                         {
                                             <tr>
                                                 <td>@session.SubjectId</td>
-                                                <td>@session.SessionId</td>
+                                                <td>
+                                                    @session.SessionId
+                                                    
+                                                    @{
+                                                        if (session.AuthenticationTicket.Properties.Items.TryGetValue("Location", out var location))
+                                                        {
+                                                            <br/><small>Location: @location</small>
+                                                        }
+                                                    }
+                                                </td>
                                                 <td>@session.DisplayName</td>
                                                 <td>@session.Created</td>
                                                 <td>@session.Expires</td>
