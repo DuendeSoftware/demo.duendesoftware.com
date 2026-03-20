@@ -33,7 +33,8 @@ internal static class HostingExtensions
 
         // cookie policy to deal with temporary browser incompatibilities
         builder.Services.AddSameSiteCookiePolicy();
-
+        
+        // duende identityserver
         builder.Services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -57,6 +58,7 @@ internal static class HostingExtensions
             .AddInMemoryApiResources(Config.ApiResources)
             .AddInMemoryClients(Config.Clients)
             .AddTestUsers(TestUsers.Users)
+            .AddServerSideSessions()
             .AddJwtBearerClientAuthentication()
             .AddSaml()
             .AddInMemorySamlServiceProviders(Config.SamlServiceProviders)
