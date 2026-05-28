@@ -1,11 +1,5 @@
 :root {
-  --font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-
-.welcome-page {
-  .logo {
-    width: 64px;
-  }
+  --font-family-sans-serif: "Funnel Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* List group */
@@ -78,7 +72,7 @@ a.navbar-brand {
   
   .icon-banner {
     margin-top: -4px;
-    height:calc(4rem - 2 * .75rem);
+    height: 1.5rem;
     width: auto;
     max-width: 100%;
     object-fit: contain;
