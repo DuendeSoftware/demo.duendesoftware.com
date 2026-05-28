@@ -32,7 +32,7 @@ public sealed class EndpointSmokeTests(DemoWebApplicationFactory factory) : ICla
         // Verify discovery and SAML metadata links
         document.QuerySelector("a[href='/.well-known/openid-configuration']")
             .ShouldNotBeNull("Discovery document link should exist");
-        document.QuerySelector("a[href='/saml/metadata']")
+        document.QuerySelector("a[href='/Saml2']")
             .ShouldNotBeNull("SAML metadata link should exist");
     }
 
@@ -57,7 +57,7 @@ public sealed class EndpointSmokeTests(DemoWebApplicationFactory factory) : ICla
     public async Task SamlMetadata_Returns_Valid_Xml()
     {
         // Act
-        var response = await _client.GetAsync("/saml/metadata");
+        var response = await _client.GetAsync("/Saml2");
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
