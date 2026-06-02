@@ -26,30 +26,18 @@ public sealed class SamlSsoTests : IClassFixture<DemoWebApplicationFactory>
         var client = CreateClient();
         var cookies = await LoginAsync(client, "alice", "alice");
 
-        // Act — Step 1: Hit IdP-initiated endpoint
+        // Act — Hit IdP-initiated endpoint (returns HTML form directly)
         var idpInitiatedRequest = CreateRequest(
             HttpMethod.Get,
             "/saml/idp-initiated?spEntityId=https://saml-sp3.example.com",
             cookies);
         var idpInitiatedResponse = await client.SendAsync(idpInitiatedRequest);
 
-        // Should redirect to signin_callback
-        idpInitiatedResponse.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-        var callbackLocation = idpInitiatedResponse.Headers.Location?.ToString();
-        callbackLocation.ShouldNotBeNull();
-        callbackLocation.ShouldContain("/saml/signin_callback");
-
-        // Collect cookies from this response (SAML state cookie)
-        var allCookies = MergeCookies(cookies, ExtractCookies(idpInitiatedResponse));
-
-        // Act — Step 2: Follow redirect to signin_callback
-        var callbackRequest = CreateRequest(HttpMethod.Get, callbackLocation, allCookies);
-        var callbackResponse = await client.SendAsync(callbackRequest);
-
-        callbackResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+        // Should return 200 with HTML form containing SAMLResponse
+        idpInitiatedResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         // Parse the SAML response from the HTML form
-        var samlXml = await ExtractSamlResponseFromHtmlAsync(callbackResponse);
+        var samlXml = await ExtractSamlResponseFromHtmlAsync(idpInitiatedResponse);
 
         // Assert — SAML Response structure
         var response = samlXml.Root;
@@ -101,15 +89,11 @@ public sealed class SamlSsoTests : IClassFixture<DemoWebApplicationFactory>
         authnStatement.Attribute("SessionIndex")?.Value.ShouldNotBeNullOrEmpty();
 
         // AttributeStatement — verify alice's name claim.
-        // Note: the login flow only puts sub + name on the ClaimsPrincipal,
-        // so only the "name" claim (which is in the default SAML mapping) appears
-        // in the assertion. Claims like "email" are on the TestUser but not on
-        // the auth cookie principal, so the profile service never issues them.
         GetAttributeValue(assertion, "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")
             .ShouldBe("Alice Smith");
 
         // Verify the HTML form posts to the correct ACS URL
-        var document = await callbackResponse.ParseHtmlAsync();
+        var document = await idpInitiatedResponse.ParseHtmlAsync();
         var form = document.QuerySelector("form[method='post']");
         form.ShouldNotBeNull();
         form.GetAttribute("action").ShouldBe("https://saml-sp3.example.com/acs");
@@ -253,33 +237,23 @@ public sealed class SamlSsoTests : IClassFixture<DemoWebApplicationFactory>
     }
 
     /// <summary>
-    /// Executes the full IdP-initiated SSO flow (redirect chain) and returns the parsed SAML response XML.
+    /// Executes the full IdP-initiated SSO flow and returns the parsed SAML response XML.
     /// </summary>
     private static async Task<XDocument> ExecuteIdpInitiatedFlowAsync(
         HttpClient client,
         Dictionary<string, string> cookies,
         string spEntityId)
     {
-        // Step 1: IdP-initiated endpoint
+        // IdP-initiated endpoint returns HTML form directly (no redirect)
         var idpRequest = CreateRequest(
             HttpMethod.Get,
             $"/saml/idp-initiated?spEntityId={Uri.EscapeDataString(spEntityId)}",
             cookies);
         var idpResponse = await client.SendAsync(idpRequest);
 
-        idpResponse.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-        var callbackLocation = idpResponse.Headers.Location?.ToString();
-        callbackLocation.ShouldNotBeNull();
+        idpResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var allCookies = MergeCookies(cookies, ExtractCookies(idpResponse));
-
-        // Step 2: Follow redirect to signin_callback
-        var callbackRequest = CreateRequest(HttpMethod.Get, callbackLocation, allCookies);
-        var callbackResponse = await client.SendAsync(callbackRequest);
-
-        callbackResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        return await ExtractSamlResponseFromHtmlAsync(callbackResponse);
+        return await ExtractSamlResponseFromHtmlAsync(idpResponse);
     }
 
     /// <summary>

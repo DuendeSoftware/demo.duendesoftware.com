@@ -460,8 +460,11 @@ namespace Duende.IdentityServer.Demo
                 {
                     EntityId = "https://saml-sp1.example.com",
                     DisplayName = "Simple SAML SP",
-                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp1.example.com/acs")],
-                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
+                    AssertionConsumerServiceUrls = new List<IndexedEndpoint>
+                    {
+                        new IndexedEndpoint { Location = "https://saml-sp1.example.com/acs", Binding = SamlBinding.HttpPost, Index = 0, IsDefault = true }
+                    },
+                    AllowedScopes = { "openid", "profile" },
                 },
 
                 // SP with Single Logout
@@ -469,12 +472,14 @@ namespace Duende.IdentityServer.Demo
                 {
                     EntityId = "https://saml-sp2.example.com",
                     DisplayName = "SAML SP with SLO",
-                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp2.example.com/acs")],
-                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
-                    SingleLogoutServiceUrl = new SamlEndpointType
+                    AssertionConsumerServiceUrls = new List<IndexedEndpoint>
                     {
-                        Location = new Uri("https://saml-sp2.example.com/saml/slo"),
-                        Binding = SamlBinding.HttpPost,
+                        new IndexedEndpoint { Location = "https://saml-sp2.example.com/acs", Binding = SamlBinding.HttpPost, Index = 0, IsDefault = true }
+                    },
+                    AllowedScopes = { "openid", "profile" },
+                    SingleLogoutServiceUrls = new List<SamlEndpointType>
+                    {
+                        new SamlEndpointType { Location = "https://saml-sp2.example.com/saml/slo", Binding = SamlBinding.HttpPost }
                     },
                 },
 
@@ -483,13 +488,15 @@ namespace Duende.IdentityServer.Demo
                 {
                     EntityId = "https://saml-sp3.example.com",
                     DisplayName = "SAML SP (IdP-initiated)",
-                    AssertionConsumerServiceUrls = [new Uri("https://saml-sp3.example.com/acs")],
-                    AssertionConsumerServiceBinding = SamlBinding.HttpPost,
-                    AllowIdpInitiated = true,
-                    SingleLogoutServiceUrl = new SamlEndpointType
+                    AssertionConsumerServiceUrls = new List<IndexedEndpoint>
                     {
-                        Location = new Uri("https://saml-sp3.example.com/saml/slo"),
-                        Binding = SamlBinding.HttpPost,
+                        new IndexedEndpoint { Location = "https://saml-sp3.example.com/acs", Binding = SamlBinding.HttpPost, Index = 0, IsDefault = true }
+                    },
+                    AllowIdpInitiated = true,
+                    AllowedScopes = { "openid", "profile" },
+                    SingleLogoutServiceUrls = new List<SamlEndpointType>
+                    {
+                        new SamlEndpointType { Location = "https://saml-sp3.example.com/saml/slo", Binding = SamlBinding.HttpPost }
                     },
                 },
             };

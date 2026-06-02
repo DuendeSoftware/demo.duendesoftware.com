@@ -15,7 +15,6 @@
 <section class="text-center container border-bottom pb-3 mb-5">
     <div class="row py-lg-2">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <img src="duende-logo.svg" alt="Duende Software Logo" class="img-fluid w-75"/>
             <h1 class="fw-light">
                 <a class="text-decoration-none" href="https://duendesoftware.com/products/identityserver">Welcome to Duende IdentityServer</a>
             </h1>
@@ -72,7 +71,7 @@
                 </p>
             </div>
             <div class="card-footer p-0">
-                <a href="/saml/metadata" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/Saml2" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
@@ -324,7 +323,7 @@
     <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">Demo SAML Service Providers (alpha)</h2>
     <p>
         This demo server also acts as a SAML 2.0 Identity Provider. The following service providers are configured for testing.
-        Use the <a href="/saml/metadata">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
+        Use the <a href="/Saml2">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
     </p>
 
     <div id="saml-accordion" class="mb-3">
@@ -339,14 +338,20 @@
                     <div class="card-body">
                         <div class="card-text">
                             Entity ID: <code>@sp.EntityId</code><br/>
-                            ACS Binding: <code>@sp.AssertionConsumerServiceBinding</code><br/>
                             @foreach (var acs in sp.AssertionConsumerServiceUrls)
                             {
-                                <text>ACS URL: <code>@acs</code><br/></text>
+                                <text>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></text>
                             }
-                            @if (sp.SingleLogoutServiceUrl != null)
+                            @if (sp.SingleLogoutServiceUrls.Any())
                             {
-                                <text>SLO URL: <code>@sp.SingleLogoutServiceUrl.Location</code><br/></text>
+                                @foreach (var slo in sp.SingleLogoutServiceUrls)
+                                {
+                                    <text>SLO URL: <code>@slo.Location</code><br/></text>
+                                }
+                            }
+                            @foreach (var slo in sp.SingleLogoutServiceUrls)
+                            {
+                                <text>SLO URL: <code>@slo.Location</code><br/></text>
                             }
                             @if (sp.AllowIdpInitiated)
                             {

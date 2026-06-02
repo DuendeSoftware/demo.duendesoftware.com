@@ -53,8 +53,6 @@ internal static class HostingExtensions
                     UseX509Certificate = true
                 });
                 options.KeyManagement.KeyPath = "/tmp/keys";
-
-                options.Endpoints.EnableSamlIdpInitiatedEndpoint = true;
             })
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryIdentityResources(Config.IdentityResources)
