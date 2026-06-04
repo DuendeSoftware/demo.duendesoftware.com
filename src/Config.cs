@@ -479,7 +479,7 @@ namespace Duende.IdentityServer.Demo
                     AllowedScopes = { "openid", "profile" },
                     SingleLogoutServiceUrls = new List<SamlEndpointType>
                     {
-                        new SamlEndpointType { Location = "https://saml-sp2.example.com/saml/slo", Binding = SamlBinding.HttpPost }
+                        new SamlEndpointType { Location = "https://saml-sp2.example.com/saml/slo", Binding = SamlBinding.HttpRedirect }
                     },
                 },
 
@@ -496,7 +496,7 @@ namespace Duende.IdentityServer.Demo
                     AllowedScopes = { "openid", "profile" },
                     SingleLogoutServiceUrls = new List<SamlEndpointType>
                     {
-                        new SamlEndpointType { Location = "https://saml-sp3.example.com/saml/slo", Binding = SamlBinding.HttpPost }
+                        new SamlEndpointType { Location = "https://saml-sp3.example.com/saml/slo", Binding = SamlBinding.HttpRedirect }
                     },
                 },
             };
