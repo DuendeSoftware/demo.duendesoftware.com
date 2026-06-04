@@ -202,7 +202,7 @@
     </p>
 
     <div id="accordion" class="mb-3">
-        @* 
+        @*
             We have a legacy login client that has been used in various demos. It's now renamed to interactive.implicit, but we need to have the
             old entry around for some time, but don't want to show it any more. The login client and the .Where(g => g.Key != "login") can be removed after 2026.
         *@
@@ -320,7 +320,7 @@
         }
     </div>
 
-    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">Demo SAML Service Providers (alpha)</h2>
+    <h2 id="saml-service-providers" style="scroll-margin-top: 3em;">Demo SAML Service Providers</h2>
     <p>
         This demo server also acts as a SAML 2.0 Identity Provider. The following service providers are configured for testing.
         Use the <a href="/Saml2">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
@@ -342,16 +342,13 @@
                             {
                                 <text>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></text>
                             }
-                            @if (sp.SingleLogoutServiceUrls.Any())
-                            {
-                                @foreach (var slo in sp.SingleLogoutServiceUrls)
-                                {
-                                    <text>SLO URL: <code>@slo.Location</code><br/></text>
-                                }
-                            }
                             @foreach (var slo in sp.SingleLogoutServiceUrls)
                             {
-                                <text>SLO URL: <code>@slo.Location</code><br/></text>
+                                <text>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></text>
+                            }
+                            @if (sp.Certificates != null && sp.Certificates.Any())
+                            {
+                                <text>SP signing certificate: <a href="#saml-signing-key">demo certificate</a><br/></text>
                             }
                             @if (sp.AllowIdpInitiated)
                             {
@@ -398,6 +395,17 @@
     "q":"0CBLGi_kRPLqI8yfVkpBbA9zkCAshgrWWn9hsq6a7Zl2LcLaLBRUxH0q1jWnXgeJh9o5v8sYGXwhbrmuypw7kJ0uA3OgEzSsNvX5Ay3R9sNel-3Mqm8Me5OfWWvmTEBOci8RwHstdR-7b9ZT13jk-dsZI7OlV_uBja1ny9Nz9ts",
     "qi":"pG6J4dcUDrDndMxa-ee1yG4KjZqqyCQcmPAfqklI2LmnpRIjcK78scclvpboI3JQyg6RCEKVMwAhVtQM6cBcIO3JrHgqeYDblp5wXHjto70HVW6Z8kBruNx1AH9E8LzNvSRL-JVTFzBkJuNgzKQfD0G77tQRgJ-Ri7qu3_9o1M4"
 }</code></pre>
+    </div>
+
+    <h2 id="saml-signing-key" style="scroll-margin-top: 3em;">X.509 certificate for SAML SP signing</h2>
+    <p>
+        The demo SAML SPs with SLO are configured to require signed logout requests.
+        Use the certificate below (base64-encoded PFX, password: <code>demo</code>) to configure your SP when testing against this demo IdP.
+    </p>
+    <div class="position-relative">
+        <button class="btn btn-sm btn-light position-absolute m-2 clipboard"
+                data-clipboard-target="#saml-sp-pfx" style="right: 0"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy</button>
+        <pre class="bg-dark text-light p-2" id="saml-sp-pfx"><code>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</code></pre>
     </div>
 </div>
 

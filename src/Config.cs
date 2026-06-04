@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer.Models;
 
 namespace Duende.IdentityServer.Demo
@@ -86,6 +87,17 @@ namespace Duende.IdentityServer.Demo
                     Scopes = { "resource3.scope1", "resource3.scope2", "shared.scope" }
                 }
             };
+
+        /// <summary>
+        /// A well-known test certificate for SAML SP signing (e.g. SLO requests).
+        /// The corresponding private key is published on the demo home page so that
+        /// anyone testing a SAML SP against this IdP can sign their logout requests.
+        /// This is a base64-encoded PFX with password "demo".
+        /// </summary>
+        private static readonly X509Certificate2 SamlSpSigningCertificate = X509CertificateLoader.LoadPkcs12(
+            Convert.FromBase64String(
+                "MIII+QIBAzCCCL8GCSqGSIb3DQEHAaCCCLAEggisMIIIqDCCA18GCSqGSIb3DQEHBqCCA1AwggNMAgEAMIIDRQYJKoZIhvcNAQcBMBwGCiqGSIb3DQEMAQYwDgQIs9hHYo27qxwCAggAgIIDGA+f7P+LE2rzusOweTo6hK+4LwZKAXDNtT0KKroFuUYozhFGRKFwLFVdi2SvdtXrdXVPPkrQoWRqdWSYLS8RnPoZm0hx2aW+R6r164gYVepYg9Sc5LJ/CrNPKjyfm7ZhwPyBvSd384WapsjZrQANDA8m8TdWywV5gBuJEcwpChGNM3urdseYkUqZ6fugTkYNZg1EAlSEfzyswd4BdEjvzJuRFaavEJcMiGN1v+EnD992BauoIHngJwg1st6Zy8C85/xl7LXMRkrArx9NZmjObZyRgRUET8fnZKugUPiu19bv/w4QMGUyCZOrf5nA11jjRHBDKns51ZReqy/SfypAIZXunvk49vAGS62UO/IL7+nWeN3yQdp3ZTZxPEWt3AgLYNql5SDFvasWGjR7wPfzTbnjuvBqbciMq2mWn0A10hNQL86tK2hzHJ1oUIjkLWDJOL5uPuhe+pWJO0+bQQCuhr6t3y1FY2aMLBTNNg9w4fS21H23cTWK+QUbqyoaX01Hl9kTPYhiRHJmeM4nWK6JxPn2PdLo3klzxsFBhmVZqLzl6kXGBgXypy873tPsGiVTlloAdc904+j13Ac3Q+N/oylHVNbPsv/AwwvU4+K1rrpLsTeflIiE85gCNN68zmJn54s+fjMveKp39QDsjtWqSpR4PJnP5ULQgl9JD6SlafJ8AxpPhIuKYO5mA2UUooPe8B2wzhFI6bslsQIjmrPu1yZukBfgk4RxMtB1j9N53pj8u+x+MUXdQD6My3c8BgioIw8AVoOwL5pCTDuHLs6vIJu58Z1lLhXXQjnZLF7xZzZCCgW3oQmuKRRzPby+vDpPdahBdRMkD0x3iw5K0Hxwv0br/U/reTO3Ns4hPdOd8Jcrbn+WQ9+PdGv+SXLH6rb7SRxYE/1qsRiA/H9Jr/neC2V+IIp3TeIilTYwlRgcoenc/cnFWAWHkB/JnSqTTDrc3CHa0V93K3kPAAcXOsd7QX62ct+0DsxoZWl58E3sEqBbbOJdHKhi545Oiwkjwt56WKtz4M4ECYic+37rmeUm9+He0v+8DDcH3jCCBUEGCSqGSIb3DQEHAaCCBTIEggUuMIIFKjCCBSYGCyqGSIb3DQEMCgECoIIE7jCCBOowHAYKKoZIhvcNAQwBAzAOBAgnMzuYST6whAICCAAEggTI7j5CZjb1TrswOBjMD1qROtAfJPUBZXW9IALVnGjlj1KALxyQOAgX5qKAYzirO6umK+cDAB0pRVea9gOWJKk9SNuizuPJhw52NMmUFAX8BQK31gOF7oqiWNa/bzGxt7DVh+ZmMCfAXiiRcScMwnUT8kfnjB0jJArCOPA7wqry/RxG/mPNhKlwrpFBLSD4wHStUoFG/V76NE6xl1eRi8LKujyTrnAbx0Pt26LkNXCDtM7ElchMDRIshLide/lXZkAAHCSGPHz29b0G/6OK+RL4JmSF6zMoq/Owf/km07KXy8gLZmFnlr1qdRTsepFbxDer7McVfv4RPrydkxdg0wZ7tyvwRuPm+5Hog1PpXAhJuee5oyme5JhnfBEyxCw2JZB3V5+BOAxYEOWxpZXGimlZ46OEHHJZbDek4MM2m0Qzb0rmb90hIdGMMD6z6Iviaq6BizQ6ERofwdI5FkgPV1nvebeJCCrhs+TsIYPmrNrfzVJ/OmIAv91iw2TJnMmz1VJpqrTgh9ZsfZMBfsaH4BOFBddfwRaUF9vGLkFYt/iW3ApWSlZIM/Dpsn3jh5EyaafDkPk44TsDtAAOjToEUqqZDDMbQqHSTxTa6qVFUjk8cNWehFHbA+PP2AFOHahHvmKJflxKEEA/EAbW4QdrnijyuClZtGPITqOe21ucHVsamSCMPXTupsztdycwBEO0oaeC8tHBKBylqje3To7nqgKSLyipdZkbErmw1362EdRoTXUkhZ5v47oWgInfUwGVFv1DHEq5QZ4EtJWdZBDrlZzAfeYmS74gdzOe7hT2O254CNH6e80meCrlKVFu8p1qxlmBi/0Cd0/WR2sGeevwkQZcnHqwxBfzUtDTka13RRV5It3ueBp4LgIfaalca2a8galpvsAUAWphx9BNGAYN+Yw3UiB+8Cb9DrfCBQuIaKzC3epfovUq9UjkY/kaC394gFLrIaFpvM1dVe2Hvq29mGndPpgusdaw8z2WfpkXwr8MGCC5AtFy4sNf5wtELUlgCXWyM6tVoeZGHAgwckyFywgzx7IwNNOq7XvA2Kk/EuBMfOFedSg0+IFfZodoh4vxGnN7JM3ZquwawsN7zEkKiXP2sey/Vd96l4pwKBWOp7nWPoBYb5yjl8SpOKQJY3D/f806Cw/sAnSrFXhfK57Xxt7TYGxFFY1N11qI2abwZVSOVmbnUpmfAbyP9KAtC3G7igRkVNTeO36oJ+SUmKmrAj9zE0RnwLDv0mztoGN56P7XdFE7Xs8PYEtTpu8MbotEHgfLS85PgG/PRBb8YCnQNvbgPuKvQgl+HzAATDi5dYR/3FWVX9lKZ2q7bDt6HLnDfXX3tVYlp/5O1eR9Oqd5SjyLXllNLKlDqSkmt8PvyMhAXvcmhIIXSAOvSqFwFS+/kR9Yy1wBP27MnYG/gGGvTfZU/rTsCwEsk6U5bkg68zxaZaoL0MKgOhS9eft6oFmWVU5B/7iE7tuT3jKTP098x4eRwUk8VZ4uaWH/aWtj1wkSUHE08vExgDYW8WBkFhL3DjS3KktcNq4I8L8xWrpwging/BOnYC9UOqtErRFAxtv7d1EOV5T6LqPRW6NrCos88BSYRE8P24Wq3v8b+h+y4o/FlydGrl7bz/A7MSUwIwYJKoZIhvcNAQkVMRYEFLn1PPixK3Ay7LCEjR6Ll/6f/kWLMDEwITAJBgUrDgMCGgUABBQhV4RjDkbbllVjM6zPnfvdGrAjJQQIw/bqbsY5sMICAggA"),
+            "demo");
 
         private static Secret PublicKey = new Secret
         {
@@ -479,7 +491,11 @@ namespace Duende.IdentityServer.Demo
                     AllowedScopes = { "openid", "profile" },
                     SingleLogoutServiceUrls = new List<SamlEndpointType>
                     {
-                        new SamlEndpointType { Location = "https://saml-sp2.example.com/saml/slo", Binding = SamlBinding.HttpPost }
+                        new SamlEndpointType { Location = "https://saml-sp2.example.com/saml/slo", Binding = SamlBinding.HttpRedirect }
+                    },
+                    Certificates = new List<ServiceProviderCertificate>
+                    {
+                        new ServiceProviderCertificate { Certificate = SamlSpSigningCertificate, Use = KeyUse.Signing }
                     },
                 },
 
@@ -496,7 +512,11 @@ namespace Duende.IdentityServer.Demo
                     AllowedScopes = { "openid", "profile" },
                     SingleLogoutServiceUrls = new List<SamlEndpointType>
                     {
-                        new SamlEndpointType { Location = "https://saml-sp3.example.com/saml/slo", Binding = SamlBinding.HttpPost }
+                        new SamlEndpointType { Location = "https://saml-sp3.example.com/saml/slo", Binding = SamlBinding.HttpRedirect }
+                    },
+                    Certificates = new List<ServiceProviderCertificate>
+                    {
+                        new ServiceProviderCertificate { Certificate = SamlSpSigningCertificate, Use = KeyUse.Signing }
                     },
                 },
             };
