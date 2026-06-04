@@ -202,7 +202,7 @@
     </p>
 
     <div id="accordion" class="mb-3">
-        @* 
+        @*
             We have a legacy login client that has been used in various demos. It's now renamed to interactive.implicit, but we need to have the
             old entry around for some time, but don't want to show it any more. The login client and the .Where(g => g.Key != "login") can be removed after 2026.
         *@
@@ -342,16 +342,9 @@
                             {
                                 <text>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></text>
                             }
-                            @if (sp.SingleLogoutServiceUrls.Any())
-                            {
-                                @foreach (var slo in sp.SingleLogoutServiceUrls)
-                                {
-                                    <text>SLO URL: <code>@slo.Location</code><br/></text>
-                                }
-                            }
                             @foreach (var slo in sp.SingleLogoutServiceUrls)
                             {
-                                <text>SLO URL: <code>@slo.Location</code><br/></text>
+                                <text>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></text>
                             }
                             @if (sp.AllowIdpInitiated)
                             {
