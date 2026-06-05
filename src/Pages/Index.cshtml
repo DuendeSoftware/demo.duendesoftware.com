@@ -53,7 +53,7 @@
                     where you can find metadata and links to all the endpoints, key material, etc.
                 </p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/.well-known/openid-configuration" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -70,7 +70,7 @@
                     SAML 2.0 IdP metadata document with entity descriptor, endpoints, and signing certificates.
                 </p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/Saml2" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -88,7 +88,7 @@
                     <a href="https://openid.net/specs/fapi-2_0-security-profile.html" rel="noopener noreferrer" target="_blank">FAPI 2.0 Security Profile</a> specifications.
                 </p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/_duende/conformance-report" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -103,7 +103,7 @@
                 </h5>
                 <p class="card-text">See the claims for your current session.</p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/diagnostics/" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -118,7 +118,7 @@
                 </h5>
                 <p class="card-text">Manage your stored grants.</p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/grants/" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -133,7 +133,7 @@
                 </h5>
                 <p class="card-text">View your pending Client-Initiated Backchannel Authentication (CIBA) login requests.</p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="/ciba/all/" rel="nofollow" class="btn btn-primary w-100">
                     Go
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -155,7 +155,7 @@
                     The source code for the Duende IdentityServer and other Duende Products.
                 </p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="https://github.com/duendesoftware/products" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
@@ -170,7 +170,7 @@
                 </h5>
                 <p class="card-text">Ready-to-use IdentityServer samples for .NET and ASP.NET Core</p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="https://github.com/DuendeSoftware/Samples/" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
@@ -185,7 +185,7 @@
                 </h5>
                 <p class="card-text">The source code for this demo server.</p>
             </div>
-            <div class="card-footer p-0">
+            <div class="card-footer">
                 <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com" class="btn btn-primary w-100">
                     Source Code
                     <i class="glyphicon glyphicon-download-alt"></i>
@@ -209,7 +209,7 @@
         @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()).Where(g => g.Key != "login"))
         {
             <div class="card mb-2">
-                <div id="clientid-@clients.Key" class="card-header bg-light shadow-sm border-0">
+                <div id="clientid-@clients.Key" class="card-header shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#clientid-@clients.Key-collapse" aria-controls="clientid-@clients.Key-collapse" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</a></h6>
                 </div>
                 <div id="clientid-@clients.Key-collapse" aria-labelledby="clientid-@clients.Key" data-parent="#accordion" class="collapse">
@@ -331,7 +331,7 @@
         {
             var spKey = sp.EntityId.Replace(":", "-").Replace("/", "-").Replace(".", "-");
             <div class="card mb-2">
-                <div id="sp-@spKey" class="card-header bg-light shadow-sm border-0">
+                <div id="sp-@spKey" class="card-header shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#sp-@spKey-collapse" aria-controls="sp-@spKey-collapse" class="d-block position-relative text-dark collapsible-link py-2">@sp.DisplayName</a></h6>
                 </div>
                 <div id="sp-@spKey-collapse" aria-labelledby="sp-@spKey" data-parent="#saml-accordion" class="collapse">
