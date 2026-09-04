@@ -1,6 +1,11 @@
 ﻿@page "~/jwt-decoder"
 @model IdentityServerHost.Pages.Home.JwtDecoder
 
+@{
+    ViewData["Title"] = "Free Browser-Based JWT Decoder Tool";
+    ViewData["Description"] = "Decode and validate JSON Web Tokens online with Duende's free JWT Decoder. Inspect headers, payloads, and signatures safely right in your browser.";
+}
+
 <div class="jwt-decoder-page">
     <h2 id="jwt-decoder" style="scroll-margin-top: 3em;">JSON Web Token (JWT) Decoder</h2>
     <div id="intro">
