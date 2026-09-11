@@ -11,23 +11,6 @@
 }
 
 @* Circular icon chip for CTA buttons, mirroring duendesoftware.com. *@
-@{
-    void IconBadge(string variant = "green")
-    {
-        <span aria-hidden="true" class="btn-icon-badge badge-@variant">
-            <svg fill="none" viewBox="0 0 20 20">
-                <path d="M13.5 10.542H4.417V9.458H13.5l-4.27-4.27.77-.771L15.583 10 10 15.583l-.77-.77z"></path>
-            </svg>
-        </span>
-    }
-    void DownloadBadge(string variant = "green")
-    {
-        <span aria-hidden="true" class="btn-icon-badge badge-@variant">
-            <i class="glyphicon glyphicon-download-alt"></i>
-        </span>
-    }
-}
-
 <!-- Google Tag Manager (noscript) -->
 <noscript>  
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMR39D3G"
@@ -52,11 +35,11 @@
             <div>
                 <a href="https://duendesoftware.com" class="btn btn-primary btn-icon btn-lg">
                     Get a License
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
                 <a href="https://docs.duendesoftware.com" class="btn btn-outline-primary btn-icon btn-lg">
                     Learn More
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
         </div>
@@ -84,7 +67,7 @@
             <div class="card-footer">
                 <a href="/.well-known/openid-configuration" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -103,7 +86,7 @@
             <div class="card-footer">
                 <a href="/Saml2" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -123,7 +106,7 @@
             <div class="card-footer">
                 <a href="/_duende/conformance-report" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -140,7 +123,7 @@
             <div class="card-footer">
                 <a href="/diagnostics/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -157,7 +140,7 @@
             <div class="card-footer">
                 <a href="/grants/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -174,7 +157,7 @@
             <div class="card-footer">
                 <a href="/ciba/all/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    @{ IconBadge(); }
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -198,7 +181,7 @@
             <div class="card-footer">
                 <a href="https://github.com/duendesoftware/products" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    @{ DownloadBadge(); }
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -215,7 +198,7 @@
             <div class="card-footer">
                 <a href="https://github.com/DuendeSoftware/Samples/" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    @{ DownloadBadge(); }
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -232,7 +215,7 @@
             <div class="card-footer">
                 <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    @{ DownloadBadge(); }
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -296,13 +279,13 @@
                                                 Grant type: @DemoServerUtilities.HumanizeAllowedGrantTypes(client.AllowedGrantTypes)
                                                 @if (client.RequireRequestObject)
                                                 {
-                                                    <text> - requires JAR</text>
+                                                    @(" - requires JAR")
                                                 }
                                                 <br/>
 
                                                 @if (client.RequirePkce)
                                                 {
-                                                    <text>Requires PKCE</text>
+                                                    @("Requires PKCE")
                                                     <br/>
                                                 }
                                                 @if (client.RequireDPoP)
@@ -322,7 +305,7 @@
 
                                                 @if (client.ClientSecrets.Any())
                                                 {
-                                                    <text>Client secret:</text>
+                                                    @("Client secret:")
                                                     @foreach (var clientSecret in client.ClientSecrets)
                                                     {
                                                         switch (clientSecret.Type)
@@ -385,19 +368,19 @@
                             Entity ID: <code>@sp.EntityId</code><br/>
                             @foreach (var acs in sp.AssertionConsumerServiceUrls)
                             {
-                                <text>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></text>
+                                <span>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></span>
                             }
                             @foreach (var slo in sp.SingleLogoutServiceUrls)
                             {
-                                <text>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></text>
+                                <span>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></span>
                             }
                             @if (sp.Certificates != null && sp.Certificates.Any())
                             {
-                                <text>SP signing certificate: <a href="#saml-signing-key">demo certificate</a><br/></text>
+                                <span>SP signing certificate: <a href="#saml-signing-key">demo certificate</a><br/></span>
                             }
                             @if (sp.AllowIdpInitiated)
                             {
-                                <text>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></text>
+                                <span>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></span>
                             }
                         </div>
                     </div>
