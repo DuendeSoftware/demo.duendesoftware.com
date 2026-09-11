@@ -164,6 +164,101 @@ a.navbar-brand .icon-banner {
   font-size: 1em;
 }
 
+/* ── Code block: rounded panel with a header bar holding the copy button ──
+   Replaces the cramped, overlapping `<pre class="bg-dark">` treatment. The
+   copy button lives in a dedicated header row so it never sits on top of the
+   code, and the body scrolls horizontally instead of bleeding off-screen. */
+.code-block {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #1a1a17;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 12px 32px -16px rgba(20, 20, 20, 0.16);
+  margin-bottom: 1.5rem;
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 1rem;
+  background-color: #211f1f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.code-block__label {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: rgba(243, 242, 233, 0.6);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Copy button in the header — sand-tinted ghost that fills on hover */
+.code-block__copy {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--duende-sand);
+  background-color: rgba(243, 242, 233, 0.08);
+  border: 1px solid rgba(243, 242, 233, 0.16);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.code-block__copy:hover,
+.code-block__copy:focus {
+  background-color: var(--duende-green);
+  border-color: var(--duende-green);
+  color: var(--duende-charcoal);
+}
+.code-block__copy .glyphicon { top: 1px; font-size: 0.8125rem; }
+
+/* Scrollable body with breathing room; long tokens no longer bleed off-page */
+.code-block > pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  color: #f3f2e9;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.code-block > pre code {
+  color: inherit;
+  white-space: pre;
+}
+.code-block > pre::-webkit-scrollbar { height: 10px; }
+.code-block > pre::-webkit-scrollbar-thumb {
+  background: rgba(243, 242, 233, 0.2);
+  border-radius: 999px;
+}
+.code-block > pre::-webkit-scrollbar-track { background: transparent; }
+
+/* Inline code + copy (the Sample APIs list) — keep the copy trigger from
+   crowding the snippet and align it to the baseline of the text */
+.inline-copy {
+  padding: 0 0.35rem;
+  font-size: 0.8125rem;
+  line-height: 1;
+  color: var(--d-fg-3);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: color 150ms ease;
+}
+.inline-copy:hover, .inline-copy:focus { color: var(--duende-charcoal); }
+
 /* Hero with decorative orbs bleeding off each side */
 .hero-section {
   position: relative;
