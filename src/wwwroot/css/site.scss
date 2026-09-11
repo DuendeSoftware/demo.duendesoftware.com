@@ -192,3 +192,52 @@ a.navbar-brand {
     font-size: 1em;
   }
 }
+
+/* Hero with decorative orbs bleeding off each side */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+
+  .row {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.hero-orb {
+  position: absolute;
+  top: 50%;
+  width: 30rem;
+  height: 30rem;
+  border-radius: 50%;
+  pointer-events: none;
+  user-select: none;
+  opacity: 1;
+  z-index: 0;
+
+  &-left {
+    left: 0;
+    transform: translate(-62%, -50%);
+  }
+
+  &-right {
+    right: 0;
+    transform: translate(62%, -50%);
+  }
+
+  @media (max-width: 991.98px) {
+    width: 22rem;
+    height: 22rem;
+    opacity: 0.4;
+
+    &-left {
+      transform: translate(-68%, -50%);
+    }
+
+    &-right {
+      transform: translate(68%, -50%);
+    }
+  }
+}

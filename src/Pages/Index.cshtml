@@ -17,8 +17,10 @@
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<section class="text-center container border-bottom pb-3 mb-5">
-    <div class="row py-lg-2">
+<section class="hero-section text-center container border-bottom pb-3 mb-5">
+    <img src="~/Ellipse 7474.png" alt="" aria-hidden="true" class="hero-orb hero-orb-left" />
+    <img src="~/Ellipse 7474.png" alt="" aria-hidden="true" class="hero-orb hero-orb-right" />
+    <div class="row py-lg-2 position-relative">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">
                 <a class="text-decoration-none" href="https://duendesoftware.com/products/identityserver">Welcome to Duende IdentityServer</a>
@@ -46,8 +48,9 @@
     <p>
         This dashboard provides access to various IdentityServer functionalities for demo purposes only.
     </p>
-    <div class="d-flex align-content-between flex-wrap mb-3">
-        <div class="card m-2" style="width: 18rem;">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-3">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-globe"></i>
@@ -64,8 +67,10 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-globe"></i>
@@ -81,8 +86,10 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-flag"></i>
@@ -99,8 +106,10 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-user"></i>
@@ -114,8 +123,10 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-book"></i>
@@ -129,8 +140,10 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-phone"></i>
@@ -144,13 +157,15 @@
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
             </div>
+            </div>
         </div>
     </div>
 
     <h2 id="references" style="scroll-margin-top: 3em;">References</h2>
     <p>To learn more about Duende products and how to implement them, check out our source repositories and samples.</p>
-    <div class="d-flex align-content-between flex-wrap mb-3">
-        <div class="card m-2" style="width: 18rem;">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-3">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-floppy-disk"></i>
@@ -166,8 +181,10 @@
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-book"></i>
@@ -181,8 +198,10 @@
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
             </div>
+            </div>
         </div>
-        <div class="card m-2" style="width: 18rem;">
+        <div class="col mb-3">
+            <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="glyphicon glyphicon-cloud"></i>
@@ -196,6 +215,7 @@
                     <i class="glyphicon glyphicon-download-alt"></i>
                 </a>
             </div>
+            </div>
         </div>
     </div>
 
@@ -206,14 +226,14 @@
         or use them in the <a href="https://github.com/duendesoftware/samples">IdentityServer sample projects</a>.
     </p>
 
-    <div id="accordion" class="mb-3">
+    <div id="accordion" class="accordion-connected mb-3">
         @*
             We have a legacy login client that has been used in various demos. It's now renamed to interactive.implicit, but we need to have the
             old entry around for some time, but don't want to show it any more. The login client and the .Where(g => g.Key != "login") can be removed after 2026.
         *@
         @foreach (var clients in Config.Clients.GroupBy(it => it.ClientId.Split('.', StringSplitOptions.TrimEntries).First()).Where(g => g.Key != "login"))
         {
-            <div class="card mb-2">
+            <div class="card">
                 <div id="clientid-@clients.Key" class="card-header shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#clientid-@clients.Key-collapse" aria-controls="clientid-@clients.Key-collapse" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">@DemoServerUtilities.HumanizeClientIdPrefix(clients.Key)</a></h6>
                 </div>
@@ -331,11 +351,11 @@
         Use the <a href="/Saml2">SAML metadata endpoint</a> to retrieve the IdP metadata for configuring your SP.
     </p>
 
-    <div id="saml-accordion" class="mb-3">
+    <div id="saml-accordion" class="accordion-connected mb-3">
         @foreach (var sp in Config.SamlServiceProviders)
         {
             var spKey = sp.EntityId.Replace(":", "-").Replace("/", "-").Replace(".", "-");
-            <div class="card mb-2">
+            <div class="card">
                 <div id="sp-@spKey" class="card-header shadow-sm border-0">
                     <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#sp-@spKey-collapse" aria-controls="sp-@spKey-collapse" class="d-block position-relative text-dark collapsible-link py-2">@sp.DisplayName</a></h6>
                 </div>
