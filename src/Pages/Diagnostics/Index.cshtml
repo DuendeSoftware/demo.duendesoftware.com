@@ -50,10 +50,10 @@
                                     var clients = Model.View.Clients.ToArray();
                                     for(var i = 0; i < clients.Length; i++)
                                     {
-                                        <text>@clients[i]</text>
+                                        @clients[i]
                                         if (i < clients.Length - 1)
                                         {
-                                            <text>, </text>
+                                            @(", ")
                                         }
                                     }
                                 }

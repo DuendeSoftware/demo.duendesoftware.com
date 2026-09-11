@@ -63,16 +63,16 @@
                             <div class="text-center">
                                 @if (Model.UserSessions.CurrentPage.HasValue && Model.UserSessions.TotalPages.HasValue)
                                 {
-                                    <text>
+                                    <span>
                                         Total Results: @Model.UserSessions.TotalCount,
                                         Page @Model.UserSessions.CurrentPage of @Model.UserSessions.TotalPages
-                                    </text>
+                                    </span>
                                 }
                                 else
                                 {
-                                    <text>
+                                    <span>
                                         Total Results: @Model.UserSessions.TotalCount
-                                    </text>
+                                    </span>
                                 }
                             </div>
                         }
@@ -104,7 +104,7 @@
                                                     @{
                                                         if (session.AuthenticationTicket.Properties.Items.TryGetValue("Location", out var location))
                                                         {
-                                                            <br/><small>Location: @location</small>
+                                                            <small><br/>Location: @location</small>
                                                         }
                                                     }
                                                 </td>

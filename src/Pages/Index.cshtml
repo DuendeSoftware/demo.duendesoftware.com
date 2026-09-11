@@ -10,6 +10,7 @@
     ViewData["Description"] = "Test and evaluate Duende IdentityServer features in real time. Access live OAuth 2.1 endpoints, JWT tools, and sample client apps. Start exploring now.";
 }
 
+@* Circular icon chip for CTA buttons, mirroring duendesoftware.com. *@
 <!-- Google Tag Manager (noscript) -->
 <noscript>  
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMR39D3G"
@@ -17,7 +18,7 @@
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<section class="hero-section text-center container border-bottom pb-3 mb-5">
+<section class="hero-section text-center container pb-3 mb-5">
     <img src="~/hero-orb-duende.png" alt="" aria-hidden="true" class="hero-orb hero-orb-left" />
     <img src="~/hero-orb-duende.png" alt="" aria-hidden="true" class="hero-orb hero-orb-right" />
     <div class="row py-lg-2 position-relative">
@@ -32,11 +33,13 @@
                 <span class="badge badge-primary">@($"v{Model.Version}")</span>
             </p>
             <div>
-                <a href="https://duendesoftware.com" class="btn btn-primary btn-lg">
+                <a href="https://duendesoftware.com" class="btn btn-primary btn-icon btn-lg">
                     Get a License
+                    <partial name="_IconBadge" />
                 </a>
-                <a href="https://docs.duendesoftware.com" class="btn btn-outline-primary btn-lg">
+                <a href="https://docs.duendesoftware.com" class="btn btn-outline-primary btn-icon btn-lg">
                     Learn More
+                    <partial name="_IconBadge" />
                 </a>
             </div>
         </div>
@@ -62,9 +65,9 @@
                 </p>
             </div>
             <div class="card-footer">
-                <a href="/.well-known/openid-configuration" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/.well-known/openid-configuration" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -81,9 +84,9 @@
                 </p>
             </div>
             <div class="card-footer">
-                <a href="/Saml2" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/Saml2" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -101,9 +104,9 @@
                 </p>
             </div>
             <div class="card-footer">
-                <a href="/_duende/conformance-report" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/_duende/conformance-report" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -118,9 +121,9 @@
                 <p class="card-text">See the claims for your current session.</p>
             </div>
             <div class="card-footer">
-                <a href="/diagnostics/" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/diagnostics/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -135,9 +138,9 @@
                 <p class="card-text">Manage your stored grants.</p>
             </div>
             <div class="card-footer">
-                <a href="/grants/" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/grants/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -152,9 +155,9 @@
                 <p class="card-text">View your pending Client-Initiated Backchannel Authentication (CIBA) login requests.</p>
             </div>
             <div class="card-footer">
-                <a href="/ciba/all/" rel="nofollow" class="btn btn-primary w-100">
+                <a href="/ciba/all/" rel="nofollow" class="btn btn-primary btn-icon w-100">
                     Go
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <partial name="_IconBadge" />
                 </a>
             </div>
             </div>
@@ -176,9 +179,9 @@
                 </p>
             </div>
             <div class="card-footer">
-                <a href="https://github.com/duendesoftware/products" class="btn btn-primary w-100">
+                <a href="https://github.com/duendesoftware/products" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    <i class="glyphicon glyphicon-download-alt"></i>
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -193,9 +196,9 @@
                 <p class="card-text">Ready-to-use IdentityServer samples for .NET and ASP.NET Core</p>
             </div>
             <div class="card-footer">
-                <a href="https://github.com/DuendeSoftware/Samples/" class="btn btn-primary w-100">
+                <a href="https://github.com/DuendeSoftware/Samples/" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    <i class="glyphicon glyphicon-download-alt"></i>
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -210,9 +213,9 @@
                 <p class="card-text">The source code for this demo server.</p>
             </div>
             <div class="card-footer">
-                <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com" class="btn btn-primary w-100">
+                <a href="https://github.com/DuendeSoftware/demo.duendesoftware.com" class="btn btn-primary btn-icon w-100">
                     Source Code
-                    <i class="glyphicon glyphicon-download-alt"></i>
+                    <partial name="_DownloadBadge" />
                 </a>
             </div>
             </div>
@@ -276,13 +279,13 @@
                                                 Grant type: @DemoServerUtilities.HumanizeAllowedGrantTypes(client.AllowedGrantTypes)
                                                 @if (client.RequireRequestObject)
                                                 {
-                                                    <text> - requires JAR</text>
+                                                    @(" - requires JAR")
                                                 }
                                                 <br/>
 
                                                 @if (client.RequirePkce)
                                                 {
-                                                    <text>Requires PKCE</text>
+                                                    @("Requires PKCE")
                                                     <br/>
                                                 }
                                                 @if (client.RequireDPoP)
@@ -302,7 +305,7 @@
 
                                                 @if (client.ClientSecrets.Any())
                                                 {
-                                                    <text>Client secret:</text>
+                                                    @("Client secret:")
                                                     @foreach (var clientSecret in client.ClientSecrets)
                                                     {
                                                         switch (clientSecret.Type)
@@ -365,19 +368,19 @@
                             Entity ID: <code>@sp.EntityId</code><br/>
                             @foreach (var acs in sp.AssertionConsumerServiceUrls)
                             {
-                                <text>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></text>
+                                <span>ACS URL: <code>@acs.Location</code> (<code>@acs.Binding</code>)<br/></span>
                             }
                             @foreach (var slo in sp.SingleLogoutServiceUrls)
                             {
-                                <text>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></text>
+                                <span>SLO URL: <code>@slo.Location</code> (<code>@slo.Binding</code>)<br/></span>
                             }
                             @if (sp.Certificates != null && sp.Certificates.Any())
                             {
-                                <text>SP signing certificate: <a href="#saml-signing-key">demo certificate</a><br/></text>
+                                <span>SP signing certificate: <a href="#saml-signing-key">demo certificate</a><br/></span>
                             }
                             @if (sp.AllowIdpInitiated)
                             {
-                                <text>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></text>
+                                <span>IdP-initiated SSO: <span class="badge badge-info">Enabled</span><br/></span>
                             }
                         </div>
                     </div>
@@ -392,11 +395,11 @@
     </p>
     <ul>
         <li>
-            You can call a test API at <code id="api-test">https://demo.duendesoftware.com/api/test</code><button class="btn btn-sm btn-link text-dark clipboard" data-clipboard-target="#api-test"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>.
+            You can call a test API at <code id="api-test">https://demo.duendesoftware.com/api/test</code><button type="button" class="inline-copy clipboard" data-clipboard-target="#api-test" title="Copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>.
             This accepts Bearer token requests.
         </li>
         <li>
-            You can call a test API at <code id="api-test-dpop">https://demo.duendesoftware.com/api/dpop/test</code><button class="btn btn-sm btn-link text-dark clipboard" data-clipboard-target="#api-test-dpop"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>.
+            You can call a test API at <code id="api-test-dpop">https://demo.duendesoftware.com/api/dpop/test</code><button type="button" class="inline-copy clipboard" data-clipboard-target="#api-test-dpop" title="Copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>.
             This accepts DPoP token requests.
         </li>
     </ul>
@@ -405,10 +408,14 @@
     <p>
         You can use the below RSA key for all clients requiring private key JWT authentication or JAR:
     </p>
-    <div class="position-relative">
-        <button class="btn btn-sm btn-light position-absolute m-2 clipboard"
-                data-clipboard-target="#jwt-key" style="right: 0"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy</button>
-        <pre class="bg-dark text-light p-2" id="jwt-key"><code>{
+    <div class="code-block">
+        <div class="code-block__header">
+            <span class="code-block__label">RSA private key (JWK)</span>
+            <button type="button" class="code-block__copy clipboard" data-clipboard-target="#jwt-key">
+                <span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy
+            </button>
+        </div>
+        <pre id="jwt-key"><code>{
     "d":"GmiaucNIzdvsEzGjZjd43SDToy1pz-Ph-shsOUXXh-dsYNGftITGerp8bO1iryXh_zUEo8oDK3r1y4klTonQ6bLsWw4ogjLPmL3yiqsoSjJa1G2Ymh_RY_sFZLLXAcrmpbzdWIAkgkHSZTaliL6g57vA7gxvd8L4s82wgGer_JmURI0ECbaCg98JVS0Srtf9GeTRHoX4foLWKc1Vq6NHthzqRMLZe-aRBNU9IMvXNd7kCcIbHCM3GTD_8cFj135nBPP2HOgC_ZXI1txsEf-djqJj8W5vaM7ViKU28IDv1gZGH3CatoysYx6jv1XJVvb2PH8RbFKbJmeyUm3Wvo-rgQ",
     "dp":"YNjVBTCIwZD65WCht5ve06vnBLP_Po1NtL_4lkholmPzJ5jbLYBU8f5foNp8DVJBdFQW7wcLmx85-NC5Pl1ZeyA-Ecbw4fDraa5Z4wUKlF0LT6VV79rfOF19y8kwf6MigyrDqMLcH_CRnRGg5NfDsijlZXffINGuxg6wWzhiqqE",
     "dq":"LfMDQbvTFNngkZjKkN2CBh5_MBG6Yrmfy4kWA8IC2HQqID5FtreiY2MTAwoDcoINfh3S5CItpuq94tlB2t-VUv8wunhbngHiB5xUprwGAAnwJ3DL39D2m43i_3YP-UO1TgZQUAOh7Jrd4foatpatTvBtY3F1DrCrUKE5Kkn770M",
@@ -427,10 +434,14 @@
         The demo SAML SPs with SLO are configured to require signed logout requests.
         Use the certificate below (base64-encoded PFX, password: <code>demo</code>) to configure your SP when testing against this demo IdP.
     </p>
-    <div class="position-relative">
-        <button class="btn btn-sm btn-light position-absolute m-2 clipboard"
-                data-clipboard-target="#saml-sp-pfx" style="right: 0"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy</button>
-        <pre class="bg-dark text-light p-2" id="saml-sp-pfx"><code>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</code></pre>
+    <div class="code-block">
+        <div class="code-block__header">
+            <span class="code-block__label">SAML SP signing certificate (base64 PFX)</span>
+            <button type="button" class="code-block__copy clipboard" data-clipboard-target="#saml-sp-pfx">
+                <span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy
+            </button>
+        </div>
+        <pre id="saml-sp-pfx"><code>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</code></pre>
     </div>
 </div>
 

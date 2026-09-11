@@ -21,9 +21,16 @@
 
 /* ── Tokens (self-contained — no dependency on the DS stylesheet) ──────── */
 :root {
-    --duende-charcoal:      #212121;
+    --duende-charcoal:      #2A2929;   /* charcoal-800 — brand ink */
     --duende-charcoal-soft: #2A2929;
     --duende-ink:           #1A1A17;
+
+    /* Brand button tokens (mirrors duendesoftware.com marketing buttons) */
+    --btn-primary-bg:        #2A2929;  /* charcoal-800 */
+    --btn-primary-bg-hover:  #5C5C5C;  /* charcoal-500 */
+    --btn-primary-bg-active: #000000;  /* charcoal-900 */
+    --btn-primary-fg:        #F3F2E9;  /* beige-500  */
+    --btn-focus-ring:        #1A5BB7;  /* blue-700   */
     --duende-white:         #FFFFFF;
     --duende-sand:          #F3F2E9;
     --duende-sand-soft:     #FAF8F5;
@@ -68,6 +75,7 @@
     --shadow-card: 0 1px 2px rgba(20,20,20,0.04), 0 12px 32px -16px rgba(20,20,20,0.16);
     --shadow-pop:  0 4px 12px rgba(20,20,20,0.08), 0 24px 56px -24px rgba(20,20,20,0.24);
     --shadow-focus: 0 0 0 3px rgba(97, 251, 146, 0.5);
+    --shadow-focus-btn: 0 0 0 2px #FFFFFF, 0 0 0 4px #1A5BB7;  /* blue-700 ring w/ white offset — brand button focus */
 
     --ease-standard:   cubic-bezier(0.2, 0.0, 0.2, 1);
     --ease-emphasized: cubic-bezier(0.2, 0.7, 0.0, 1);
@@ -174,6 +182,53 @@ blockquote, .blockquote {
 .btn-sm, .btn-group-sm > .btn { border-radius: var(--radius-pill); }
 .btn:active, .btn.active { transform: scale(0.98); }
 
+/* ── Circular icon badge (mirrors duendesoftware.com CTA buttons) ─────────
+   A trailing round chip holding the arrow/icon. Add `.btn-icon` to any .btn
+   and wrap the trailing icon in `<span class="btn-icon-badge">…</span>`.
+   The button gets asymmetric padding so the chip nests neatly on the right. */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;               /* 8px — matches marketing gap-x-2 */
+    padding-left: 1rem;        /* pl-4 */
+    padding-right: 0.5rem;     /* pr-2 — room for the chip */
+}
+.btn-icon.w-100 { justify-content: space-between; }
+.btn-icon.btn-lg { padding-left: 1.25rem; padding-right: 0.625rem; }
+
+.btn-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 1.5rem;             /* size-6 = 24px */
+    height: 1.5rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--duende-green);   /* green-500 chip (default) */
+    color: var(--duende-charcoal);           /* charcoal icon */
+    line-height: 1;
+    transition: background-color var(--dur-fast) var(--ease-standard),
+                color var(--dur-fast) var(--ease-standard);
+}
+.btn-icon-badge > .glyphicon,
+.btn-icon-badge > svg { font-size: 0.75rem; width: 0.875rem; height: 0.875rem; top: 0; }
+.btn-icon-badge > svg { fill: currentColor; }
+.btn-lg .btn-icon-badge { width: 1.75rem; height: 1.75rem; }
+.btn-lg .btn-icon-badge > .glyphicon,
+.btn-lg .btn-icon-badge > svg { font-size: 0.875rem; width: 1rem; height: 1rem; }
+
+/* Chip colour variants */
+.btn-icon-badge.badge-green  { background-color: var(--duende-green);  color: var(--duende-charcoal); }
+.btn-icon-badge.badge-blue   { background-color: var(--duende-blue);   color: var(--duende-charcoal); }
+.btn-icon-badge.badge-beige  { background-color: var(--duende-sand);   color: var(--duende-charcoal); }
+.btn-icon-badge.badge-charcoal { background-color: var(--duende-charcoal); color: var(--duende-sand); }
+
+/* Subtle lift on hover, echoing the marketing button motion */
+.btn-icon:hover .btn-icon-badge { background-color: var(--duende-green-hover); }
+.btn-icon.btn-secondary .btn-icon-badge,
+.btn-icon.btn-outline-primary .btn-icon-badge { background-color: var(--duende-green); color: var(--duende-charcoal); }
+
 /* Universal green focus halo (replaces Bootstrap's blue/grey glows) */
 .btn:focus, .btn.focus,
 .btn-primary:focus, .btn-primary.focus,
@@ -189,26 +244,26 @@ blockquote, .blockquote {
 .btn-outline-success:focus, .btn-outline-danger:focus,
 .btn-outline-warning:focus, .btn-outline-info:focus,
 .btn-outline-light:focus, .btn-outline-dark:focus {
-    box-shadow: var(--shadow-focus);
+    box-shadow: var(--shadow-focus-btn);
 }
 
-/* ---- PRIMARY (default flavour: charcoal pill) ---- */
+/* ---- PRIMARY (brand charcoal pill — matches duendesoftware.com CTA) ---- */
 .btn-primary {
-    background-color: var(--duende-charcoal);
-    border-color: var(--duende-charcoal);
-    color: var(--duende-sand);
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
 }
 .btn-primary:hover {
-    background-color: var(--duende-charcoal-soft);
-    border-color: var(--duende-charcoal-soft);
-    color: var(--duende-sand);
+    background-color: var(--btn-primary-bg-hover);
+    border-color: var(--btn-primary-bg-hover);
+    color: var(--btn-primary-fg);
 }
 .btn-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
-    background-color: var(--duende-ink);
-    border-color: var(--duende-ink);
-    color: var(--duende-sand);
+    background-color: var(--btn-primary-bg-active);
+    border-color: var(--btn-primary-bg-active);
+    color: var(--btn-primary-fg);
 }
 .btn-primary.disabled, .btn-primary:disabled {
     background-color: var(--duende-n-200);
@@ -235,23 +290,23 @@ blockquote, .blockquote {
     color: var(--duende-charcoal);
 }
 
-/* ---- SECONDARY → sand/charcoal soft button ---- */
+/* ---- SECONDARY → outline pill (matches duendesoftware.com "Talk to an Expert") ---- */
 .btn-secondary {
-    background-color: var(--duende-sand-deep);
-    border-color: var(--duende-sand-deep);
-    color: var(--duende-charcoal);
+    background-color: transparent;
+    border-color: var(--btn-primary-bg);
+    color: var(--btn-primary-bg);
 }
 .btn-secondary:hover {
-    background-color: #ded9d1;
-    border-color: #ded9d1;
-    color: var(--duende-charcoal);
+    background-color: var(--btn-primary-bg-hover);
+    border-color: var(--btn-primary-bg-hover);
+    color: var(--btn-primary-fg);
 }
 .btn-secondary:not(:disabled):not(.disabled):active,
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
-    background-color: #d4cec4;
-    border-color: #d4cec4;
-    color: var(--duende-charcoal);
+    background-color: var(--btn-primary-bg-active);
+    border-color: var(--btn-primary-bg-active);
+    color: var(--btn-primary-fg);
 }
 
 /* ---- SUCCESS → Building Green ---- */
@@ -475,12 +530,36 @@ blockquote, .blockquote {
 /* Dark navbar = Charcoal background, sand text (also used by .bg-dark navbars) */
 .navbar-dark { background-color: var(--duende-charcoal); }
 .navbar-dark .navbar-brand { color: var(--duende-sand); }
-.navbar-dark .navbar-nav .nav-link { color: rgba(243,242,233,0.82); font-weight: 500; }
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(243,242,233,0.82);
+    font-weight: 500;
+    position: relative;
+    transition: color var(--dur-fast) var(--ease-standard);
+}
+/* Animated green underline that grows from the centre on hover/focus */
+.navbar-dark .navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.35rem;
+    height: 2px;
+    background: var(--duende-green);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--dur-base) var(--ease-emphasized);
+}
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link:focus { color: var(--duende-sand); }
+.navbar-dark .navbar-nav .nav-link:hover::after,
+.navbar-dark .navbar-nav .nav-link:focus::after { transform: scaleX(1); }
 .navbar-dark .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active,
 .navbar-dark .navbar-nav .show > .nav-link { color: var(--duende-green); }
+/* Active item keeps a persistent underline */
+.navbar-dark .navbar-nav .active > .nav-link::after,
+.navbar-dark .navbar-nav .nav-link.active::after { transform: scaleX(1); }
 .navbar-dark .navbar-toggler { border-color: var(--d-border-on-dark); }
 
 /* ════════════════════════════════════════════════════════════════════════
