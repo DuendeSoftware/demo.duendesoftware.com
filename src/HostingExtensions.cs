@@ -17,6 +17,19 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
         builder.Services.AddControllers();
+
+        // response caching for anonymous, non-protocol pages.
+        // in-memory store clears on restart, so deploys auto-invalidate.
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(b => b.NoCache());
+            options.AddPolicy("PublicPage", b => b
+                .Cache()
+                .Expire(TimeSpan.FromMinutes(5)));
+            options.AddPolicy("StaticPage", b => b
+                .Cache()
+                .Expire(TimeSpan.FromHours(1)));
+        });
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -123,7 +136,14 @@ internal static class HostingExtensions
 
         app.UseCors("allow_all");
 
-        app.UseStaticFiles();
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            OnPrepareResponse = ctx =>
+            {
+                // asp-append-version fingerprints URLs, so long-cache is safe.
+                ctx.Context.Response.Headers.CacheControl = "public,max-age=604800,immutable";
+            }
+        });
 
         app.Use((context, next) =>
         {
@@ -135,6 +155,7 @@ internal static class HostingExtensions
         });
 
         app.UseRouting();
+        app.UseOutputCache();
         app.UseIdentityServer();
         app.UseAuthorization();
         
