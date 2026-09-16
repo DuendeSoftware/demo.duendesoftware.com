@@ -519,6 +519,18 @@ namespace Duende.IdentityServer.Demo
                         new ServiceProviderCertificate { Certificate = SamlSpSigningCertificate, Use = KeyUse.Signing }
                     },
                 },
+                
+                // template
+                new SamlServiceProvider
+                {
+                    EntityId = "https://localhost:5001/saml-sp",
+                    DisplayName = "Project Template SP",
+                    AssertionConsumerServiceUrls = new List<IndexedEndpoint>
+                    {
+                        new IndexedEndpoint { Location = "https://localhost:5001/signin-saml", Binding = SamlBinding.HttpPost, Index = 0, IsDefault = true }
+                    },
+                    AllowedScopes = { "openid", "profile" },
+                },
             };
     }
 }
