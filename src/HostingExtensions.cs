@@ -160,6 +160,10 @@ internal static class HostingExtensions
         app.UseAuthorization();
         
         app.MapConformanceReport();
+
+        // the JWT decoder moved to the Duende website
+        app.MapGet("/jwt-decoder", () =>
+            Results.Redirect("https://duendesoftware.com/tools/jwt-decoder", permanent: true));
         
         app.MapRazorPages()
             .RequireAuthorization();
